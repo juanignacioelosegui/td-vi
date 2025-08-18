@@ -1,0 +1,165 @@
+---
+title: ""
+output:
+  html_document:
+    df_print: paged
+---
+
+\
+Universidad Torcuato Di Tella
+
+Licenciatura en Tecnología Digital\
+**Tecnología Digital VI: Inteligencia Artificial**
+
+# **rpart**
+
+rpart es un paquete de R que nos permite crear árboles de decisión, ya sea de clasificación o de regresión. La principal diferencia con la implementación de los árboles de decisión de scikit-learn es que rpart puede manejar datos faltantes y atributos categóricos.
+
+```{r}
+# install.packages("rpart") # Descomentar si no lo tienen ya instalado.
+library(rpart)
+```
+
+### **Datos**
+
+Carguemos los datos que vamos a usar. Para este ejemplo, vamos a usar la base de datos `titanic`, que ya se encuentra cargada en R. (Usamos una base de datos similar sobre el Titanic en la P01, pero mediante un archivo CSV aparte).
+
+```{r}
+# install.packages("titanic") # Descomentar si no lo tienen ya instalado.
+library(titanic)
+train <- titanic_train
+test <- titanic_test
+```
+
+`<-` es el operador de asignación clásico en R, pero también se puede usar `=` como en Python.
+
+Recordemos la estructura que tiene.
+
+```{r}
+str(train)
+```
+
+Dentro de R, tenemos diferentes tipos de datos:
+
+- **Integer**: valor entero. La función `as.integer()` convierte valores en enteros.
+
+- **Numeric**: numéro real. La función `as.numeric()` convierte valores en número reales.
+
+- **Character**: valor nominal. La función `as.character()` convierte valores en caracteres. Todo elemento escrito entre comillas es considerado por R como un caracter.
+
+- **Factor**: valores categóricos con niveles. La función `as.factor()` convierte valores en categóricos con niveles. Se suele usar para variables de tipo `character` con pocos valores posibles, como sexo.
+
+- **Logical**: valores Booleanos. Acepta elementos como *TRUE*, *FALSE* y *NA*. La función `as.logical()` convierte valores en Booleanos.
+
+- **Complex**: números complejos.
+
+Veamos los tipos de datos que tienen las columnas de nuestra base de datos y fijémonos si son correctos.
+
+Las columnas `PClass` y `Sex` deberían ser de tipo `factor`.
+
+```{r}
+train$Pclass <- as.factor(train$Pclass)
+train$Sex <- as.factor(train$Sex)
+```
+
+Por último, veamos si la base de datos contiene valores `NA`, de dos maneras distintas:
+
+```{r}
+table(is.na(train))
+```
+
+```{r}
+summary(train)
+```
+
+### **Árbol de decisión**
+
+Vamos a querer predecir, en base a los datos, si una persona *sobrevirá o no*. Como queremos un árbol de decisión de clasificación, usaremos la función `rpart()` del paquete rpart.
+
+`tree <- rpart(formula, data, method, parms, control, ...)`
+
+¿En qué consiste cada uno de los parámetros de la función?
+
+- `formula`: permite especificar la respuesta y las variables predictoras de la forma habitual. Se suele establecer de la forma `respuesta ~ .` para incluir todas las posibles variables predictoras. En el caso de que sólo se quieran incluir algunas columnas del `data.frame` como predictoras la sintaxis pasa a ser: `respuesta ~ var_pred_selecc_1 + var_pred_selecc_2 + var_pred_selecc_3 + ...`.
+
+- `data`: `data.frame` (opcional; donde se evaluará la fórmula) con la muestra de entrenamiento.
+
+- `method`: método empleado para realizar las particiones. Puede ser `"anova"` (regresión), `"class"` (clasificación), `"poisson"` (regresión de Poisson) o `"exp"` (supervivencia). Por defecto, se selecciona a partir de la variable `respuesta` en `formula`; por ejemplo, si `respuesta` es de tipo `factor`, `method = "class"`.
+
+- `parms`: lista de parámetros opcionales para la partición en el caso de clasificación (o regresión de Poisson). Puede contener los componentes `prior` (vector de probabilidades previas; por defecto, las frecuencias observadas), `loss` (matriz de pérdidas; con ceros en la diagonal y por defecto 1 en el resto) y `split` (criterio de error; por defecto `"gini"` o alternativamente `"information"`).
+
+- `control`: lista con los hiperparámetros. Por defecto, se seleccionan mediante la función `rpart.control`, aunque también se pueden establecer en la llamada a la función principal. Sus principales parámetros son:
+
+   `rpart.control(minsplit = 20, minbucket = round(minsplit/3), cp = 0.01, xval = 10, maxdepth = 30, ...)`
+
+   - `cp` es el parámetro de complejidad para la poda del árbol. Un valor de 1 se corresponde con un árbol sin divisiones, mientras que un valor de 0, con un árbol de profundidad máxima. Sólo se agregan divisiones cuando el costo de agregarlas es menor al valor de `cp`.
+
+   - `maxdepth` es la máxima profundidad permitida para el árbol.
+   
+   - `minsplit` es el número mínimo de observaciones que debe haber en un nodo intermedio para poder dividirlo.
+   
+   - `minbucket` es el número mínimo de observaciones en una hoja.
+   
+   - `xval` es el número de grupos (*folds*) para validación cruzada.
+
+### **Ahora todo junto: árbol de decisión con datos**
+
+Armemos un árbol de decisión donde la variable *Survived* sea predicha en función de algunas de las otras columnas.
+
+Aclaración: columnas con el ID, el nombre de la persona o el ticket no suelen ser consideradas como variables predictoras. ¿Por qué? ¿Cuán probable es que un nuevo pasajero tenga el mismo ID o el mismo nombre o el mismo ticket que un pasajero pasado?
+
+```{r}
+set.seed(22)
+tree <- rpart(formula = Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, 
+              data = train, 
+              method = "class")
+```
+
+En este caso, dejamos que el árbol trabaje por sí solo con los valores faltantes en edad.
+
+```{r}
+# install.packages("rpart.plot") # Descomentar si no lo tienen ya instalado.
+library(rpart.plot)
+
+rpart.plot(tree)
+```
+
+De forma similar al árbol analizado ayer, en el taller de la P03:
+
+- La gama del color de un nodo indica la clase predicha para las observaciones que quedan en él.
+
+- La intensidad del color indica cuán puro es el nodo. A mayor cantidad de observaciones pertenecientes a la clase predicha, mayor es la intensidad.
+
+A diferencia del árbol analizado ayer, en el de acá:
+
+- Las reglas de decisión aparecen fuera, en vez de dentro, de los nodos.
+
+- Dentro de cada nodo, se muestra qué proporción de casos pertenecen efectivamente a la clase predicha y la proporción del total de datos que han sido agrupados en ese nodo.
+
+También podemos hacer predicciones con nuestro árbol:
+
+```{r}
+test$Pclass <- as.factor(test$Pclass)
+test$Sex <- as.factor(test$Sex)
+predictions  <- predict(tree, newdata = test, type = "class")
+```
+
+¿Qué hubiese pasado si, en lugar de entrenar el modelo con valores faltantes, los hubiésemos completado con el *promedio*?
+
+```{r}
+train_withoutNA <- train                                             
+train_withoutNA$Age[is.na(train_withoutNA$Age)] <- mean(train_withoutNA$Age, na.rm = TRUE)
+
+tree_withoutNA <- rpart(formula = Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked,
+                        data = train_withoutNA,
+                        method = "class")
+
+predictions_withoutNA <- predict(tree_withoutNA, newdata = test, type = "class")
+
+data.frame("predicciones_con_na" = predictions,
+           "predicciones_sin_na" = predictions_withoutNA)
+```
+
+Podemos ver que, para algunas observaciones, la predicción es diferente (e.g., fila 19). Entonces, nos puede surgir la siguiente pregunta: ¿es mejor imputar los datos faltantes o dejar que el árbol por sí solo se encargue de ellos?
+
+Esto y *mucho más* lo veremos en el TP1.

@@ -1,0 +1,22 @@
+Animal	Da a luz	Vuela	Vive en el agua	Tiene piernas	Mamífero
+humano	sí	no	no	sí	mamífero
+pitón	no	no	no	no	no-mamífero
+salmón	no	no	sí	no	no-mamífero
+ballena	sí	no	sí	no	mamífero
+rana	no	no	a veces	sí	no-mamífero
+dragón de komodo	no	no	no	sí	no-mamífero
+murciélago	sí	sí	no	sí	mamífero
+paloma	no	sí	no	sí	no-mamífero
+gato	sí	no	no	sí	mamífero
+tiburón leopardo	sí	no	sí	no	no-mamífero
+tortuga	no	no	a veces	sí	no-mamífero
+pingüino	no	no	a veces	sí	no-mamífero
+puercoespín	sí	no	no	sí	mamífero
+anguila	no	no	sí	no	no-mamífero
+salamandra	no	no	a veces	sí	no-mamífero
+monstruo de gila	no	no	no	sí	no-mamífero
+ornitorrinco	no	no	no	sí	mamífero
+búho	no	sí	no	sí	no-mamífero
+delfín	sí	no	sí	no	mamífero
+águila	no	sí	no	sí	no-mamífero
+Desconocido	sí	no	sí	no	
