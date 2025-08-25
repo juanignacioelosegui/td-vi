@@ -1,0 +1,786 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<!DOCTYPE html>
+<html lang="es-AR" dir="ltr" platform="win" style="--font-family: sans-serif; --font-weight: normal;"><head>
+    <title id="reader-title">Cost-Sensitive Classification • mlr</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src chrome:; img-src data: *; media-src *; object-src 'none'">
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta name="viewport" content="width=device-width; user-scalable=0">
+    <link rel="stylesheet" href="chrome://global/skin/design-system/tokens-brand.css">
+    <link rel="stylesheet" href="chrome://global/skin/aboutReader.css" type="text/css">
+    <link rel="localization" href="toolkit/about/aboutReader.ftl">
+    <link rel="localization" href="toolkit/branding/brandings.ftl">
+    <script type="module" src="chrome://global/content/reader/moz-slider.mjs"></script>
+    <script type="module" src="chrome://global/content/elements/moz-input-color.mjs"></script>
+    <script type="module" src="chrome://global/content/elements/named-deck.js"></script>
+  <link rel="stylesheet" href="chrome://global/skin/narrate.css"><link rel="shortcut icon" href="https://mlr.mlr-org.com/favicon-16x16.png"></head>
+
+  <body class="light loaded" style="--content-width: 30em; --font-size: 20px;">
+    <div class="top-anchor"></div>
+
+    <div id="toolbar" class="toolbar-container scrolled" style="">
+      <div class="toolbar reader-toolbar">
+        <div class="reader-controls" articledir="ltr">
+          <button class="close-button toolbar-button" aria-labelledby="toolbar-close" data-telemetry-id="reader-close">
+            <span class="hover-label" id="toolbar-close" data-l10n-id="about-reader-toolbar-close">Salir de vista de lectura</span>
+          </button>
+          <ul class="dropdown text-layout-dropdown">
+            <li>
+              <button class="dropdown-toggle toolbar-button text-layout-button" aria-labelledby="toolbar-text-layout-controls" data-telemetry-id="reader-text-layout-controls">
+                <span class="hover-label" id="toolbar-text-layout-controls" data-l10n-id="about-reader-toolbar-text-layout-controls">Texto y distribución</span>
+              </button>
+            </li>
+            <li class="dropdown-popup" id="text-layout-controls" tabindex="-1">
+              <h2 data-l10n-id="about-reader-text-header" id="about-reader-text-header">Texto</h2>
+              <div id="text-size-controls">
+                <span data-l10n-id="about-reader-text-size-label" id="about-reader-text-size-label">Tamaño del texto</span>
+                <div class="text-size-buttons buttonrow">
+                  <button class="text-size-minus-button" data-l10n-id="about-reader-toolbar-minus" data-telemetry-id="text-size-minus-button" title="Reducir el tamaño del texto"></button>
+                  <button class="text-size-plus-button" data-l10n-id="about-reader-toolbar-plus" data-telemetry-id="text-size-plus-button" title="Aumentar el tamaño del texto"></button>
+                </div>
+              </div>
+              <div id="font-controls">
+                <div id="font-type-dropdown" class="dropdown-selector">
+                  <label for="font-type-selector" data-l10n-id="about-reader-font-type-selector-label">Tipo de letra</label>
+                  <select name="font-type-selector" id="font-type-selector" data-telemetry-id="font-type-selector"><option data-l10n-id="about-reader-font-type-sans-serif" value="sans-serif" selected="selected">Sans-serif</option><option data-l10n-id="about-reader-font-type-serif" value="serif">Serif</option><option data-l10n-id="about-reader-font-type-monospace" value="monospace">Monoespaciada</option></select>
+                </div>
+                <div id="font-weight-dropdown" class="dropdown-selector">
+                  <label for="font-weight-selector" data-l10n-id="about-reader-font-weight-selector-label">Grosor de tipografía</label>
+                  <select name="font-weight-selector" id="font-weight-selector" data-telemetry-id="font-weight-selector"><option data-l10n-id="about-reader-font-weight-regular" value="regular" selected="selected">Regular</option><option data-l10n-id="about-reader-font-weight-light" value="light">Claro</option><option data-l10n-id="about-reader-font-weight-bold" value="bold">Negrita</option></select>
+                </div>
+              </div>
+              <hr>
+              <h2 data-l10n-id="about-reader-layout-header" id="about-reader-layout-header">Distribución</h2>
+              <div id="content-width-slider" class="slider-container"><moz-slider min="1" max="9" value="3" ticks="9" tick-labels="[]" data-l10n-id="about-reader-content-width-label" data-l10n-attrs="label" slider-icon="chrome://global/skin/reader/content-width-20.svg" data-telemetry-id="content-width-slider" label="Ancho del contenido"></moz-slider></div>
+              <div id="line-spacing-slider" class="slider-container"><moz-slider min="1" max="9" value="4" ticks="9" tick-labels="[]" data-l10n-id="about-reader-line-spacing-label" data-l10n-attrs="label" slider-icon="chrome://global/skin/reader/line-spacing-20.svg" data-telemetry-id="line-spacing-slider" label="Espaciado de líneas"></moz-slider></div>
+              <hr>
+              <details id="about-reader-advanced-layout">
+                <summary class="accordion-header">
+                  <h2 data-l10n-id="about-reader-advanced-layout-header" id="about-reader-advanced-layout-header">Avanzadas</h2>
+                  <span class="chevron-icon"></span>
+                </summary>
+                <div id="character-spacing-slider" class="slider-container"><moz-slider min="1" max="9" value="0" ticks="9" tick-labels="[&quot;Estándar&quot;, &quot;Ancho&quot;]" data-l10n-id="about-reader-character-spacing-label" data-l10n-attrs="label" slider-icon="chrome://global/skin/reader/character-spacing-20.svg" data-telemetry-id="character-spacing-slider" label="Espaciado entre caracteres"></moz-slider></div>
+                <div id="word-spacing-slider" class="slider-container"><moz-slider min="1" max="9" value="0" ticks="9" tick-labels="[&quot;Estándar&quot;, &quot;Ancho&quot;]" data-l10n-id="about-reader-word-spacing-label" data-l10n-attrs="label" slider-icon="chrome://global/skin/reader/word-spacing-20.svg" data-telemetry-id="word-spacing-slider" label="Espaciado entre palabras"></moz-slider></div>
+                <label for="text-alignment-buttons" data-l10n-id="about-reader-text-alignment-label">Alineación de texto</label>
+                <div class="text-alignment-buttons radiorow" id="text-alignment-buttons"><input id="radio-itemleft-align-button" type="radio" class="radio-button" name="text-alignment" data-telemetry-id="left-align-button" checked="checked"><label for="radio-itemleft-align-button" class="left-align-button" data-l10n-id="about-reader-text-alignment-left" checked="true" title="Alinear texto a la izquierda"></label><input id="radio-itemcenter-align-button" type="radio" class="radio-button" name="text-alignment" data-telemetry-id="center-align-button"><label for="radio-itemcenter-align-button" class="center-align-button" data-l10n-id="about-reader-text-alignment-center" title="Alinear texto centrado"></label><input id="radio-itemright-align-button" type="radio" class="radio-button" name="text-alignment" data-telemetry-id="right-align-button"><label for="radio-itemright-align-button" class="right-align-button" data-l10n-id="about-reader-text-alignment-right" title="Alinear texto a la derecha"></label><input id="radio-itemjustify-align-button" type="radio" class="radio-button" name="text-alignment" data-telemetry-id="justify-align-button"><label for="radio-itemjustify-align-button" class="justify-align-button" data-l10n-id="about-reader-text-alignment-justify" title="Justificar texto"></label></div>
+                <button class="text-layout-reset-button reset-button" data-l10n-id="about-reader-reset-button">Restablecer predeterminados</button>
+              </details>
+            </li>
+          </ul>
+          <ul class="dropdown colors-dropdown">
+            <li>
+              <button class="dropdown-toggle toolbar-button colors-button" aria-labelledby="toolbar-color-controls" data-telemetry-id="reader-color-controls">
+                <span class="hover-label" id="toolbar-color-controls" data-l10n-id="about-reader-toolbar-theme-controls">Tema</span>
+              </button>
+            </li>
+            <li class="dropdown-popup" id="color-controls">
+              <h2 data-l10n-id="about-reader-colors-menu-header" id="about-reader-colors-menu-header">Tema</h2>
+              <button-group aria-labelledby="about-reader-colors-menu-header" role="tablist">
+                <button is="named-deck-button" deck="tabs-deck" name="fxtheme" data-l10n-id="about-reader-fxtheme-tab" data-telemetry-id="colors-menu-default-tab" id="tabs-deck-button-fxtheme" role="tab" aria-selected="true" tabindex="0" selected="">Predeterminado</button>
+                <button is="named-deck-button" deck="tabs-deck" name="customtheme" data-l10n-id="about-reader-customtheme-tab" data-telemetry-id="colors-menu-custom-tab" id="tabs-deck-button-customtheme" role="tab" aria-selected="false" tabindex="-1">Personalizado</button>
+              </button-group>
+              <named-deck id="tabs-deck" is-tabbed="" selected-view="fxtheme">
+                <div name="fxtheme" class="color-scheme-buttons radiorow" aria-labelledby="tabs-deck-button-fxtheme" role="tabpanel" slot="selected"><input id="radio-itemauto-button" type="radio" class="radio-button" name="color-scheme" data-telemetry-id="auto-button" checked="checked"><label for="radio-itemauto-button" class="auto-button" data-l10n-id="about-reader-color-auto-theme" checked="true" title="Tema automático">Auto</label><input id="radio-itemlight-button" type="radio" class="radio-button" name="color-scheme" data-telemetry-id="light-button"><label for="radio-itemlight-button" class="light-button" data-l10n-id="about-reader-color-light-theme" title="Tema claro">Claro</label><input id="radio-itemdark-button" type="radio" class="radio-button" name="color-scheme" data-telemetry-id="dark-button"><label for="radio-itemdark-button" class="dark-button" data-l10n-id="about-reader-color-dark-theme" title="Tema oscuro">Oscuro</label><input id="radio-itemsepia-button" type="radio" class="radio-button" name="color-scheme" data-telemetry-id="sepia-button"><label for="radio-itemsepia-button" class="sepia-button" data-l10n-id="about-reader-color-sepia-theme" title="Tema sepia">Sepia</label><input id="radio-itemcontrast-button" type="radio" class="radio-button" name="color-scheme" data-telemetry-id="contrast-button"><label for="radio-itemcontrast-button" class="contrast-button" data-l10n-id="about-reader-color-contrast-theme" title="Tema con contraste">Contraste</label><input id="radio-itemgray-button" type="radio" class="radio-button" name="color-scheme" data-telemetry-id="gray-button"><label for="radio-itemgray-button" class="gray-button" data-l10n-id="about-reader-color-gray-theme" title="Tema automático">Gris</label></div>
+                <div name="customtheme" aria-labelledby="tabs-deck-button-customtheme" role="tabpanel" slot="">
+                  <ul class="custom-colors-selection"><li><moz-input-color name="foreground" data-l10n-id="about-reader-custom-colors-foreground2" value="#14151A" data-l10n-attrs="label" label="Texto" title="Editar color"></moz-input-color></li><li><moz-input-color name="background" data-l10n-id="about-reader-custom-colors-background2" value="#FFFFFF" data-l10n-attrs="label" label="Fondo" title="Editar color"></moz-input-color></li><li><moz-input-color name="unvisited-links" data-l10n-id="about-reader-custom-colors-unvisited-links2" value="#0060DF" data-l10n-attrs="label" label="Enlaces no visitados" title="Editar color"></moz-input-color></li><li><moz-input-color name="visited-links" data-l10n-id="about-reader-custom-colors-visited-links2" value="#321C64" data-l10n-attrs="label" label="Enlaces visitados" title="Editar color"></moz-input-color></li><li><moz-input-color name="selection-highlight" data-l10n-id="about-reader-custom-colors-selection-highlight2" value="#FFFFCC" data-l10n-attrs="label" label="Resaltador para leer en voz alta" title="Editar color"></moz-input-color></li></ul>
+                  <button class="custom-colors-reset-button reset-button" data-l10n-id="about-reader-reset-button" hidden="">Restablecer predeterminados</button>
+                </div>
+              </named-deck>
+            </li>
+          </ul>
+        <ul class="dropdown narrate-dropdown"><li><button class="dropdown-toggle toolbar-button narrate-toggle" data-telemetry-id="reader-listen" aria-label="Leer en voz alta (N)"><span class="hover-label">Leer en voz alta (N)</span></button></li><li class="dropdown-popup"><h2 id="narrate-header">Leer en voz alta</h2><div class="narrate-row narrate-control"><button class="narrate-skip-previous" disabled="disabled" aria-keyshortcuts="ArrowLeft" title="Atrás (←)"></button><button class="narrate-start-stop" aria-keyshortcuts="N" title="Iniciar (N)"></button><button class="narrate-skip-next" disabled="disabled" aria-keyshortcuts="ArrowRight" title="Adelante (→)"></button></div><div class="narrate-row narrate-rate"><span class="narrate-rate-icon slow" title="Ralentizar la narración"></span><input class="narrate-rate-input" value="0" step="5" max="100" min="-100" type="range" aria-label="Choose a narration speed from -100 to 100, where 0 is the default speed." title="Velocidad"><span class="narrate-rate-icon fast" title="Acelerar la narración"></span></div><hr><h2 id="voice-header">Voz</h2><div class="narrate-row narrate-voices"><div class="voiceselect voice-select"><button class="select-toggle" aria-controls="voice-options" aria-expanded="false" role="combobox" aria-labelledby="voice-header">
+      <span class="current-voice">Predeterminada</span>
+    </button>
+    <div class="options" id="voice-options" role="listbox"><button data-value="automatic" class="option selected" tabindex="-1" role="option" aria-selected="true">Predeterminada</button><button data-value="urn:moz-tts:sapi:Microsoft Zira Desktop - English (United States)?en-US" class="option" tabindex="-1" role="option">Microsoft Zira Desktop - English (United States)</button></div></div></div></li></ul></div>
+      </div>
+    </div>
+
+    <div class="container" style="--line-height: 1.6em; --letter-spacing: -0.03em; --word-spacing: -0.05em; --text-alignment: start; --block-img-margin-right: unset; --block-img-margin-left: unset;" lang="en" dir="ltr">
+      <div class="header reader-header reader-show-element">
+        <a class="domain reader-domain" href="https://mlr.mlr-org.com/articles/tutorial/cost_sensitive_classif.html">mlr.mlr-org.com</a>
+        <div class="domain-border"></div>
+        <h1 class="reader-title">Cost-Sensitive Classification</h1>
+        <div class="credits reader-credits"></div>
+        <div class="meta-data">
+          <div class="reader-estimated-time" data-l10n-args="{&quot;range&quot;:&quot;28-36&quot;,&quot;rangePlural&quot;:&quot;other&quot;}" data-l10n-id="about-reader-estimated-read-time" dir="ltr">28-36 minutos</div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="content">
+        <div class="moz-reader-content reader-show-element"><div id="readability-page-1" class="page"><div>
+    
+
+    
+    
+<p>In <em>regular classification</em> the aim is to minimize the 
+misclassification rate and thus all types of misclassification errors 
+are deemed equally severe. A more general setting is <em>cost-sensitive classification</em>
+ where the costs caused by different kinds of errors are not assumed to 
+be equal and the objective is to minimize the expected costs.</p>
+<p>In case of <em>class-dependent costs</em> the costs depend on the true and predicted class label. The costs <span><span></span><span id="MathJax-Element-1-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi><mo stretchy="false">(</mo><mi>k</mi><mo>,</mo><mi>l</mi><mo stretchy="false">)</mo></math></span></span></span> for predicting class <span><span></span><span id="MathJax-Element-2-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi></math></span></span></span> if the true label is <span><span></span><span id="MathJax-Element-3-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>l</mi></math></span></span></span> are usually organized into a <span><span></span><span id="MathJax-Element-4-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;mo&gt;×&lt;/mo&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>K</mi><mo>×</mo><mi>K</mi></math></span></span></span> cost matrix where <span><span></span><span id="MathJax-Element-5-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>K</mi></math></span></span></span> is the number of classes. Naturally, it is assumed that the cost of predicting the correct class label <span><span></span><span id="MathJax-Element-6-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>y</mi></math></span></span></span> is minimal (that is <span><span></span><span id="MathJax-Element-7-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;≤&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi><mo stretchy="false">(</mo><mi>y</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo><mo>≤</mo><mi>c</mi><mo stretchy="false">(</mo><mi>k</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo></math></span></span></span> for all <span><span></span><span id="MathJax-Element-8-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;…&lt;/mo&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi><mo>=</mo><mn>1</mn><mo>,</mo><mo>…</mo><mo>,</mo><mi>K</mi></math></span></span></span>).</p>
+<p>A further generalization of this scenario are <em>example-dependent misclassification costs</em> where each example <span><span></span><span id="MathJax-Element-9-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo></math></span></span></span> is coupled with an individual cost vector of length <span><span></span><span id="MathJax-Element-10-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>K</mi></math></span></span></span>. Its <span><span></span><span id="MathJax-Element-11-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi></math></span></span></span>-th component expresses the cost of assigning <span><span></span><span id="MathJax-Element-12-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>x</mi></math></span></span></span> to class <span><span></span><span id="MathJax-Element-13-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi></math></span></span></span>.
+ A real-world example is fraud detection where the costs do not only 
+depend on the true and predicted status fraud/non-fraud, but also on the
+ amount of money involved in each case. Naturally, the cost of 
+predicting the true class label <span><span></span><span id="MathJax-Element-14-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>y</mi></math></span></span></span>
+ is assumed to be minimum. The true class labels are redundant 
+information, as they can be easily inferred from the cost vectors. 
+Moreover, given the cost vector, the expected costs do not depend on the
+ true class label <span><span></span><span id="MathJax-Element-15-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>y</mi></math></span></span></span>. The classification problem is therefore completely defined by the feature values <span><span></span><span id="MathJax-Element-16-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>x</mi></math></span></span></span> and the corresponding cost vectors.</p>
+<p>In the following we show ways to handle cost-sensitive classification problems in <code>mlr</code>. Some of the functionality is currently experimental, and there may be changes in the future.</p>
+<div id="class-dependent-misclassification-costs">
+<h2 id="class-dependent-misclassification-costs-1">
+<a href="#class-dependent-misclassification-costs"></a>Class-dependent misclassification costs</h2>
+<p>There are some classification methods that can accomodate misclassification costs directly. One example is <code><a href="https://rdrr.io/pkg/rpart/man/rpart.html">rpart::rpart()</a></code>.</p>
+<p>Alternatively, we can use cost-insensitive methods and manipulate the
+ predictions or the training data in order to take misclassification 
+costs into account. <code>mlr</code> supports <em>thresholding</em> and <em>rebalancing</em>.</p>
+<ol>
+<li><p><strong>Thresholding</strong>: The thresholds used to turn 
+posterior probabilities into class labels are chosen such that the costs
+ are minimized. This requires a Learner (<code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>) that can predict posterior probabilities. During training the costs are not taken into account.</p></li>
+<li>
+<p><strong>Rebalancing</strong>: The idea is to change the proportion of
+ the classes in the training data set in order to account for costs 
+during training, either by <em>weighting</em> or by <em>sampling</em>. Rebalancing does not require that the Learner (<code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>) can predict probabilities.</p>
+<ol>
+<li><p>For <em>weighting</em> we need a Learner (<code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>) that supports class weights or observation weights.</p></li>
+<li><p>If the Learner (<code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>) cannot deal with weights the proportion of classes can be changed by <em>over-</em> and <em>undersampling</em>.</p></li>
+</ol>
+</li>
+</ol>
+<p>We start with binary classification problems and afterwards deal with multi-class problems.</p>
+</div>
+<div id="binary-classification-problems">
+<h2 id="binary-classification-problems-1">
+<a href="#binary-classification-problems"></a>Binary classification problems</h2>
+<p>The positive and negative classes are labeled <span><span></span><span id="MathJax-Element-17-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>1</mn></math></span></span></span> and <span><span></span><span id="MathJax-Element-18-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>−</mo><mn>1</mn></math></span></span></span>,
+ respectively, and we consider the following cost matrix where the rows 
+indicate true classes and the columns predicted classes:</p>
+<table><tbody>
+<tr>
+<td>true/pred.</td>
+<td><span><span></span><span id="MathJax-Element-19-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>+</mo><mn>1</mn></math></span></span></span></td>
+<td><span><span></span><span id="MathJax-Element-20-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>−</mo><mn>1</mn></math></span></span></span></td>
+</tr>
+<tr>
+<td><span><span></span><span id="MathJax-Element-21-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>+</mo><mn>1</mn></math></span></span></span></td>
+<td><span><span></span><span id="MathJax-Element-22-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi><mo stretchy="false">(</mo><mo>+</mo><mn>1</mn><mo>,</mo><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></math></span></span></span></td>
+<td><span><span></span><span id="MathJax-Element-23-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo>,</mo><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></math></span></span></span></td>
+</tr>
+<tr>
+<td><span><span></span><span id="MathJax-Element-24-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>−</mo><mn>1</mn></math></span></span></span></td>
+<td><span><span></span><span id="MathJax-Element-25-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi><mo stretchy="false">(</mo><mo>+</mo><mn>1</mn><mo>,</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></math></span></span></span></td>
+<td><span><span></span><span id="MathJax-Element-26-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo>,</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></math></span></span></span></td>
+</tr>
+</tbody></table>
+<p>Often, the diagonal entries are zero or the cost matrix is rescaled to achieve zeros in the diagonal (see for example <a href="http://machinelearning.org/archive/icml2008/papers/150.pdf">O’Brien et al, 2008</a>).</p>
+<p>A well-known cost-sensitive classification problem is posed by the German Credit data set (<code><a href="https://rdrr.io/pkg/caret/man/GermanCredit.html">caret::GermanCredit()</a></code>) (see also the <a href="https://archive.ics.uci.edu/ml/datasets/Statlog+(German+Credit+Data)">UCI Machine Learning Repository</a>). The corresponding cost matrix (though <a href="http://www.cs.iastate.edu/~honavar/elkan.pdf">Elkan (2001)</a> argues that this matrix is economically unreasonable) is given as:</p>
+<table><tbody>
+<tr>
+<td>true/pred.</td>
+<td>Bad</td>
+<td>Good</td>
+</tr>
+<tr>
+<td>Bad</td>
+<td>0</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Good</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>As in the table above, the rows indicate true and the columns predicted classes.</p>
+<p>In case of class-dependent costs it is sufficient to generate an ordinary <code>ClassifTask</code> (<code><a href="https://mlr.mlr-org.com/reference/Task.html">Task()</a></code>). A <code>CostSensTask</code> (<code><a href="https://mlr.mlr-org.com/reference/Task.html">Task()</a></code>) is only needed if the costs are example-dependent. In the <strong>R</strong> code below we create the <code>ClassifTask</code> (<code><a href="https://mlr.mlr-org.com/reference/Task.html">Task()</a></code>), remove two constant features from the data set and generate the cost matrix. Per default, Bad is the positive class.</p>
+<div id="cb1"><pre><code><span><a href="https://rdrr.io/r/utils/data.html">data</a></span><span>(</span><span>GermanCredit</span>, package <span>=</span> <span>"caret"</span><span>)</span>
+<span>credit.task</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeClassifTask.html">makeClassifTask</a></span><span>(</span>data <span>=</span> <span>GermanCredit</span>, target <span>=</span> <span>"Class"</span><span>)</span>
+<span>credit.task</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/removeConstantFeatures.html">removeConstantFeatures</a></span><span>(</span><span>credit.task</span><span>)</span>
+<span>## Removing 2 columns: Purpose.Vacation,Personal.Female.Single</span>
+
+<span>credit.task</span>
+<span>## Supervised task: GermanCredit</span>
+<span>## Type: classif</span>
+<span>## Target: Class</span>
+<span>## Observations: 1000</span>
+<span>## Features:</span>
+<span>##    numerics     factors     ordered functionals </span>
+<span>##          59           0           0           0 </span>
+<span>## Missings: FALSE</span>
+<span>## Has weights: FALSE</span>
+<span>## Has blocking: FALSE</span>
+<span>## Has coordinates: FALSE</span>
+<span>## Classes: 2</span>
+<span>##  Bad Good </span>
+<span>##  300  700 </span>
+<span>## Positive class: Bad</span>
+
+<span>costs</span> <span>=</span> <span><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span>(</span><span><a href="https://rdrr.io/r/base/c.html">c</a></span><span>(</span><span>0</span>, <span>1</span>, <span>5</span>, <span>0</span><span>)</span>, <span>2</span><span>)</span>
+<span><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span>(</span><span>costs</span><span>)</span> <span>=</span> <span><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span>(</span><span>costs</span><span>)</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/getTaskClassLevels.html">getTaskClassLevels</a></span><span>(</span><span>credit.task</span><span>)</span>
+<span>costs</span>
+<span>##      Bad Good</span>
+<span>## Bad    0    5</span>
+<span>## Good   1    0</span></code></pre></div>
+<div id="thresholding">
+<h3 id="1-thresholding">
+<a href="#thresholding"></a>1. Thresholding</h3>
+<p>We start by fitting a logistic regression model (<code><a href="https://rdrr.io/pkg/nnet/man/multinom.html">nnet::multinom()</a></code>) to the German Credit data set (<code><a href="https://rdrr.io/pkg/caret/man/GermanCredit.html">caret::GermanCredit()</a></code>) and predict posterior probabilities.</p>
+<div id="cb2"><pre><code><span># Train and predict posterior probabilities</span>
+<span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner</a></span><span>(</span><span>"classif.multinom"</span>, predict.type <span>=</span> <span>"prob"</span>, trace <span>=</span> <span>FALSE</span><span>)</span>
+<span>mod</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/train.html">train</a></span><span>(</span><span>lrn</span>, <span>credit.task</span><span>)</span>
+<span>pred</span> <span>=</span> <span><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span>(</span><span>mod</span>, task <span>=</span> <span>credit.task</span><span>)</span>
+<span>pred</span>
+<span>## Prediction: 1000 observations</span>
+<span>## predict.type: prob</span>
+<span>## threshold: Bad=0.50,Good=0.50</span>
+<span>## time: 0.01</span>
+<span>##   id truth   prob.Bad prob.Good response</span>
+<span>## 1  1  Good 0.03525092 0.9647491     Good</span>
+<span>## 2  2   Bad 0.63222363 0.3677764      Bad</span>
+<span>## 3  3  Good 0.02807414 0.9719259     Good</span>
+<span>## 4  4  Good 0.25182703 0.7481730     Good</span>
+<span>## 5  5   Bad 0.75193275 0.2480673      Bad</span>
+<span>## 6  6  Good 0.26230149 0.7376985     Good</span>
+<span>## ... (#rows: 1000, #cols: 5)</span></code></pre></div>
+<p>The default thresholds for both classes are 0.5. But according to the
+ cost matrix we should predict class Good only if we are very sure that 
+Good is indeed the correct label. Therefore we should increase the 
+threshold for class Good and decrease the threshold for class Bad.</p>
+<div id="i--theoretical-thresholding">
+<h4>
+<a href="#i--theoretical-thresholding"></a>i. Theoretical thresholding</h4>
+<p>The theoretical threshold for the <em>positive</em> class can be calculated from the cost matrix as <span><span></span></span></p><p><span id="MathJax-Element-27-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;msup&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo&gt;∗&lt;/mo&gt;&lt;/msup&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mfrac&gt;&lt;mrow&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;mo&gt;.&lt;/mo&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msup><mi>t</mi><mo>∗</mo></msup><mo>=</mo><mfrac><mrow><mi>c</mi><mo stretchy="false">(</mo><mo>+</mo><mn>1</mn><mo>,</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo>−</mo><mi>c</mi><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo>,</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mrow><mi>c</mi><mo stretchy="false">(</mo><mo>+</mo><mn>1</mn><mo>,</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo>−</mo><mi>c</mi><mo stretchy="false">(</mo><mo>+</mo><mn>1</mn><mo>,</mo><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>+</mo><mi>c</mi><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo>,</mo><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>−</mo><mi>c</mi><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo>,</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mfrac><mo>.</mo></math></span></span></p> For more details see <a href="http://www.cs.iastate.edu/~honavar/elkan.pdf">Elkan (2001)</a>.<p></p>
+<p>Below the theoretical threshold for the German Credit data set (<code><a href="https://rdrr.io/pkg/caret/man/GermanCredit.html">caret::GermanCredit()</a></code>)
+ is calculated and used to predict class labels. Since the diagonal of 
+the cost matrix is zero the formula given above simplifies accordingly.</p>
+<div id="cb3"><pre><code><span># Calculate the theoretical threshold for the positive class</span>
+<span>th</span> <span>=</span> <span>costs</span><span>[</span><span>2</span>,<span>1</span><span>]</span><span>/</span><span>(</span><span>costs</span><span>[</span><span>2</span>,<span>1</span><span>]</span> <span>+</span> <span>costs</span><span>[</span><span>1</span>,<span>2</span><span>]</span><span>)</span>
+<span>th</span>
+<span>## [1] 0.1666667</span></code></pre></div>
+<p>As you may recall you can change thresholds in <code>mlr</code> either before training by using the <code>predict.threshold</code> option of <code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code> or after prediction by calling <code><a href="https://mlr.mlr-org.com/reference/setThreshold.html">setThreshold()</a></code> on the <code><a href="https://mlr.mlr-org.com/reference/Prediction.html">Prediction()</a></code> object.</p>
+<p>As we already have a prediction we use the <code><a href="https://mlr.mlr-org.com/reference/setThreshold.html">setThreshold()</a></code> function. It returns an altered <code><a href="https://mlr.mlr-org.com/reference/Prediction.html">Prediction()</a></code> object with class predictions for the theoretical threshold.</p>
+<div id="cb4"><pre><code><span># Predict class labels according to the theoretical threshold</span>
+<span>pred.th</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/setThreshold.html">setThreshold</a></span><span>(</span><span>pred</span>, <span>th</span><span>)</span>
+<span>pred.th</span>
+<span>## Prediction: 1000 observations</span>
+<span>## predict.type: prob</span>
+<span>## threshold: Bad=0.17,Good=0.83</span>
+<span>## time: 0.01</span>
+<span>##   id truth   prob.Bad prob.Good response</span>
+<span>## 1  1  Good 0.03525092 0.9647491     Good</span>
+<span>## 2  2   Bad 0.63222363 0.3677764      Bad</span>
+<span>## 3  3  Good 0.02807414 0.9719259     Good</span>
+<span>## 4  4  Good 0.25182703 0.7481730      Bad</span>
+<span>## 5  5   Bad 0.75193275 0.2480673      Bad</span>
+<span>## 6  6  Good 0.26230149 0.7376985      Bad</span>
+<span>## ... (#rows: 1000, #cols: 5)</span></code></pre></div>
+<p>In order to calculate the average costs over the entire data set we first need to create a new performance Measure (<code><a href="https://mlr.mlr-org.com/reference/makeMeasure.html">makeMeasure()</a></code>). This can be done through function <code><a href="https://mlr.mlr-org.com/reference/makeCostMeasure.html">makeCostMeasure()</a></code>. It is expected that the rows of the cost matrix indicate true and the columns predicted class labels.</p>
+<div id="cb5"><pre><code><span>credit.costs</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeCostMeasure.html">makeCostMeasure</a></span><span>(</span>id <span>=</span> <span>"credit.costs"</span>, name <span>=</span> <span>"Credit costs"</span>, costs <span>=</span> <span>costs</span>,
+  best <span>=</span> <span>0</span>, worst <span>=</span> <span>5</span><span>)</span>
+<span>credit.costs</span>
+<span>## Name: Credit costs</span>
+<span>## Performance measure: credit.costs</span>
+<span>## Properties: classif,classif.multi,req.pred,req.truth,predtype.response,predtype.prob</span>
+<span>## Minimize: TRUE</span>
+<span>## Best: 0; Worst: 5</span>
+<span>## Aggregated by: test.mean</span>
+<span>## Arguments: costs=&lt;matrix&gt;, combine=&lt;function&gt;</span>
+<span>## Note:</span></code></pre></div>
+<p>Then the average costs can be computed by function <code><a href="https://mlr.mlr-org.com/reference/performance.html">performance()</a></code>. Below we compare the average costs and the error rate (<a href="https://mlr.mlr-org.com/articles/tutorial/measures.html" target="_blank">mmce</a>) of the learning algorithm with both default thresholds 0.5 and theoretical thresholds.</p>
+<div id="cb6"><pre><code><span># Performance with default thresholds 0.5</span>
+<span><a href="https://mlr.mlr-org.com/reference/performance.html">performance</a></span><span>(</span><span>pred</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>credit.costs</span>, <span>mmce</span><span>)</span><span>)</span>
+<span>## credit.costs         mmce </span>
+<span>##        0.774        0.214</span>
+
+<span># Performance with theoretical thresholds</span>
+<span><a href="https://mlr.mlr-org.com/reference/performance.html">performance</a></span><span>(</span><span>pred.th</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>credit.costs</span>, <span>mmce</span><span>)</span><span>)</span>
+<span>## credit.costs         mmce </span>
+<span>##        0.478        0.346</span></code></pre></div>
+<p>These performance values may be overly optimistic as we used the same
+ data set for training and prediction, and resampling strategies should 
+be preferred. In the <strong>R</strong> code below we make use of the <code>predict.threshold</code> argument of <code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code> to set the threshold before doing a 3-fold cross-validation on the <code>credit.task()</code>. Note that we create a <code>ResampleInstance</code> (<code><a href="https://mlr.mlr-org.com/reference/makeResampleInstance.html">makeResampleInstance()</a></code>) (<code>rin</code>) that is used throughout the next several code chunks to get comparable performance values.</p>
+<div id="cb7"><pre><code><span># Cross-validated performance with theoretical thresholds</span>
+<span>rin</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeResampleInstance.html">makeResampleInstance</a></span><span>(</span><span>"CV"</span>, iters <span>=</span> <span>3</span>, task <span>=</span> <span>credit.task</span><span>)</span>
+<span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner</a></span><span>(</span><span>"classif.multinom"</span>, predict.type <span>=</span> <span>"prob"</span>, predict.threshold <span>=</span> <span>th</span>, trace <span>=</span> <span>FALSE</span><span>)</span>
+<span>r</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/resample.html">resample</a></span><span>(</span><span>lrn</span>, <span>credit.task</span>, resampling <span>=</span> <span>rin</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>credit.costs</span>, <span>mmce</span><span>)</span>, show.info <span>=</span> <span>FALSE</span><span>)</span>
+<span>r</span></code></pre></div>
+<p>If we are also interested in the cross-validated performance for the default threshold values we can call <code><a href="https://mlr.mlr-org.com/reference/setThreshold.html">setThreshold()</a></code> on the resample prediction (<code><a href="https://mlr.mlr-org.com/reference/ResamplePrediction.html">ResamplePrediction()</a></code>) <code>r$pred</code>.</p>
+<div id="cb8"><pre><code><span># Cross-validated performance with default thresholds</span>
+<span><a href="https://mlr.mlr-org.com/reference/performance.html">performance</a></span><span>(</span><span><a href="https://mlr.mlr-org.com/reference/setThreshold.html">setThreshold</a></span><span>(</span><span>r</span><span>$</span><span>pred</span>, <span>0.5</span><span>)</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>credit.costs</span>, <span>mmce</span><span>)</span><span>)</span>
+<span>## credit.costs         mmce </span>
+<span>##    0.8599378    0.2519885</span></code></pre></div>
+<p>Theoretical thresholding is only reliable if the predicted posterior 
+probabilities are correct. If there is bias the thresholds have to be 
+shifted accordingly.</p>
+<p>Useful in this regard is function <code><a href="https://mlr.mlr-org.com/reference/plotThreshVsPerf.html">plotThreshVsPerf()</a></code>
+ that you can use to plot the average costs as well as any other 
+performance measure versus possible threshold values for the positive 
+class in <span><span></span><span id="MathJax-Element-28-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo stretchy=&quot;false&quot;&gt;[&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;]&lt;/mo&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo stretchy="false">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">]</mo></math></span></span></span>. The underlying data is generated by <code><a href="https://mlr.mlr-org.com/reference/generateThreshVsPerfData.html">generateThreshVsPerfData()</a></code>.</p>
+<p>The following plots show the cross-validated costs and error rate (<a href="https://mlr.mlr-org.com/articles/tutorial/measures.html" target="_blank">mmce</a>). The theoretical threshold <code>th</code>
+ calculated above is indicated by the vertical line. As you can see from
+ the left-hand plot the theoretical threshold seems a bit large.</p>
+
+<p><img src="Cost-Sensitive%20Classification_archivos/unnamed-chunk-12-1.png" width="700" class="moz-reader-block-img" moz-reader-full-width="true" moz-reader-center="true"></p>
+</div>
+<div id="ii--empirical-thresholding">
+<h4>
+<a href="#ii--empirical-thresholding"></a>ii. Empirical thresholding</h4>
+<p>The idea of <em>empirical thresholding</em> (see <a href="http://sun0.cs.uca.edu/~ssheng/papers/AAAI06a.pdf">Sheng and Ling, 2006</a>) is to select cost-optimal threshold values for a given learning method based on the training data. In contrast to <em>theoretical thresholding</em> it suffices if the estimated posterior probabilities are order-correct.</p>
+<p>In order to determine optimal threshold values you can use <code>mlr</code>’s function <code><a href="https://mlr.mlr-org.com/reference/tuneThreshold.html">tuneThreshold()</a></code>.
+ As tuning the threshold on the complete training data set can lead to 
+overfitting, you should use resampling strategies. Below we perform 
+3-fold cross-validation and use <code><a href="https://mlr.mlr-org.com/reference/tuneThreshold.html">tuneThreshold()</a></code> to calculate threshold values with lowest average costs over the 3 test data sets.</p>
+<div id="cb10"><pre><code><span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner</a></span><span>(</span><span>"classif.multinom"</span>, predict.type <span>=</span> <span>"prob"</span>, trace <span>=</span> <span>FALSE</span><span>)</span>
+
+<span># 3-fold cross-validation</span>
+<span>r</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/resample.html">resample</a></span><span>(</span><span>lrn</span>, <span>credit.task</span>, resampling <span>=</span> <span>rin</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>credit.costs</span>, <span>mmce</span><span>)</span>, show.info <span>=</span> <span>FALSE</span><span>)</span>
+<span>r</span>
+
+<span>## Resample Result</span>
+<span>## Task: GermanCredit</span>
+<span>## Learner: classif.multinom</span>
+<span>## Aggr perf: credit.costs.test.mean=0.8461036,mmce.test.mean=0.2539905</span>
+<span>## Runtime: 0.285521</span>
+
+<span># Tune the threshold based on the predicted probabilities on the 3 test data sets</span>
+<span>tune.res</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/tuneThreshold.html">tuneThreshold</a></span><span>(</span>pred <span>=</span> <span>r</span><span>$</span><span>pred</span>, measure <span>=</span> <span>credit.costs</span><span>)</span>
+<span>tune.res</span>
+
+<span>## $th</span>
+<span>## [1] 0.1062593</span>
+<span>## </span>
+<span>## $perf</span>
+<span>## credit.costs </span>
+<span>##     0.527033</span></code></pre></div>
+<p><code><a href="https://mlr.mlr-org.com/reference/tuneThreshold.html">tuneThreshold()</a></code>
+ returns the optimal threshold value for the positive class and the 
+corresponding performance. As expected the tuned threshold is smaller 
+than the theoretical threshold.</p>
+</div>
+</div>
+<div id="rebalancing">
+<h3 id="2-rebalancing">
+<a href="#rebalancing"></a>2. Rebalancing</h3>
+<p>In order to minimize the average costs, observations from the less 
+costly class should be given higher importance during training. This can
+ be achieved by <em>weighting</em> the classes, provided that the 
+learner under consideration has a ‘class weights’ or an ‘observation 
+weights’ argument. To find out which learning methods support either 
+type of weights have a look at the list of <a href="https://mlr.mlr-org.com/articles/tutorial/integrated_learners.html" target="_blank">integrated learners</a> in the Appendix or use <code><a href="https://mlr.mlr-org.com/reference/listLearners.html">listLearners()</a></code>.</p>
+<div id="cb11"><pre><code><span># Learners that accept observation weights</span>
+<span><a href="https://mlr.mlr-org.com/reference/listLearners.html">listLearners</a></span><span>(</span><span>"classif"</span>, properties <span>=</span> <span>"weights"</span><span>)</span><span>[</span><span><a href="https://rdrr.io/r/base/c.html">c</a></span><span>(</span><span>"class"</span>, <span>"package"</span><span>)</span><span>]</span>
+<span>##                       class         package</span>
+<span>## 1          classif.binomial           stats</span>
+<span>## 2               classif.C50             C50</span>
+<span>## 3           classif.cforest           party</span>
+<span>## 4             classif.ctree           party</span>
+<span>## 5          classif.cvglmnet          glmnet</span>
+<span>## 6             classif.earth     earth,stats</span>
+<span>## 7            classif.evtree          evtree</span>
+<span>## 8        classif.extraTrees      extraTrees</span>
+<span>## 9        classif.fdausc.knn         fda.usc</span>
+<span>## 10         classif.gamboost          mboost</span>
+<span>## 11              classif.gbm             gbm</span>
+<span>## 12         classif.glmboost          mboost</span>
+<span>## 13           classif.glmnet          glmnet</span>
+<span>## 14 classif.h2o.deeplearning             h2o</span>
+<span>## 15          classif.h2o.glm             h2o</span>
+<span>## 16           classif.logreg           stats</span>
+<span>## 17         classif.multinom            nnet</span>
+<span>## 18             classif.nnet            nnet</span>
+<span>## 19              classif.plr         stepPlr</span>
+<span>## 20           classif.probit           stats</span>
+<span>## 21  classif.randomForestSRC randomForestSRC</span>
+<span>## 22           classif.ranger          ranger</span>
+<span>## 23            classif.rpart           rpart</span>
+<span>## 24          classif.xgboost         xgboost</span>
+
+<span># Learners that can deal with class weights</span>
+<span><a href="https://mlr.mlr-org.com/reference/listLearners.html">listLearners</a></span><span>(</span><span>"classif"</span>, properties <span>=</span> <span>"class.weights"</span><span>)</span><span>[</span><span><a href="https://rdrr.io/r/base/c.html">c</a></span><span>(</span><span>"class"</span>, <span>"package"</span><span>)</span><span>]</span>
+<span>##                            class      package</span>
+<span>## 1                   classif.ksvm      kernlab</span>
+<span>## 2       classif.LiblineaRL1L2SVC    LiblineaR</span>
+<span>## 3      classif.LiblineaRL1LogReg    LiblineaR</span>
+<span>## 4       classif.LiblineaRL2L1SVC    LiblineaR</span>
+<span>## 5      classif.LiblineaRL2LogReg    LiblineaR</span>
+<span>## 6         classif.LiblineaRL2SVC    LiblineaR</span>
+<span>## 7 classif.LiblineaRMultiClassSVC    LiblineaR</span>
+<span>## 8           classif.randomForest randomForest</span>
+<span>## 9                    classif.svm        e1071</span></code></pre></div>
+<p>Alternatively, <em>over- and undersampling</em> techniques can be used.</p>
+<div id="i--weighting">
+<h4>
+<a href="#i--weighting"></a>i. Weighting</h4>
+<p>Just as <em>theoretical thresholds</em>, <em>theoretical weights</em> can be calculated from the cost matrix. If <span><span></span><span id="MathJax-Element-29-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>t</mi></math></span></span></span> indicates the target threshold and <span><span></span><span id="MathJax-Element-30-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;msub&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>t</mi><mn>0</mn></msub></math></span></span></span> the original threshold for the positive class the proportion of observations in the positive class has to be multiplied by <span><span></span></span></p><p><span id="MathJax-Element-31-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;mfrac&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/mrow&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/mfrac&gt;&lt;mfrac&gt;&lt;msub&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;mo&gt;.&lt;/mo&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mfrac><mrow><mn>1</mn><mo>−</mo><mi>t</mi></mrow><mi>t</mi></mfrac><mfrac><msub><mi>t</mi><mn>0</mn></msub><mrow><mn>1</mn><mo>−</mo><msub><mi>t</mi><mn>0</mn></msub></mrow></mfrac><mo>.</mo></math></span></span></p> Alternatively, the proportion of observations in the negative class can be multiplied by the inverse. A proof is given by <a href="http://www.cs.iastate.edu/~honavar/elkan.pdf">Elkan (2001)</a>.<p></p>
+<p>In most cases, the original threshold is <span><span></span><span id="MathJax-Element-32-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;msub&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;0.5&lt;/mn&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>t</mi><mn>0</mn></msub><mo>=</mo><mn>0.5</mn></math></span></span></span> and thus the second factor vanishes. If additionally the target threshold <span><span></span><span id="MathJax-Element-33-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>t</mi></math></span></span></span> equals the theoretical threshold <span><span></span><span id="MathJax-Element-34-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;msup&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo&gt;∗&lt;/mo&gt;&lt;/msup&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>t</mi><mo>∗</mo></msup></math></span></span></span> the proportion of observations in the positive class has to be multiplied by <span><span></span></span></p><p><span id="MathJax-Element-35-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;mfrac&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;msup&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo&gt;∗&lt;/mo&gt;&lt;/msup&gt;&lt;/mrow&gt;&lt;msup&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mo&gt;∗&lt;/mo&gt;&lt;/msup&gt;&lt;/mfrac&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mfrac&gt;&lt;mrow&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;mo&gt;.&lt;/mo&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mfrac><mrow><mn>1</mn><mo>−</mo><msup><mi>t</mi><mo>∗</mo></msup></mrow><msup><mi>t</mi><mo>∗</mo></msup></mfrac><mo>=</mo><mfrac><mrow><mi>c</mi><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo>,</mo><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>−</mo><mi>c</mi><mo stretchy="false">(</mo><mo>+</mo><mn>1</mn><mo>,</mo><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mrow><mi>c</mi><mo stretchy="false">(</mo><mo>+</mo><mn>1</mn><mo>,</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo>−</mo><mi>c</mi><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo>,</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mfrac><mo>.</mo></math></span></span></p><p></p>
+<p>For the credit example (<code>caret:GermanCredit()</code>) the theoretical threshold corresponds to a weight of 5 for the positive class.</p>
+<div id="cb12"><pre><code><span># Weight for positive class corresponding to theoretical treshold</span>
+<span>w</span> <span>=</span> <span>(</span><span>1</span> <span>-</span> <span>th</span><span>)</span><span>/</span><span>th</span>
+<span>w</span>
+<span>## [1] 5</span></code></pre></div>
+<p>A unified and convenient way to assign class weights to a Learner (<code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>) (and tune them) is provided by function <code><a href="https://mlr.mlr-org.com/reference/makeWeightedClassesWrapper.html">makeWeightedClassesWrapper()</a></code>. The class weights are specified using argument <code>wcw.weight</code>.
+ For learners that support observation weights a suitable weight vector 
+is then generated internally during training or resampling. If the 
+learner can deal with class weights, the weights are basically passed on
+ to the appropriate learner parameter. The advantage of using the 
+wrapper in this case is the unified way to specify the class weights.</p>
+<p>Below is an example using learner <code>"classif.multinom"</code> (<code><a href="https://rdrr.io/pkg/nnet/man/multinom.html">nnet::multinom()</a></code>) from package <code>nnet</code>) which accepts observation weights. For binary classification problems it is sufficient to specify the weight <code>w</code> for the positive class. The negative class then automatically receives weight 1.</p>
+<div id="cb13"><pre><code><span># Weighted learner</span>
+<span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner</a></span><span>(</span><span>"classif.multinom"</span>, trace <span>=</span> <span>FALSE</span><span>)</span>
+<span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeWeightedClassesWrapper.html">makeWeightedClassesWrapper</a></span><span>(</span><span>lrn</span>, wcw.weight <span>=</span> <span>w</span><span>)</span>
+<span>lrn</span>
+
+<span>r</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/resample.html">resample</a></span><span>(</span><span>lrn</span>, <span>credit.task</span>, <span>rin</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>credit.costs</span>, <span>mmce</span><span>)</span>, show.info <span>=</span> <span>FALSE</span><span>)</span>
+<span>r</span>
+
+<span>## Resample Result</span>
+<span>## Task: GermanCredit</span>
+<span>## Learner: weightedclasses.classif.multinom</span>
+<span>## Aggr perf: credit.costs.test.mean=0.5680531,mmce.test.mean=0.3599887</span>
+<span>## Runtime: 0.20412</span></code></pre></div>
+<p>For classification methods like <code>"classif.ksvm"</code> (the support vector machine <code><a href="https://rdrr.io/pkg/kernlab/man/ksvm.html">kernlab::ksvm()</a></code> in package <code>kernlab</code>) that support class weights you can pass them directly.</p>
+<div id="cb14"><pre><code><span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner</a></span><span>(</span><span>"classif.ksvm"</span>, class.weights <span>=</span> <span><a href="https://rdrr.io/r/base/c.html">c</a></span><span>(</span>Bad <span>=</span> <span>w</span>, Good <span>=</span> <span>1</span><span>)</span><span>)</span></code></pre></div>
+<p>Or, more conveniently, you can again use <code><a href="https://mlr.mlr-org.com/reference/makeWeightedClassesWrapper.html">makeWeightedClassesWrapper()</a></code>.</p>
+<div id="cb15"><pre><code><span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeWeightedClassesWrapper.html">makeWeightedClassesWrapper</a></span><span>(</span><span>"classif.ksvm"</span>, wcw.weight <span>=</span> <span>w</span><span>)</span>
+<span>r</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/resample.html">resample</a></span><span>(</span><span>lrn</span>, <span>credit.task</span>, <span>rin</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>credit.costs</span>, <span>mmce</span><span>)</span>, show.info <span>=</span> <span>FALSE</span><span>)</span>
+<span>r</span>
+
+<span>## Resample Result</span>
+<span>## Task: GermanCredit</span>
+<span>## Learner: weightedclasses.classif.ksvm</span>
+<span>## Aggr perf: credit.costs.test.mean=0.6070861,mmce.test.mean=0.3349817</span>
+<span>## Runtime: 1.69427</span></code></pre></div>
+<p>Just like the theoretical threshold, the theoretical weights may not 
+always be suitable, therefore you can tune the weight for the positive 
+class as shown in the following example. Calculating the theoretical 
+weight beforehand may help to narrow down the search interval.</p>
+<div id="cb16"><pre><code><span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner</a></span><span>(</span><span>"classif.multinom"</span>, trace <span>=</span> <span>FALSE</span><span>)</span>
+<span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeWeightedClassesWrapper.html">makeWeightedClassesWrapper</a></span><span>(</span><span>lrn</span><span>)</span>
+<span>ps</span> <span>=</span> <span>makeParamSet</span><span>(</span><span>makeDiscreteParam</span><span>(</span><span>"wcw.weight"</span>, <span><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span>(</span><span>4</span>, <span>12</span>, <span>0.5</span><span>)</span><span>)</span><span>)</span>
+<span>ctrl</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeTuneControlGrid.html">makeTuneControlGrid</a></span><span>(</span><span>)</span>
+<span>tune.res</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/tuneParams.html">tuneParams</a></span><span>(</span><span>lrn</span>, <span>credit.task</span>, resampling <span>=</span> <span>rin</span>, par.set <span>=</span> <span>ps</span>,
+  measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>credit.costs</span>, <span>mmce</span><span>)</span>, control <span>=</span> <span>ctrl</span>, show.info <span>=</span> <span>FALSE</span><span>)</span>
+<span>tune.res</span>
+<span>## Tune result:</span>
+<span>## Op. pars: wcw.weight=8</span>
+<span>## credit.costs.test.mean=0.5139601,mmce.test.mean=0.4020038</span>
+
+<span><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span>(</span><span>tune.res</span><span>$</span><span>opt.path</span><span>)</span><span>[</span><span>1</span><span>:</span><span>3</span><span>]</span>
+<span>##    wcw.weight credit.costs.test.mean mmce.test.mean</span>
+<span>## 1           4              0.5439032      0.3279867</span>
+<span>## 2         4.5              0.5598982      0.3439817</span>
+<span>## 3           5              0.5589242      0.3589877</span>
+<span>## 4         5.5              0.5539162      0.3699838</span>
+<span>## 5           6              0.5369202      0.3769878</span>
+<span>## 6         6.5              0.5249201      0.3809918</span>
+<span>## 7           7              0.5289331      0.3889968</span>
+<span>## 8         7.5              0.5159561      0.3960038</span>
+<span>## 9           8              0.5139601      0.4020038</span>
+<span>## 10        8.5              0.5219621      0.4100058</span>
+<span>## 11          9              0.5299551      0.4179988</span>
+<span>## 12        9.5              0.5369561      0.4249999</span>
+<span>## 13         10              0.5439571      0.4320009</span>
+<span>## 14       10.5              0.5439481      0.4359959</span>
+<span>## 15         11              0.5409631      0.4409949</span>
+<span>## 16       11.5              0.5439601      0.4439919</span>
+<span>## 17         12              0.5499661      0.4499979</span></code></pre></div>
+</div>
+<div id="ii--over--and-undersampling">
+<h4>
+<a href="#ii--over--and-undersampling"></a>ii. Over- and undersampling</h4>
+<p>If the Learner (<code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>)
+ supports neither observation nor class weights the proportions of the 
+classes in the training data can be changed by over- or undersampling.</p>
+<p>In the GermanCredit data set (<code><a href="https://rdrr.io/pkg/caret/man/GermanCredit.html">caret::GermanCredit()</a></code>) the positive class Bad should receive a theoretical weight of <code>w = (1 - th)/th = 5</code>. This can be achieved by oversampling class Bad with a <code>rate</code> of 5 or by undersampling class Good with a <code>rate</code> of 1/5 (using functions <code><a href="https://mlr.mlr-org.com/reference/oversample.html">oversample()</a></code> or undersample (<code><a href="https://mlr.mlr-org.com/reference/oversample.html">undersample()</a></code>).</p>
+<div id="cb17"><pre><code><span>credit.task.over</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/oversample.html">oversample</a></span><span>(</span><span>credit.task</span>, rate <span>=</span> <span>w</span>, cl <span>=</span> <span>"Bad"</span><span>)</span>
+<span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner</a></span><span>(</span><span>"classif.multinom"</span>, trace <span>=</span> <span>FALSE</span><span>)</span>
+<span>mod</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/train.html">train</a></span><span>(</span><span>lrn</span>, <span>credit.task.over</span><span>)</span>
+<span>pred</span> <span>=</span> <span><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span>(</span><span>mod</span>, task <span>=</span> <span>credit.task</span><span>)</span>
+<span><a href="https://mlr.mlr-org.com/reference/performance.html">performance</a></span><span>(</span><span>pred</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>credit.costs</span>, <span>mmce</span><span>)</span><span>)</span>
+<span>## credit.costs         mmce </span>
+<span>##        0.441        0.337</span></code></pre></div>
+<p>Note that in the above example the learner was trained on the oversampled task <code>credit.task.over</code>. In order to get the training performance on the original task predictions were calculated for <code>credit.task</code>.</p>
+<p>We usually prefer resampled performance values, but simply calling <code><a href="https://mlr.mlr-org.com/reference/resample.html">resample()</a></code>
+ on the oversampled task does not work since predictions have to be 
+based on the original task. The solution is to create a wrapped Learner (<code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>) via function <code><a href="https://mlr.mlr-org.com/reference/makeUndersampleWrapper.html">makeUndersampleWrapper()</a></code>. Internally, <code><a href="https://mlr.mlr-org.com/reference/oversample.html">oversample()</a></code> is called before training, but predictions are done on the original data.</p>
+<div id="cb18"><pre><code><span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner</a></span><span>(</span><span>"classif.multinom"</span>, trace <span>=</span> <span>FALSE</span><span>)</span>
+<span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeUndersampleWrapper.html">makeOversampleWrapper</a></span><span>(</span><span>lrn</span>, osw.rate <span>=</span> <span>w</span>, osw.cl <span>=</span> <span>"Bad"</span><span>)</span>
+<span>lrn</span>
+
+<span>## Learner classif.multinom.oversampled from package mlr,nnet</span>
+<span>## Type: classif</span>
+<span>## Name: ; Short name: </span>
+<span>## Class: OversampleWrapper</span>
+<span>## Properties: numerics,factors,weights,prob,twoclass,multiclass</span>
+<span>## Predict-Type: response</span>
+<span>## Hyperparameters: trace=FALSE,osw.rate=5,osw.cl=Bad</span>
+
+<span>r</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/resample.html">resample</a></span><span>(</span><span>lrn</span>, <span>credit.task</span>, <span>rin</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>credit.costs</span>, <span>mmce</span><span>)</span>, show.info <span>=</span> <span>FALSE</span><span>)</span>
+<span>r</span>
+
+<span>## Resample Result</span>
+<span>## Task: GermanCredit</span>
+<span>## Learner: classif.multinom.oversampled</span>
+<span>## Aggr perf: credit.costs.test.mean=0.5530710,mmce.test.mean=0.3570067</span>
+<span>## Runtime: 0.418571</span></code></pre></div>
+<p>Of course, we can also tune the oversampling rate. For this purpose we again have to create an OversampleWrapper (<code><a href="https://mlr.mlr-org.com/reference/makeUndersampleWrapper.html">makeUndersampleWrapper()</a></code>). Optimal values for parameter <code>osw.rate</code> can be obtained using function <code><a href="https://mlr.mlr-org.com/reference/tuneParams.html">tuneParams()</a></code>.</p>
+<div id="cb19"><pre><code><span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner</a></span><span>(</span><span>"classif.multinom"</span>, trace <span>=</span> <span>FALSE</span><span>)</span>
+<span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeUndersampleWrapper.html">makeOversampleWrapper</a></span><span>(</span><span>lrn</span>, osw.cl <span>=</span> <span>"Bad"</span><span>)</span>
+<span>ps</span> <span>=</span> <span>makeParamSet</span><span>(</span><span>makeDiscreteParam</span><span>(</span><span>"osw.rate"</span>, <span><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span>(</span><span>3</span>, <span>7</span>, <span>0.25</span><span>)</span><span>)</span><span>)</span>
+<span>ctrl</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeTuneControlGrid.html">makeTuneControlGrid</a></span><span>(</span><span>)</span>
+<span>tune.res</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/tuneParams.html">tuneParams</a></span><span>(</span><span>lrn</span>, <span>credit.task</span>, <span>rin</span>, par.set <span>=</span> <span>ps</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>credit.costs</span>, <span>mmce</span><span>)</span>,
+  control <span>=</span> <span>ctrl</span>, show.info <span>=</span> <span>FALSE</span><span>)</span>
+<span>tune.res</span>
+<span>## Tune result:</span>
+<span>## Op. pars: osw.rate=7</span>
+<span>## credit.costs.test.mean=0.5219171,mmce.test.mean=0.3819928</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="multi-class-problems">
+<h2 id="multi-class-problems-1">
+<a href="#multi-class-problems"></a>Multi-class problems</h2>
+<p>We consider the waveform <code><a href="https://rdrr.io/pkg/mlbench/man/mlbench.waveform.html">mlbench::mlbench.waveform()</a></code> data set from package <code>mlbench::mlbench()</code> and add an artificial cost matrix:</p>
+<table><tbody>
+<tr>
+<td>true/pred.</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>30</td>
+<td>80</td>
+</tr>
+<tr>
+<td>2</td>
+<td>5</td>
+<td>0</td>
+<td>4</td>
+</tr>
+<tr>
+<td>3</td>
+<td>10</td>
+<td>8</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>We start by creating the <code><a href="https://mlr.mlr-org.com/reference/Task.html">Task()</a></code>, the cost matrix and the corresponding performance measure.</p>
+<div id="cb20"><pre><code><span># Task</span>
+<span>df</span> <span>=</span> <span>mlbench</span><span>::</span><span><a href="https://rdrr.io/pkg/mlbench/man/mlbench.waveform.html">mlbench.waveform</a></span><span>(</span><span>500</span><span>)</span>
+<span>wf.task</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeClassifTask.html">makeClassifTask</a></span><span>(</span>id <span>=</span> <span>"waveform"</span>, data <span>=</span> <span><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span>(</span><span>df</span><span>)</span>, target <span>=</span> <span>"classes"</span><span>)</span>
+
+<span># Cost matrix</span>
+<span>costs</span> <span>=</span> <span><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span>(</span><span><a href="https://rdrr.io/r/base/c.html">c</a></span><span>(</span><span>0</span>, <span>5</span>, <span>10</span>, <span>30</span>, <span>0</span>, <span>8</span>, <span>80</span>, <span>4</span>, <span>0</span><span>)</span>, <span>3</span><span>)</span>
+<span><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span>(</span><span>costs</span><span>)</span> <span>=</span> <span><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span>(</span><span>costs</span><span>)</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/getTaskClassLevels.html">getTaskClassLevels</a></span><span>(</span><span>wf.task</span><span>)</span>
+
+<span># Performance measure</span>
+<span>wf.costs</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeCostMeasure.html">makeCostMeasure</a></span><span>(</span>id <span>=</span> <span>"wf.costs"</span>, name <span>=</span> <span>"Waveform costs"</span>, costs <span>=</span> <span>costs</span>,
+  best <span>=</span> <span>0</span>, worst <span>=</span> <span>10</span><span>)</span></code></pre></div>
+<p>In the multi-class case, both, <em>thresholding</em> and <em>rebalancing</em> correspond to cost matrices of a certain structure where <span><span></span><span id="MathJax-Element-36-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi><mo stretchy="false">(</mo><mi>k</mi><mo>,</mo><mi>l</mi><mo stretchy="false">)</mo><mo>=</mo><mi>c</mi><mo stretchy="false">(</mo><mi>l</mi><mo stretchy="false">)</mo></math></span></span></span> for <span><span></span><span id="MathJax-Element-37-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi></math></span></span></span>, <span><span></span><span id="MathJax-Element-38-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo&gt;…&lt;/mo&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>l</mi><mo>=</mo><mn>1</mn><mo>,</mo><mo>…</mo><mo>,</mo><mi>K</mi></math></span></span></span>, <span><span></span><span id="MathJax-Element-39-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;mo&gt;≠&lt;/mo&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi><mo>≠</mo><mi>l</mi></math></span></span></span>. This condition means that the cost of misclassifying an observation is independent of the predicted class label (see <a href="http://homes.cs.washington.edu/~pedrod/papers/kdd99.pdf">Domingos, 1999</a>).
+ Given a cost matrix of this type, theoretical thresholds and weights 
+can be derived in a similar manner as in the binary case. Obviously, the
+ cost matrix given above does not have this special structure.</p>
+<div id="thresholding-1">
+<h3 id="1-thresholding-1">
+<a href="#thresholding-1"></a>1. Thresholding</h3>
+<p>Given a vector of positive threshold values as long as the number of classes <span><span></span><span id="MathJax-Element-40-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>K</mi></math></span></span></span>,
+ the predicted probabilities for all classes are adjusted by dividing 
+them by the corresponding threshold value. Then the class with the 
+highest adjusted probability is predicted. This way, as in the binary 
+case, classes with a low threshold are preferred to classes with a 
+larger threshold.</p>
+<p>Again this can be done by function <code><a href="https://mlr.mlr-org.com/reference/setThreshold.html">setThreshold()</a></code> as shown in the following example (or alternatively by the <code>predict.threshold</code> option of <code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>). Note that the threshold vector needs to have names that correspond to the class labels.</p>
+<div id="cb21"><pre><code><span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner</a></span><span>(</span><span>"classif.rpart"</span>, predict.type <span>=</span> <span>"prob"</span><span>)</span>
+<span>rin</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeResampleInstance.html">makeResampleInstance</a></span><span>(</span><span>"CV"</span>, iters <span>=</span> <span>3</span>, task <span>=</span> <span>wf.task</span><span>)</span>
+<span>r</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/resample.html">resample</a></span><span>(</span><span>lrn</span>, <span>wf.task</span>, <span>rin</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>wf.costs</span>, <span>mmce</span><span>)</span>, show.info <span>=</span> <span>FALSE</span><span>)</span>
+<span>r</span>
+
+<span>## Resample Result</span>
+<span>## Task: waveform</span>
+<span>## Learner: classif.rpart</span>
+<span>## Aggr perf: wf.costs.test.mean=5.9764447,mmce.test.mean=0.2460020</span>
+<span>## Runtime: 0.0586474</span>
+
+<span># Calculate thresholds as 1/(average costs of true classes)</span>
+<span>th</span> <span>=</span> <span>2</span><span>/</span><span><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span>(</span><span>costs</span><span>)</span>
+<span><a href="https://rdrr.io/r/base/names.html">names</a></span><span>(</span><span>th</span><span>)</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/getTaskClassLevels.html">getTaskClassLevels</a></span><span>(</span><span>wf.task</span><span>)</span>
+<span>th</span>
+
+<span>##          1          2          3 </span>
+<span>## 0.01818182 0.22222222 0.11111111</span>
+
+<span>pred.th</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/setThreshold.html">setThreshold</a></span><span>(</span><span>r</span><span>$</span><span>pred</span>, threshold <span>=</span> <span>th</span><span>)</span>
+<span><a href="https://mlr.mlr-org.com/reference/performance.html">performance</a></span><span>(</span><span>pred.th</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>wf.costs</span>, <span>mmce</span><span>)</span><span>)</span>
+
+<span>##  wf.costs      mmce </span>
+<span>## 4.6863021 0.2919823</span></code></pre></div>
+<p>The threshold vector <code>th</code> in the above example is chosen according to the average costs of the true classes 55, 4.5 and 9. More exactly, <code>th</code> corresponds to an artificial cost matrix of the structure mentioned above with off-diagonal elements <span><span></span><span id="MathJax-Element-41-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;55&lt;/mn&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi><mo stretchy="false">(</mo><mn>2</mn><mo>,</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mi>c</mi><mo stretchy="false">(</mo><mn>3</mn><mo>,</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mn>55</mn></math></span></span></span>, <span><span></span><span id="MathJax-Element-42-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;4.5&lt;/mn&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi><mo stretchy="false">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo stretchy="false">)</mo><mo>=</mo><mi>c</mi><mo stretchy="false">(</mo><mn>3</mn><mo>,</mo><mn>2</mn><mo stretchy="false">)</mo><mo>=</mo><mn>4.5</mn></math></span></span></span> and <span><span></span><span id="MathJax-Element-43-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;9&lt;/mn&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi><mo stretchy="false">(</mo><mn>1</mn><mo>,</mo><mn>3</mn><mo stretchy="false">)</mo><mo>=</mo><mi>c</mi><mo stretchy="false">(</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo stretchy="false">)</mo><mo>=</mo><mn>9</mn></math></span></span></span>. This threshold vector may be not optimal but leads to smaller total costs on the data set than the default.</p>
+<div id="ii--empirical-thresholding-1">
+<h4>
+<a href="#ii--empirical-thresholding-1"></a>ii. Empirical thresholding</h4>
+<p>As in the binary case it is possible to tune the threshold vector using function <code><a href="https://mlr.mlr-org.com/reference/tuneThreshold.html">tuneThreshold()</a></code>. Since the scaling of the threshold vector does not change the predicted class labels <code><a href="https://mlr.mlr-org.com/reference/tuneThreshold.html">tuneThreshold()</a></code> returns threshold values that lie in [0,1] and sum to unity.</p>
+<div id="cb22"><pre><code><span>tune.res</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/tuneThreshold.html">tuneThreshold</a></span><span>(</span>pred <span>=</span> <span>r</span><span>$</span><span>pred</span>, measure <span>=</span> <span>wf.costs</span><span>)</span>
+<span>tune.res</span>
+<span>## $th</span>
+<span>##          1          2          3 </span>
+<span>## 0.04206368 0.47912405 0.47881227 </span>
+<span>## </span>
+<span>## $perf</span>
+<span>## [1] 4.594</span></code></pre></div>
+<p>For comparison we show the standardized version of the theoretically motivated threshold vector chosen above.</p>
+<div id="cb23"><pre><code><span>th</span><span>/</span><span><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span>(</span><span>th</span><span>)</span>
+<span>##          1          2          3 </span>
+<span>## 0.05172414 0.63218391 0.31609195</span></code></pre></div>
+</div>
+</div>
+<div id="rebalancing-1">
+<h3 id="2-rebalancing-1">
+<a href="#rebalancing-1"></a>2. Rebalancing</h3>
+<div id="i--weighting-1">
+<h4>
+<a href="#i--weighting-1"></a>i. Weighting</h4>
+<p>In the multi-class case you have to pass a vector of weights as long as the number of classes <span><span></span><span id="MathJax-Element-44-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>K</mi></math></span></span></span> to function <code><a href="https://mlr.mlr-org.com/reference/makeWeightedClassesWrapper.html">makeWeightedClassesWrapper()</a></code>. The weight vector can be tuned using function <code><a href="https://mlr.mlr-org.com/reference/tuneParams.html">tuneParams()</a></code>.</p>
+<div id="cb24"><pre><code><span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner</a></span><span>(</span><span>"classif.multinom"</span>, trace <span>=</span> <span>FALSE</span><span>)</span>
+<span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeWeightedClassesWrapper.html">makeWeightedClassesWrapper</a></span><span>(</span><span>lrn</span><span>)</span>
+
+<span>ps</span> <span>=</span> <span>makeParamSet</span><span>(</span><span>makeNumericVectorParam</span><span>(</span><span>"wcw.weight"</span>, len <span>=</span> <span>3</span>, lower <span>=</span> <span>0</span>, upper <span>=</span> <span>1</span><span>)</span><span>)</span>
+<span>ctrl</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeTuneControlRandom.html">makeTuneControlRandom</a></span><span>(</span><span>)</span>
+
+<span>tune.res</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/tuneParams.html">tuneParams</a></span><span>(</span><span>lrn</span>, <span>wf.task</span>, resampling <span>=</span> <span>rin</span>, par.set <span>=</span> <span>ps</span>,
+  measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>wf.costs</span>, <span>mmce</span><span>)</span>, control <span>=</span> <span>ctrl</span>, show.info <span>=</span> <span>FALSE</span><span>)</span>
+<span>tune.res</span>
+<span>## Tune result:</span>
+<span>## Op. pars: wcw.weight=0.544,0.0852...</span>
+<span>## wf.costs.test.mean=2.5099079,mmce.test.mean=0.2340379</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="example-dependent-misclassification-costs">
+<h2>
+<a href="#example-dependent-misclassification-costs"></a>Example-dependent misclassification costs</h2>
+<p>In case of example-dependent costs we have to create a special <code><a href="https://mlr.mlr-org.com/reference/Task.html">Task()</a></code> via function <code><a href="https://mlr.mlr-org.com/reference/makeCostSensTask.html">makeCostSensTask()</a></code>. For this purpose the feature values <span><span></span><span id="MathJax-Element-45-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>x</mi></math></span></span></span> and an <span><span></span><span id="MathJax-Element-46-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;×&lt;/mo&gt;&lt;mi&gt;K&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi><mo>×</mo><mi>K</mi></math></span></span></span> <code>cost</code> matrix that contains the cost vectors for all <span><span></span><span id="MathJax-Element-47-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/math&gt;" role="presentation"><span role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math></span></span></span> examples in the data set are required.</p>
+<p>We use the iris (<code><a href="https://rdrr.io/r/datasets/iris.html">datasets::iris()</a></code>) data and generate an artificial cost matrix (see <a href="https://doi.org/10.1145/1102351.1102358">Beygelzimer et al., 2005</a>).</p>
+<div id="cb25"><pre><code><span>df</span> <span>=</span> <span>iris</span>
+<span>cost</span> <span>=</span> <span><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span>(</span><span><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span>(</span><span>150</span> <span>*</span> <span>3</span>, <span>0</span>, <span>2000</span><span>)</span>, <span>150</span><span>)</span> <span>*</span> <span>(</span><span>1</span> <span>-</span> <span><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span>(</span><span>3</span><span>)</span><span>)</span><span>[</span><span>df</span><span>$</span><span>Species</span>,<span>]</span> <span>+</span> <span><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span>(</span><span>150</span>, <span>0</span>, <span>10</span><span>)</span>
+<span><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span>(</span><span>cost</span><span>)</span> <span>=</span> <span><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span>(</span><span>iris</span><span>$</span><span>Species</span><span>)</span>
+<span><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span>(</span><span>cost</span><span>)</span> <span>=</span> <span><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span>(</span><span>iris</span><span>)</span>
+<span>df</span><span>$</span><span>Species</span> <span>=</span> <span>NULL</span>
+
+<span>costsens.task</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeCostSensTask.html">makeCostSensTask</a></span><span>(</span>id <span>=</span> <span>"iris"</span>, data <span>=</span> <span>df</span>, cost <span>=</span> <span>cost</span><span>)</span>
+<span>costsens.task</span>
+<span>## Supervised task: iris</span>
+<span>## Type: costsens</span>
+<span>## Observations: 150</span>
+<span>## Features:</span>
+<span>##    numerics     factors     ordered functionals </span>
+<span>##           4           0           0           0 </span>
+<span>## Missings: FALSE</span>
+<span>## Has blocking: FALSE</span>
+<span>## Has coordinates: FALSE</span>
+<span>## Classes: 3</span>
+<span>## setosa, versicolor, virginica</span></code></pre></div>
+<p><code>mlr</code> provides several <a href="https://mlr.mlr-org.com/articles/tutorial/wrapper.html" target="_blank">wrappers</a> to turn regular classification or regression methods into Learner (<code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>)s that can deal with example-dependent costs.</p>
+<ul>
+<li>
+<code><a href="https://mlr.mlr-org.com/reference/makeCostSensClassifWrapper.html">makeCostSensClassifWrapper()</a></code> (wraps a classification Learner (<code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>)):
+ This is a naive approach where the costs are coerced into class labels 
+by choosing the class label with minimum cost for each example. Then a 
+regular classification method is used.</li>
+<li>
+<code><a href="https://mlr.mlr-org.com/reference/makeCostSensRegrWrapper.html">makeCostSensRegrWrapper()</a></code> (wraps a regression Learner (<code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>)):
+ An individual regression model is fitted for the costs of each class. 
+In the prediction step first the costs are predicted for all classes and
+ then the class with the lowest predicted costs is selected.</li>
+<li>
+<code><a href="https://mlr.mlr-org.com/reference/makeCostSensWeightedPairsWrapper.html">makeCostSensWeightedPairsWrapper()</a></code> (wraps a classification Learner (<code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>)): This is also known as <em>cost-sensitive one-vs-one</em>
+ (CS-OVO) and the most sophisticated of the currently supported methods.
+ For each pair of classes, a binary classifier is fitted. For each 
+observation the class label is defined as the element of the pair with 
+minimal costs. During fitting, the observations are weighted with the 
+absolute difference in costs. Prediction is performed by simple voting.</li>
+</ul>
+<p>In the following example we use the third method. We create the wrapped Learner (<code><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner()</a></code>) and train it on the <code>CostSensTask</code>(<code><a href="https://mlr.mlr-org.com/reference/Task.html">Task()</a></code>) defined above.</p>
+<div id="cb26"><pre><code><span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeLearner.html">makeLearner</a></span><span>(</span><span>"classif.multinom"</span>, trace <span>=</span> <span>FALSE</span><span>)</span>
+<span>lrn</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/makeCostSensWeightedPairsWrapper.html">makeCostSensWeightedPairsWrapper</a></span><span>(</span><span>lrn</span><span>)</span>
+<span>lrn</span>
+<span>## Learner costsens.classif.multinom from package nnet</span>
+<span>## Type: costsens</span>
+<span>## Name: ; Short name: </span>
+<span>## Class: CostSensWeightedPairsWrapper</span>
+<span>## Properties: twoclass,multiclass,numerics,factors</span>
+<span>## Predict-Type: response</span>
+<span>## Hyperparameters: trace=FALSE</span>
+
+<span>mod</span> <span>=</span> <span><a href="https://mlr.mlr-org.com/reference/train.html">train</a></span><span>(</span><span>lrn</span>, <span>costsens.task</span><span>)</span>
+<span>mod</span>
+<span>## Model for learner.id=costsens.classif.multinom; learner.class=CostSensWeightedPairsWrapper</span>
+<span>## Trained on: task.id = iris; obs = 150; features = 4</span>
+<span>## Hyperparameters: trace=FALSE</span></code></pre></div>
+<p>The models corresponding to the individual pairs can be accessed by function <code><a href="https://mlr.mlr-org.com/reference/getLearnerModel.html">getLearnerModel()</a></code>.</p>
+<div id="cb27"><pre><code><span><a href="https://mlr.mlr-org.com/reference/getLearnerModel.html">getLearnerModel</a></span><span>(</span><span>mod</span><span>)</span>
+<span>## [[1]]</span>
+<span>## Model for learner.id=classif.multinom; learner.class=classif.multinom</span>
+<span>## Trained on: task.id = feats; obs = 150; features = 4</span>
+<span>## Hyperparameters: trace=FALSE</span>
+<span>## </span>
+<span>## [[2]]</span>
+<span>## Model for learner.id=classif.multinom; learner.class=classif.multinom</span>
+<span>## Trained on: task.id = feats; obs = 150; features = 4</span>
+<span>## Hyperparameters: trace=FALSE</span>
+<span>## </span>
+<span>## [[3]]</span>
+<span>## Model for learner.id=classif.multinom; learner.class=classif.multinom</span>
+<span>## Trained on: task.id = feats; obs = 150; features = 4</span>
+<span>## Hyperparameters: trace=FALSE</span></code></pre></div>
+<p><code>mlr</code> provides some performance measures for 
+example-specific cost-sensitive classification. In the following example
+ we calculate the mean costs of the predicted class labels (<a href="https://mlr.mlr-org.com/articles/tutorial/measures.html" target="_blank">meancosts</a>) and the misclassification penalty (<a href="https://mlr.mlr-org.com/articles/tutorial/measures.html" target="_blank">mcp</a>). The latter measure is the average difference between the costs caused by the predicted class labels, i.e., <a href="https://mlr.mlr-org.com/articles/tutorial/measures.html" target="_blank">meancosts</a>,
+ and the costs resulting from choosing the class with lowest cost for 
+each observation. In order to compute these measures the costs for the 
+test observations are required and therefore the <code><a href="https://mlr.mlr-org.com/reference/Task.html">Task()</a></code> has to be passed to <code><a href="https://mlr.mlr-org.com/reference/performance.html">performance()</a></code>.</p>
+<div id="cb28"><pre><code><span>pred</span> <span>=</span> <span><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span>(</span><span>mod</span>, task <span>=</span> <span>costsens.task</span><span>)</span>
+<span>pred</span>
+
+<span>## Prediction: 150 observations</span>
+<span>## predict.type: response</span>
+<span>## threshold: </span>
+<span>## time: 0.04</span>
+<span>##   id response</span>
+<span>## 1  1   setosa</span>
+<span>## 2  2   setosa</span>
+<span>## 3  3   setosa</span>
+<span>## 4  4   setosa</span>
+<span>## 5  5   setosa</span>
+<span>## 6  6   setosa</span>
+<span>## ... (#rows: 150, #cols: 2)</span>
+
+<span><a href="https://mlr.mlr-org.com/reference/performance.html">performance</a></span><span>(</span><span>pred</span>, measures <span>=</span> <span><a href="https://rdrr.io/r/base/list.html">list</a></span><span>(</span><span>meancosts</span>, <span>mcp</span><span>)</span>, task <span>=</span> <span>costsens.task</span><span>)</span>
+
+<span>## meancosts       mcp </span>
+<span>##  129.5971  124.8077</span></code></pre></div>
+</div>
+  </div><div><p>Developed by Bernd Bischl, Michel Lang, Lars Kotthoff, 
+Patrick Schratz, Julia Schiffner, Jakob Richter, Zachary Jones, Giuseppe
+ Casalicchio, Mason Gallo.</p>
+
+<p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+
+      </div></div></div>
+      </div>
+
+      <div>
+        <div class="reader-message"></div>
+      </div>
+      <div aria-owns="toolbar"></div>
+    </div>
+  
+
+</body></html>
