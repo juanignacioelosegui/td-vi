@@ -5,16 +5,13 @@ from sklearn.svm import SVC
 # Cargamos el dataset Iris
 iris = load_iris()
 
-# Dividimos el dataset en:
-# - train+validation (75%)
-# - test (25%)
+# Dividimos el dataset en: train+validation (75%) y test (25%)
 X_trainval, X_test, y_trainval, y_test = train_test_split(
     iris.data, iris.target, random_state=0
 )
 
-# Luego dividimos train+validation en:
-# - entrenamiento (75% de 75%)
-# - validación (25% de 75%)
+# Luego dividimos train+validation en train y validation
+# Se repitió la división anterior pero solamente en train+val
 X_train, X_valid, y_train, y_valid = train_test_split(
     X_trainval, y_trainval, random_state=1
 )
