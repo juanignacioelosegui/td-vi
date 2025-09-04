@@ -1,0 +1,858 @@
+---
+title: "Trabajo práctico 1 - Tecnología Digital VI"
+output: html_document
+date: "Indira Imbellone, Juan Ignacio Elosegui, Nicolás Boudourian"
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(cowplot) # Necesaria para plot_grid
+library(scales) # Necesaria para el formato de porcentajes
+library(rpart)
+library(rpart.plot)
+library(caret) 
+```
+
+#### [**EJERCICIO 1**]{.underline}
+
+El conjunto de datos a utilizar, "Adult Census Income", se obtuvo del repositorio de datos de la Universidad de California en Irvine (UCI) y está disponible en la plataforma Kaggle. Este dataset contiene información de registros del censo de Estados Unidos de 1994 y tiene como objetivo predecir si el ingreso anual de un individuo es superior a 50.000 dólares o no.
+
+Las principales variables incluidas son:
+
+**Variables numéricas:** age (edad), fnlwgt (peso final), education.num (nivel educativo en formato numérico), capital.gain (ganancias de capital), capital.loss (pérdidas de capital) y hours.per.week (horas de trabajo semanales).
+
+**Variables categóricas:** workclass (tipo de empleador), education (nivel de educación), marital.status (estado civil), occupation (ocupación), relationship (relación familiar), race (raza), sex (género) y native.country (país de origen).
+
+El problema a resolver es de clasificación binaria, donde la variable objetivo, income, indica si el ingreso de un individuo es \>50K o \<=50K.
+
+**Justificación para el uso de árboles de decisión:**
+
+Este conjunto de datos es una elección adecuada para aplicar algoritmos de árboles de decisión, ya que cumple con las características requeridas para el trabajo práctico. La variable objetivo, income, es de naturaleza binaria, lo cual se alinea perfectamente con un problema de clasificación. Además, el dataset combina una variedad de atributos numéricos y categóricos.
+
+#### [**EJERCICIO 2**]{.underline}
+
+```{r}
+# Cargar y preparar los datos
+adult_df <- read.csv("adultos2.csv", 
+                     col.names = c("age", "workclass", "fnlwgt", "education", "education.num", "marital.status", "occupation", "relationship", "race", "sex", "capital.gain", "capital.loss", "hours.per.week", "native.country", "income"), 
+                     na.strings = "?")
+
+# Eliminamos las filas con valores faltantes
+adult_df <- na.omit(adult_df)
+# Convertimos la variable 'income' en un factor, que es esencial para la clasificación.
+# Eliminamos espacios en blanco de la columna 'income'
+adult_df$income <- trimws(adult_df$income)
+adult_df$income <- as.factor(adult_df$income)
+adult_df$age <- as.numeric(adult_df$age)
+
+```
+
+#### Estadísticas descriptivas de las variables principales
+
+```{r, include=FALSE}
+print("Estadísticas de las variables numéricas principales:")
+print(summary(adult_df[, c("age", "education.num", "hours.per.week")]))
+
+```
+
+En esta sección, se utiliza la función summary() para obtener un resumen estadístico de las variables numéricas clave: edad (age), nivel educativo numérico (education.num) y horas de trabajo semanales (hours.per.week). La salida de esta función incluye el valor mínimo, el primer cuartil (25%), la mediana (50%), la media, el tercer cuartil (75%) y el valor máximo de cada variable. Estos datos proporcionan una visión general de la distribución de las variables y ayudan a identificar posibles valores atípicos o la asimetría de los datos. Por ejemplo, el resumen de la edad permite entender el rango de edades en el conjunto de datos, mientras que el de las horas de trabajo semanales puede mostrar si la mayoría de las personas trabajan a tiempo completo o parcial.
+
+```{r,include=FALSE}
+print("Distribución del Nivel de Educación:")
+print(sort(table(adult_df$education), decreasing = TRUE))
+```
+
+Por otro lado, utilizamos la función table() combinada con sort() para mostrar la frecuencia de cada categoría dentro de la variable nivel de educación. La salida es una lista que indica cuántas personas en el conjunto de datos pertenecen a cada nivel educativo, como "Bachelors", "High School grad", "Masters", etc., ordenado de mayor a menor frecuencia. Este análisis es fundamental para identificar las categorías más y menos representadas. Al conocer la distribución, se puede tener una idea de cómo la educación podría influir en otras variables, como los ingresos, y si el conjunto de datos tiene suficientes observaciones para cada nivel educativo para un análisis fiable.
+
+```{r,include=FALSE}
+print("Distribución de la variable objetivo 'income':")
+print(table(adult_df$income))
+```
+
+Finalmente, esta parte del código se muestra la distribución de la variable objetivo, income, que tiene dos categorías: \<=50K y \>50K. El resultado es un conteo simple de la cantidad de individuos que se encuentran en cada una de estas categorías de ingresos. Este es un paso crítico en cualquier problema de clasificación, ya que revela si la variable objetivo está balanceada o si existe un desequilibrio significativo (desbalance). En este caso, al observar el conteo, se puede ver que hay un 75% de personas que ganan \<=50K (22654) y un 25% (7508) que ganan \>50K. Esto confirma la existencia de un desbalance y resalta la necesidad de considerarlo durante el entrenamiento del modelo para evitar que este se incline hacia la categoría mayoritaria.
+
+#### Visualizaciones
+
+```{r}
+
+
+#Calcular las proporciones y preparar los datos
+income_proportions <- adult_df %>%
+  group_by(education) %>%
+  summarise(
+    total = n(),
+    prop_gt_50K = sum(income == ">50K") / total,
+    prop_le_50K = sum(income == "<=50K") / total
+  ) %>%
+  # Reordenar los niveles de educación antes de pivotar los datos
+  mutate(education = reorder(education, prop_gt_50K)) %>%
+  pivot_longer(
+    cols = starts_with("prop"),
+    names_to = "income_group",
+    values_to = "proportion"
+  )
+
+
+p_combined <- ggplot(income_proportions, aes(x = proportion, y = education, color = income_group)) +
+  geom_point(size = 3) +
+  labs(
+    title = "Proporción de ingresos por nivel educativo",
+    x = "Proporción de ingresos",
+    y = "Nivel educativo",
+    color = "Grupo de Ingresos"
+  ) +
+  scale_color_manual(
+    values = c("prop_gt_50K" = "skyblue", "prop_le_50K" = "salmon"),
+    labels = c("prop_gt_50K" = ">50K", "prop_le_50K" = "<=50K")
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(hjust = 1),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    legend.position = "bottom"
+  )
+
+print(p_combined)
+```
+
+En el gráfico anterior, se ilustra claramente la relación entre el nivel educativo y la distribución de ingresos. La principal conclusión es que **existe una correlación positiva y marcada entre un mayor nivel de educación y la probabilidad de obtener ingresos superiores a USD\$50K**. Formalmente, a medida que se avanza en la escala educativa, la proporción del segmento que representa los ingresos altos (color azul) aumenta consistentemente. Esto se evidencia de forma contundente en los niveles más altos como `Doctorate` y `Prof-school`, donde la mayoría de los individuos se ubican en el grupo de ingresos más altos. Por el contrario, en los niveles educativos más bajos (`Preschool`, `1st-4th`), la porción de ingresos inferiores a USD\$50K (color salmón) domina casi por completo. Al utilizar este gráfico de puntos se puede denotar fácilmente que la composición de los grupos de ingresos dentro de cada nivel educativo suma un total del 100%, lo que permite una comparación directa y visualmente intuitiva. Además, deja en claro cómo aumenta la proporción de ingresos a medido que aumenta el nivel educativo.
+
+```{r}
+
+library(ggplot2)
+ggplot(adult_df, aes(x = age, fill = income)) +
+  geom_histogram(binwidth = 5, alpha = 0.6, position = "identity") +
+  labs(
+    title = "Distribución de Edad por Nivel de Ingresos",
+    x = "Edad",
+    y = "Frecuencia",
+    fill = "Ingresos"
+  ) +
+  scale_fill_manual(values = c("<=50K" = "salmon", ">50K" = "skyblue")) +
+  theme_minimal()
+```
+
+En el histograma se observa un patrón bien claro del ciclo laboral: los ingresos superiores a USD\$50K empiezan a ganar peso recién a partir de los 30 años, cuando la trayectoria y la antigüedad ya se presentan; en cambio, en las edades más tempranas predomina el grupo ≤50K porque la mayoría está entrando al mercado laboral con sueldos iniciales. A medida que nos acercamos a los 40–50 años crece con fuerza la proporción de \>50K(los picos del histograma se ubican justamente ahí), mientras que después de los 55–60 años cae la frecuencia de ambos grupos: menos gente sigue trabajando a tiempo completo y, por ende, también baja la probabilidad de registrar ingresos altos por efectos de jubilación o retiro parcial. Finalmente, la idea de presentar este histograma era mostrar como la edad es un factor con mucho peso a la hora de determinar el nivel de ingreso de una persona.
+
+```{r}
+#Creamos una nueva variable para agrupar las relaciones
+df_grouped <- adult_df %>%
+  mutate(marital_group = ifelse(relationship %in% c("Husband", "Wife"), "Married", "Not Married"))
+
+#Filtramos los datos en dos data frames
+married_df <- df_grouped %>%
+  filter(marital_group == "Married")
+
+not_married_df <- df_grouped %>%
+  filter(marital_group == "Not Married")
+
+#Creamos y mostramos el gráfico para el grupo de Casados
+p_married <- married_df %>%
+  group_by(income) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  mutate(prop = n / sum(n)) %>%
+  complete(income, fill = list(n = 0, prop = 0)) %>%
+  ggplot(aes(x = income, y = prop, fill = income)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
+  labs(
+    title = "Ingresos en el Grupo de Casados",
+    x = "Nivel de Ingresos",
+    y = "Proporción",
+    fill = "Ingresos"
+  ) +
+  scale_fill_manual(values = c("<=50K" = "salmon", ">50K" = "skyblue")) +
+  theme_minimal()
+
+#Creamos y mostramos el gráfico para el grupo de No Casados
+p_not_married <- not_married_df %>%
+  group_by(income) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  mutate(prop = n / sum(n)) %>%
+  complete(income, fill = list(n = 0, prop = 0)) %>%
+  ggplot(aes(x = income, y = prop, fill = income)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
+  labs(
+    title = "Ingresos en el Grupo de No Casados",
+    x = "Nivel de Ingresos",
+    y = "Proporción",
+    fill = "Ingresos"
+  ) +
+  scale_fill_manual(values = c("<=50K" = "salmon", ">50K" = "skyblue")) +
+  theme_minimal()
+
+
+plot_grid(p_married, p_not_married, ncol = 2, labels = c("A", "B"))
+```
+
+La visualización de la izquierda, correspondiente a los **casados**, revela que una proporción significativamente mayor de este grupo tiene ingresos superiores a los \$50K, en comparación con el grupo de no casados. Por el contrario, la visualización de la derecha, para el grupo de **no casados**, muestra que la inmensa mayoría de las personas en este grupo tiene ingresos iguales o inferiores a \$50K. Esto sugiere una fuerte correlación positiva entre el estado civil de una persona (estar casado) y tener un ingreso más alto.Comentar sobre las características observadas en los datos.
+
+#### Comentar sobre las características observadas en los datos.
+
+**Valores faltantes:** Al cargar los datos, se encontró que las columnas workclass, occupation y native.country tenían valores faltantes representados con ?. Para este análisis, se decidió eliminar las filas con estos valores para asegurar la calidad de los datos, lo que resultó en un conjunto de datos más limpio con 30.162 observaciones.
+
+**Desbalance de la variable income**: La variable objetivo presenta un claro desbalance. El código muestra que una gran mayoría de los individuos gana \<=50K. Esto es una característica importante que el modelo debe considerar.
+
+#### [**EJERCICIO 3**]{.underline}
+
+```{r}
+
+library(caret)
+#semilla para asegurar que la división es la misma cada vez
+set.seed(42)
+
+# Dividir el 70% para el conjunto de entrenamiento
+indices_entrenamiento <- createDataPartition(adult_df$income, p = 0.7, list = FALSE)
+
+#Crear el conjunto de entrenamiento y el resto de los datos
+datos_entrenamiento <- adult_df[indices_entrenamiento, ]
+datos_restantes <- adult_df[-indices_entrenamiento, ] 
+
+indices_validacion <- createDataPartition(datos_restantes$income, p = 0.5, list = FALSE)
+
+#  conjuntos de validación y de prueba
+datos_validacion <- datos_restantes[indices_validacion, ]
+datos_prueba <- datos_restantes[-indices_validacion, ]
+
+```
+
+```{r, include = FALSE}
+cat("Dimensiones de los conjuntos de datos:\n")
+cat("Entrenamiento:", nrow(datos_entrenamiento), "filas\n")
+cat("Validación:", nrow(datos_validacion), "filas\n")
+cat("Prueba:", nrow(datos_prueba), "filas\n")
+```
+
+```{r}
+# Identificar todas las variables categóricas (factores) en el conjunto de entrenamiento.
+vars_categoricas <- names(datos_entrenamiento)[sapply(datos_entrenamiento, is.factor)]
+
+# Alinear los niveles para cada una de las variables categóricas.
+for (var in vars_categoricas) {
+  # Obtener los niveles definidos en el conjunto de entrenamiento.
+  niveles_entrenamiento <- levels(datos_entrenamiento[[var]])
+
+  # Alinear los niveles en el conjunto de validación.
+  # Si hay un nivel nuevo, lo convertirá a NA.
+  datos_validacion[[var]] <- factor(as.character(datos_validacion[[var]]), levels = niveles_entrenamiento)
+  
+  # Alinear los niveles en el conjunto de prueba.
+  # Si hay un nivel nuevo, lo convertirá a NA.
+  datos_prueba[[var]] <- factor(as.character(datos_prueba[[var]]), levels = niveles_entrenamiento)
+}
+
+
+arbol_basico <- rpart(income ~ ., data = datos_entrenamiento , method = "class")
+
+
+# 'extra = 101' agrega porcentajes en los nodos, lo que ayuda a interpretar los resultados.
+rpart.plot(arbol_basico, extra = 101, main = "Árbol de Decisión")
+
+
+
+
+```
+
+Para rpart, los hiperparámetros por defecto son:
+
+**Minsplit** = 20: Un nodo debe tener al menos 20 observaciones para que se intente una división. Esto ayuda a evitar que el árbol se ajuste demasiado a pequeños subconjuntos de datos, lo cual previene el sobreajuste.
+
+**Minbucket** = 7: El número mínimo de observaciones en un nodo terminal (hoja). Si solo se especifica minsplit, este valor se establece como un tercio de minsplit, redondeado.
+
+**Cp** = 0.01: El parámetro de complejidad. Si una división no mejora la bondad de ajuste del modelo en al menos un 1%, no se realizará. Esto ayuda a podar el árbol y a ahorrar tiempo de cálculo.
+
+**Maxdepth** = 30: La profundidad máxima del árbol. Con un valor tan alto, en la práctica, otros hiperparámetros como minsplit o cp suelen detener el crecimiento del árbol mucho antes de alcanzar esta profundidad.
+
+**Xval = 10**: Este parámetro fija en 10 el número de "folds" para la validación cruzada interna, un proceso que ayuda a encontrar el valor de cp óptimo para la poda.
+
+**Maxcompete = 4**: Indica cuántas divisiones alternativas (competitors) debe guardar el modelo por cada nodo. Por defecto, son 4.
+
+**Maxsurrogate = 5**: Define cuántas divisiones de respaldo (surrogate splits) debe guardar el modelo. Por defecto, son 5.
+
+El árbol de decisión proporcionado tiene como objetivo clasificar a los individuos en dos categorías de ingresos: \<=50K o \>50K. El árbol comienza en un nodo raíz en la parte superior, que contiene a todas las observaciones del conjunto de datos de entrenamiento. En este nodo, el 100% de los datos corresponden a la clase \<=50K porque es la clase mayoritaria.
+
+El modelo intenta encontrar la mejor división (split) en cada nodo para separar las clases de la manera más efectiva posible. Los dos primeros cortes son particularmente importantes, ya que definen la estructura principal del árbol y tienen el mayor impacto en la clasificación de los datos.
+
+En este caso, el árbol se basa en tres variables principales. El modelo identifica a marital.status como el factor más influyente para la primera división. El árbol se bifurca en dos ramas principales, la rama de la izquierda para los individuos "no casados" (incluye a solteros, divorciados y viudos) y la rama de la derecha para los individuos "casados" (incluye a Husband y Wife). Para los individuos en la rama de los "no casados", el modelo realiza un segundo corte basado en capital.gain. Los que tienen una ganancia de capital menor a 7074 forman una región, mientras que el resto va a otra. Esto sugiere que para las personas solteras, el ingreso alto está fuertemente asociado con las ganancias de capital. Para los individuos en la rama de los "casados", la siguiente división significativa se basa en el nivel educativo. Aquellos con un nivel de educación superior (como Bachelors, Masters o Doctorate) forman una región de mayor ingreso. Para este grupo, el árbol concluye que el porcentaje de personas que ganan \>50K es del 14%. Esto resalta la importancia de la educación para la obtención de salarios altos dentro del grupo de personas casadas. Y del lado derecho se vuelve a dividir a las personas en las que tienen capital gain menor a 5096 USD lo que sugiere que, para las personas casadas con un nivel de educación bajo, su ingreso no está determinado por la educación, sino por otro factor.
+
+#### [**EJERCICIO 4**]{.underline}
+
+En esta sección analizamos el rendimiento del árbol básico entrenado con el conjunto de entrenamiento en el conjunto de testeo.
+
+En primer lugar realizamos una matriz de confusión de la cual tomamos métricas claves.
+
+```{r, include = FALSE}
+library(pROC)
+library(caret)
+```
+
+```{r}
+set.seed(42)
+#Predicciones en test
+predicciones_clase <- predict(arbol_basico, newdata = datos_prueba, type = "class") #clases predichas
+predicciones_probabilidad <- predict(arbol_basico, newdata = datos_prueba, type = "prob")#probabilidades predichas 
+
+#Matriz de confusión
+# La función 'confusionMatrix' calcula varias métricas a la vez, incluyendo Accuracy, Precision y Recall.
+matriz_confusion <- confusionMatrix(predicciones_clase, datos_prueba$income, positive = ">50K")
+print(matriz_confusion)
+```
+
+```{r, echo=FALSE, results='asis'}
+
+# Crear un dataframe con los resultados de la matriz de confusión
+matriz_df <- data.frame(
+  Abreviacion = c("TN", "FP", "FN", "TP"),
+  Nombre = c("Verdaderos Negativos", "Falsos Positivos", "Falsos Negativos", "Verdaderos Positivos"),
+  Conteo = c(3239, 159, 537, 589),
+  Interpretacion = c(
+    "El modelo predijo que la persona no tenía ingresos >50K, y acertó.",
+    "El modelo predijo que la persona tenía ingresos >50K, pero se equivocó.",
+    "El modelo predijo que la persona no tenía ingresos >50K, pero se equivocó.",
+    "El modelo predijo que la persona tenía ingresos >50K, y acertó."
+  )
+)
+
+# Cargar la librería kableExtra para tablas mejoradas
+library(knitr)
+library(kableExtra)
+
+# Generar la tabla con formato mejorado
+kable(matriz_df, 
+      format = "html", 
+      align = "c",
+      caption = "Tabla de matriz de confusión realizada para entender mejor cómo funciona nuestro el modelo") %>%
+  kable_styling(bootstrap_options = "striped", 
+                full_width = F) %>%
+  column_spec(1, bold = T) %>%
+  column_spec(2:4, width = "12em")
+```
+
+**Accuracy**
+
+```{r, include=FALSE}
+TP = 589
+TN = 3239
+FP = 159
+FN = 537
+total =  TP + TN + FP + FN
+accuracy = (TN + TP)/total
+cat("Accuracy:", accuracy, "\n")
+```
+
+La matriz de confusión proporciona una vista detallada del rendimiento del modelo, revelando que de los 4,524 datos de los datos de prueba (test), el modelo clasificó correctamente a 3,828 personas (3,239 verdaderos negativos y 589 verdaderos positivos). Esto resulta en una exactitud (accuracy) del 84.62%. Aunque este valor es alto y a primera vista parece muy bueno, no es suficiente por sí solo, ya que puede ser engañoso en conjuntos de datos donde una clase es mucho más frecuente que la otra.
+
+**Precisión**
+
+```{r,include=FALSE}
+precision = TP/(TP + FP)
+cat("Precision:", precision, "\n")
+```
+
+**Recall**
+
+```{r,include=FALSE}
+recall = TP/(TP+FN)
+cat("Recall:", recall, "\n")
+```
+
+Con una precisión (Pos Pred Value) de 78.74%, el modelo es muy fiable ya que de todas las veces que predijo que una persona tenía ingresos \>50K, acertó casi el 79% de las veces. Sin embargo, el recall (sensitivity) es significativamente más bajo, del 52.3%. Esto significa que solo logró identificar a un poco más de la mitad de las personas que realmente tenían ingresos \>50K, lo que indica que el modelo tiene un rendimiento aceptable, pero se está perdiendo a casi la mitad de las personas que tienen ingresos \>50K.
+
+**F1-score (en base a la precisión y el recall)**
+
+```{r, include=FALSE}
+#F1-SCORE
+f1score= (2 * precision * recall) / (precision + recall)
+cat("F1-score:", f1score, "\n")
+```
+
+El F1-Score de 0.628 sirve como una medida combinada que equilibra la precisión y el recall. Un valor tan cercano a 0.6 indica que, a pesar de la buena precisión del modelo, el bajo recall es un factor limitante que reduce el rendimiento general cuando se considera el balance entre ambas métricas. Este valor confirma que el modelo no logra un equilibrio perfecto, sino que favorece la precisión sobre la capacidad de encontrar todos los casos positivos.
+
+**AUC-ROC**
+
+```{r, include=FALSE}
+curva_roc <- roc(datos_prueba$income, predicciones_probabilidad[, ">50K"])
+cat("Valor AUC-ROC\n")
+print(curva_roc$auc)
+plot(curva_roc, main = "Curva ROC", col = "blue")
+
+```
+
+El valor AUC-ROC de 0.8457 es una métrica clave que confirma el sólido poder predictivo general de el modelo. A diferencia de las métricas de la matriz de confusión que se centran en un umbral de decisión específico, el AUC evalúa el rendimiento del modelo en todos los umbrales posibles. Un valor superior a 0.84 indica que el modelo es significativamente mejor que una clasificación aleatoria y tiene un gran potencial para distinguir entre las dos clases de ingresos, incluso si el umbral actual no es el más óptimo para todos los objetivos. Específicamente, hay un 84.57% de probabilidad de que el modelo clasifique a un individuo seleccionado al azar con un ingreso mayor a 50K por encima de un individuo seleccionado al azar con un ingreso menor o igual a 50K. En general, un AUC por encima de 0.8 se considera un rendimiento muy bueno.
+
+En conjunto, el análisis revela que el modelo es robusto, con un AUC-ROC que demuestra un excelente rendimiento. Sin embargo, la matriz de confusión muestra que el umbral de clasificación actual del modelo prioriza la precisión a expensas del recall. Esto lo hace ideal para aplicaciones donde el coste de un falso positivo es alto pero menos adecuado si el objetivo es identificar a todos los casos positivos posibles.
+
+### Optimización del modelo
+
+En esta sección, se aborda la optimización del modelo de árbol de decisión con el objetivo de encontrar la configuración de hiperparámetros que maximice el rendimiento en datos no vistos, utilizando el conjunto de validación. En primer lugar realizamos unos gráficos que nos permiten ver cómo se relacionan los valores de estos hiperparámetros con la performance obtenida en validación.
+
+**Relación de maxdepth con performance**
+
+```{r}
+maxdepth <- c(2,4,8,10,12,14,16,18,20)
+
+# Las etiquetas reales del conjunto de validación se convierten a factor.
+reales_val <- factor(datos_validacion$income, levels=c("<=50K", ">50K"))
+
+performance <- list()
+
+
+for (md in maxdepth) {
+    # El modelo se entrena con 'datos_entrenamiento' y la variable objetivo 'income'.
+    arbol_aux <- rpart(income ~ ., data=datos_entrenamiento,
+                       method="class",
+                       control=rpart.control(maxdepth=md,
+                                             cp=0, xval=0))
+    # Evaluamos el modelo.
+    # Se extraen las probabilidades para la clase ">50K".
+    prob_val <- predict(arbol_aux, newdata=datos_validacion, type="prob")[, ">50K"]
+    
+    # Se asegura que ambas clases existan en los datos de validación antes de calcular el AUC.
+    if(length(unique(reales_val)) > 1) {
+        auc_val <- as.numeric(pROC::auc(pROC::roc(reales_val, prob_val, quiet = TRUE)))
+    } else {
+        # Si falta una clase, se asigna NA para evitar un error.
+        auc_val <- NA
+    }
+    
+    performance[[length(performance)+1]] = auc_val
+}
+
+library(ggplot2)
+
+maxdepth <- unlist(maxdepth)
+performance <- unlist(performance)
+
+df <- data.frame(maxdepth, performance)
+
+ggplot(df, aes(x = maxdepth, y = performance)) +
+  geom_line(color = "green", linewidth = 1.2) +
+  geom_point(color = "black", linewidth = 3) +
+  labs(x = "Valor de maxdepth", y = "AUC del modelo",
+       title = "Relación de maxdepth con performance")
+```
+
+Podemos notar que el valor óptimo es maxdepth = 10.
+
+**Relación de minbucket con performance**
+
+```{r}
+# Establecer los valores de minbucket a probar
+minbucket <- c(10, 30, 50, 100, 500)
+
+# Las etiquetas reales del conjunto de validación se convierten a factor.
+reales_val <- factor(datos_validacion$income, levels=c("<=50K", ">50K"))
+
+performance <- list()
+
+# Entrenamos el modelo con distintos valores de minbucket
+for (mb in minbucket) {
+    # El modelo se entrena con 'datos_entrenamiento' y la variable objetivo 'income'.
+    arbol_aux <- rpart(income ~ ., data=datos_entrenamiento,
+                       method="class",
+                       control=rpart.control(minbucket=mb,
+                                             cp=0, xval=0))
+    # Evaluamos el modelo.
+    # Se extraen las probabilidades para la clase ">50K".
+    prob_val <- predict(arbol_aux, newdata=datos_validacion, type="prob")[, ">50K"]
+    
+    # Se asegura que ambas clases existan en los datos de validación antes de calcular el AUC.
+    if(length(unique(reales_val)) > 1) {
+        auc_val <- as.numeric(pROC::auc(pROC::roc(reales_val, prob_val, quiet = TRUE)))
+    } else {
+        # Si falta una clase, se asigna NA para evitar un error.
+        auc_val <- NA
+    }
+    
+    performance[[length(performance)+1]] = auc_val
+}
+
+library(ggplot2)
+
+minbucket <- unlist(minbucket)
+performance <- unlist(performance)
+
+df <- data.frame(minbucket, performance)
+
+ggplot(df, aes(x = minbucket, y = performance)) +
+  geom_line(color = "green", size = 1.2) +
+  geom_point(color = "black", size = 3) +
+  labs(x = "Valor de minbucket", y = "AUC del modelo",
+       title = "Relación de minbucket con performance")
+
+```
+
+Podemos notar que el valor óptimo es minbucket = 30 y luego decrece la performance.
+
+#### Experimentación con hiperparámetros
+
+Para llevar a cabo la experimentación, se realiza una búsqueda en cuadrícula (grid search) sobre los hiperparámetros maxdepth, minsplit y minbucket, los cuales controlan la complejidad del árbol. Tal como lo indican las consignas, los hiperparámetros cp y xval se fijan en 0. Esto es crucial porque nos permite construir árboles de máxima profundidad y controlarlos únicamente con los hiperparámetros de poda previa (pre-pruning) que estamos ajustando.
+
+Se probaron los siguientes rangos de valores para cada hiperparámetro:
+
+-   **Maxdepth**: de 1 a 20. Una profundidad máxima de 20 es un buen punto de partida para evitar árboles excesivamente grandes que podrían derivar en sobreajuste, pero al mismo tiempo permite la flexibilidad necesaria para capturar patrones complejos en los datos.
+-   **Minsplit**: de 10 a 70 Este hiperparámetro controla el número mínimo de observaciones en un nodo para que se considere una división.
+-   **Minbucket**: de 5 a 40, con incrementos de 5. Este valor define el número mínimo de observaciones en cada nodo hoja.
+
+A continuación, se implementa una validación repetida con 20 iteraciones para cada combinación de hiperparámetros. En cada repetición, se crea una nueva partición aleatoria de los datos, lo que nos brinda una estimación más robusta y confiable del rendimiento del modelo.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(pROC)
+
+# 1. Evaluar el árbol básico en el conjunto de prueba para compararlo después
+# Asume que 'arbol_basico' ya fue creado en un paso anterior
+prob_test_basico <- predict(arbol_basico, newdata = datos_prueba, type = "prob")[, ">50K"]
+y_test <- as.numeric(datos_prueba$income == ">50K")
+auc_test_basico <- as.numeric(auc(roc(y_test, prob_test_basico, quiet = TRUE)))
+
+
+# Grid de hiperparámetros
+grid <- expand.grid(
+  maxdepth  = c(2,4,8,10,12,14,16,18,20),
+  minsplit  = c(10, 20, 30, 40, 50, 60, 70),
+  minbucket = c(5, 10, 15,20,25, 30, 35, 40),
+  KEEP.OUT.ATTRS = FALSE
+)
+
+# Total de combinaciones
+total_iter <- nrow(grid)
+cat("Total de iteraciones que vamos a evaluar en busca de los hiperparametros óptimos:", total_iter, "\n")
+
+# Función para entrenar y devolver AUC en validación
+fit_auc_val <- function(md, ms, mb) {
+  fit <- rpart(
+    income ~ .,
+    data    = datos_entrenamiento,
+    method  = "class",
+    control = rpart.control(cp = 0, xval = 0,
+                            maxdepth = md, minsplit = ms, minbucket = mb)
+  )
+  prob_val <- predict(fit, newdata = datos_validacion, type = "prob")[, ">50K"]
+  y_val    <- as.numeric(datos_validacion$income == ">50K")
+  as.numeric(auc(roc(y_val, prob_val, quiet = TRUE)))
+}
+
+# Evaluar todo el grid con feedback de iteración
+auc_vals <- numeric(total_iter)
+for (i in seq_len(total_iter)) {
+  pars <- grid[i, ]
+  auc_vals[i] <- fit_auc_val(pars$maxdepth, pars$minsplit, pars$minbucket)
+}
+
+
+# Unir resultados
+res <- cbind(grid, auc_val = auc_vals)
+
+# Selección del mejor
+best_idx  <- which.max(res$auc_val)
+best_pars <- res[best_idx, ]
+
+
+# Reentrenar el mejor
+best_fit <- rpart(
+  income ~ ., data = datos_entrenamiento, method = "class",
+  control = rpart.control(cp = 0, xval = 0,
+                          maxdepth  = best_pars$maxdepth,
+                          minsplit  = best_pars$minsplit,
+                          minbucket = best_pars$minbucket)
+)
+
+# Evaluar en TEST
+prob_test_best <- predict(best_fit, newdata = datos_prueba, type = "prob")[, ">50K"]
+y_test         <- as.numeric(datos_prueba$income == ">50K")
+auc_test_best  <- as.numeric(auc(roc(y_test, prob_test_best, quiet = TRUE)))
+
+# Resultados clave
+list(
+  Mejor_parametros        = best_pars,
+  AUC_validacion_mejor    = round(max(res$auc_val), 4),
+  AUC_test_arbol_basico   = round(auc_test_basico, 4),
+  AUC_test_arbol_optim0    = round(auc_test_best, 4)
+)
+
+# Heatmap AUC(val) por minsplit/minbucket, por maxdepth
+suppressPackageStartupMessages(library(ggplot2))
+ggplot(res, aes(x = minsplit, y = minbucket, fill = auc_val)) +
+  geom_tile() +
+  facet_wrap(~ maxdepth, nrow = 4) +
+  labs(title = "AUC en validación por hiperparámetros",
+       x = "minsplit", y = "minbucket", fill = "AUC (val)") +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid = element_blank(),
+# Rotar las etiquetas del eje X para que no se superpongan
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+```
+
+**Mejor_parametros:** Este es el conjunto de hiperparámetros (maxdepth, minsplit, minbucket) que resultó en el mejor rendimiento de nuestro modelo en el conjunto de validación. El código guarda la fila completa de la cuadrícula (grid) que tuvo el valor de AUC más alto. Se muestran los valores de maxdepth = 10, minsplit=50, minbucket=5 y AUC = 0.89.
+
+**AUC_validacion_mejor:** Este valor muestra el mejor rendimiento que se logró en el conjunto de validación a lo largo de toda la búsqueda en cuadrícula. Representa la capacidad de nuestro modelo para generalizar datos no vistos durante el entrenamiento, pero antes de la evaluación final.
+
+**AUC_test_arbol_basico:** Este valor es el rendimiento del árbol básico que se construyó con los parámetros predeterminados de rpart. Es la línea de base contra la que se compara el modelo optimizado.
+
+**AUC_test_arbol_optimo:** Este es el rendimiento final del árbol optimizado en el conjunto de prueba. Dado que este conjunto de datos nunca se utilizó para el entrenamiento o la validación, este valor te da la medida más honesta de cuán bien se espera que nuestro modelo se desempeñe con datos nuevos en un entorno real.
+
+El gráfico es un mapa de calor que visualiza cómo el rendimiento de el modelo (medido por el AUC en validación) varía según la combinación de los hiperparámetros minsplit y minbucket, segmentado por la profundidad máxima (maxdepth) del árbol. Los paneles con un maxdepth más bajo, como el de 2, muestran áreas de color más oscuro, lo que indica un rendimiento menor del modelo. A medida que la profundidad máxima aumenta (paneles de maxdepth 14, 16, 18, y 20), las áreas de color se vuelven más claras, lo que significa que el AUC mejora. Esto sugiere que, para este conjunto de datos, los modelos más complejos tienen una mayor capacidad predictiva, tal como lo confirman los resultados que muestran que el árbol optimizado tiene un AUC de 0.9085 en el conjunto de testeo. Por lo tanto, el gráfico ayuda a identificar visualmente las combinaciones de minsplit y minbucket que optimizan el rendimiento para cada nivel de profundidad.
+
+```{r,include=FALSE}
+# Comparación explícita con el árbol básico
+cat(sprintf(
+  "\nComparación en TEST:\n  Árbol básico (p3): AUC=%.4f\n  Árbol optimizado:  AUC=%.4f\n",
+  auc_test_basico, auc_test_best
+))
+
+cat("\nConclusión breve:\n",
+    if (auc_test_best > auc_test_basico)
+      "La optimización mejora el rendimiento en test (AUC↑)."
+    else if (abs(auc_test_best - auc_test_basico) < 1e-4)
+      "No hay diferencia material en test; el grid no aportó mejora."
+    else
+      "El optimizado rinde peor en test (posible sobreajuste a validación).",
+    "\n")
+```
+
+```{r}
+#  para reuso en Punto 6
+# Guarda resultados y el mejor modelo para reutilizar sin recalcular
+opt_results <- list(
+  grid_results          = res,            # tabla completa con AUC(val)
+  best_params           = best_pars,      # hiperparámetros óptimos
+  best_fit              = best_fit,       # modelo en train con pars óptimos
+  auc_val_best          = max(res$auc_val, na.rm = TRUE),
+  auc_test_baseline_p3  = auc_test_basico,
+  auc_test_best_model   = auc_test_best
+)
+
+# Función re-usable: dado (train_df, val_df) devuelve best_fit y métricas
+fit_best_tree_by_val_auc <- function(datos_entrenamiento, datos_validacion, grid) {
+  y_val <- as.numeric(datos_validacion$income == ">50K")
+  fit_one <- function(md, ms, mb) {
+    m <- rpart(
+      income ~ ., data = datos_entrenamiento, method = "class",
+      control = rpart.control(cp = 0, xval = 0,
+                              maxdepth = md, minsplit = ms, minbucket = mb)
+    )
+    pv <- predict(m, newdata = datos_validacion, type = "prob")[, ">50K"]
+    auc <- as.numeric(pROC::auc(pROC::roc(y_val, pv, quiet = TRUE)))
+    list(auc = auc, model = m)
+  }
+  # eval grid
+  aucs <- numeric(nrow(grid)); models <- vector("list", nrow(grid))
+  for (i in seq_len(nrow(grid))) {
+    pars <- grid[i, ]
+    out <- fit_one(pars$maxdepth, pars$minsplit, pars$minbucket)
+    aucs[i]   <- out$auc
+    models[[i]] <- out$model
+  }
+  best_i <- which.max(aucs)
+  list(
+    best_model = models[[best_i]],
+    best_auc   = aucs[best_i],
+    best_pars  = grid[best_i, ],
+    res_table  = cbind(grid, auc_val = aucs)
+  )
+}
+
+```
+
+Al comparar el rendimiento de ambos modelos en el conjunto de prueba, se puede concluir que el proceso de optimización fue muy exitoso. Mientras que el árbol básico tuvo un AUC de 0.8473, el árbol optimizado logró un AUC superior de 0.9100. Esta mejora de más del 6% demuestra que ajustar los hiperparámetros del modelo como maxdepth=10, minsplit=50 y minbucket=5 permitió que nuestro modelo aprendiera patrones más complejos y relevantes en los datos de entrenamiento, lo que resultó en una capacidad de generalización mejorada para clasificar correctamente los ingresos de personas en el conjunto de prueba.
+
+#### [**EJERCICIO 5**]{.underline}
+
+#### Interpretación de resultados
+
+```{r}
+
+# Visualización del árbol optimizado
+rpart.plot(best_fit, type = 4, extra = 101, main = "Árbol de Decisión Optimizado (Nivel 3)", fallen.leaves = TRUE, branch = .3, cex = .14)
+
+# Importancia de variables
+var_imp <- as.data.frame(best_fit$variable.importance)
+var_imp <- tibble::tibble(
+  Variable = rownames(var_imp),
+  Importancia = var_imp[,1]
+) %>% arrange(desc(Importancia))
+
+# Top variables
+head(var_imp, 10)
+
+# Gráfico de importancia
+ggplot(var_imp, aes(x = reorder(Variable, Importancia), y = Importancia)) +
+  geom_col(fill = "#3182bd") +
+  coord_flip() +
+  labs(title = "Importancia de variables en el árbol optimizado",
+       x = "Variable", y = "Importancia") +
+  theme_minimal(base_size = 13)
+
+
+```
+
+El árbol optimizado presenta una estructura considerablemente más profunda y compleja que el árbol básico anterior. Se puede ver que el minsplit pasó de 20 a 50, el maxdepth pasoó de 30 a 10 y el minbucket de 7 a 5. A pesar de que los cambios en los hiperparámetros parecen sugerir una simplificación del árbol, el proceso de optimización encontró una combinación de valores (minsplit = 50, maxdepth = 10, minbucket = 5) que es más eficiente para nuestro problema de clasificación. La evidencia de esto es el aumento significativo en el rendimiento del modelo, ya que el AUC en el conjunto de prueba mejoró del 0.8473 (árbol básico) al 0.9100 (árbol optimizado). El análisis de importancia de variables revela que relationship y marital.status son los predictores más influyentes, seguidos por education y education.num, lo cual siguen en linea con lo presentado en el primer arbol. Asimismo, capital.gain, occupation y age contribuyen de forma significativa, reforzando la idea de que la experiencia laboral y el tipo de empleo tienen un gran peso. Todas las demas variables si juegan un rol en determinar el income como el sexo y el pais de origne, pero estas tienen un aporte muchisimo menor. Esto es hilado notoriamente mas fino que el primer arbol.
+
+#### [**EJERCICIO 6**]{.underline}
+
+#### Análisis del impacto de etiquetas corruptas
+
+```{r}
+library(rpart)
+library(dplyr) 
+library(ggplot2) 
+library(pROC)
+library(tidyr) 
+library(scales)
+set.seed(42)
+# Función: corromper etiquetas SOLO en TRAIN (flip binario)
+corrupt_labels <- function(df, target_col, corruption_rate) {
+  n   <- nrow(df)
+  k   <- floor(corruption_rate * n)
+  idx <- sample.int(n, size = k, replace = FALSE)  # aleatorio SIN reemplazo
+  df2 <- df
+  x   <- as.character(df2[[target_col]])
+  x[idx] <- ifelse(x[idx] == ">50K", "<=50K", ">50K")
+  df2[[target_col]] <- factor(x, levels = levels(df[[target_col]]))
+  df2
+}
+
+# GRID para re-optimizar en cada versión corrupta (cp=0, xval=0)
+grid6 <- expand.grid(
+  maxdepth  = c(2,4,8,10,12,14,16,18,20),
+  minsplit  = c(10, 20, 30, 40, 50, 60, 70, 100),
+  minbucket = c(5, 10, 15,20,25, 30, 35, 40),
+  KEEP.OUT.ATTRS = FALSE
+) |>
+  
+  dplyr::filter(minbucket < minsplit, minbucket <= floor(minsplit/2))
+
+eval_grid_auc_val <- function(train_data, val_data, grid) {
+  y_val <- as.numeric(datos_validacion$income == ">50K")
+  total <- nrow(grid)
+  aucs  <- numeric(total)
+  for (i in seq_len(total)) {
+    pars <- grid[i, ]
+    fit <- rpart(
+      income ~ ., data = train_data, method = "class",
+      control = rpart.control(cp = 0, xval = 0,
+                              maxdepth = pars$maxdepth,
+                              minsplit = pars$minsplit,
+                              minbucket = pars$minbucket)
+    )
+    pval    <- predict(fit, newdata = val_data, type = "prob")[, ">50K"]
+    aucs[i] <- as.numeric(auc(roc(y_val, pval, quiet = TRUE)))
+    if (i %% 50 == 0) cat(sprintf("   grid %d/%d\n", i, total))
+  }
+  cbind(grid, auc_val = aucs)
+}
+
+#Seis versiones corruptas SOLO en TRAIN, re-optimización y evaluación en TEST
+rates <- c(0.05, 0.10, 0.15, 0.20, 0.25, 0.30)
+results_noise <- list()
+best_tables   <- list()  # guarda tabla completa por rate si querés inspeccionar
+
+y_test <- as.numeric(datos_prueba$income == ">50K")
+
+for (j in seq_along(rates)) {
+  r <- rates[j]
+  cat(sprintf("\n>> Corrupción en TRAIN = %s \n", percent(r) ))
+  train_corrupt <- corrupt_labels(datos_entrenamiento, "income", corruption_rate = r)
+
+  # Re-optimización por AUC(validación) con cp=0, xval=0
+  res_grid <- eval_grid_auc_val(train_corrupt, datos_validacion, grid6)
+
+  # Empates: priorizar modelo más simple (menor profundidad, minsplit, minbucket)
+  best_row <- res_grid |>
+    arrange(desc(auc_val), maxdepth, minsplit, minbucket) |>
+    slice(1)
+
+  best_pars_r <- best_row[, c("maxdepth","minsplit","minbucket")]
+
+  # Entrenar mejor en TRAIN_corrupt y evaluar en TEST limpio
+  best_fit_r <- rpart(
+    income ~ ., data = train_corrupt, method = "class",
+    control = rpart.control(cp = 0, xval = 0,
+                            maxdepth  = best_pars_r$maxdepth,
+                            minsplit  = best_pars_r$minsplit,
+                            minbucket = best_pars_r$minbucket)
+  )
+  ptest_r    <- predict(best_fit_r, newdata = datos_prueba, type = "prob")[, ">50K"]
+  auc_test_r <- as.numeric(auc(roc(y_test, ptest_r, quiet = TRUE)))
+
+  results_noise[[j]] <- data.frame(
+    Corrupcion     = r,
+    AUC_val_mejor  = best_row$auc_val,
+    AUC_test_mejor = auc_test_r,
+    maxdepth       = best_pars_r$maxdepth,
+    minsplit       = best_pars_r$minsplit,
+    minbucket      = best_pars_r$minbucket
+  )
+
+  best_tables[[j]] <- res_grid
+  
+}
+
+noise_df <- bind_rows(results_noise)
+noise_df
+
+```
+
+Para evaluar la robustez ante errores de etiquetado, generamos seis versiones del conjunto de entrenamiento corrompiendo aleatoriamente la variable objetivo en 5%, 10%, 15%, 20%, 25% y 30% (seed=42), manteniendo validación y test intactos. En cada versión re-optimizamos los hiperparámetros del árbol (maxdepth, minsplit, minbucket) con cp=0 y xval=0, seleccionando por AUC-ROC en validación, y luego medimos el rendimiento en test. Observamos que el AUC en test desciende desde 0.8937128 (sin ruido) a 0.8595922 con 30% de etiquetas corruptas.
+
+
+**Gráfico de rendimiento vs. corrupción**
+
+```{r}
+library(ggplot2)
+
+ggplot(noise_df, aes(x = Corrupcion, y = AUC_test_mejor)) +
+  geom_line(color = "black", size = 1.2) +
+  geom_point(color = "red", size = 3) +
+  labs(title = "Rendimiento del Modelo vs. Corrupción de Etiquetas",
+       x = "Porcentaje de Etiquetas Corruptas",
+       y = "AUC en Testeo") +
+  theme_minimal()
+```
+
+Este gráfico muestra de manera contundente la relación entre la calidad de nuestros datos de entrenamiento y el rendimiento de nuestro modelo. A medida que aumenta el porcentaje de etiquetas corruptas, la capacidad predictiva del modelo, medida por el AUC en el conjunto de testeo, disminuye de forma constante. La tendencia del gráfico no es lineal: la caída en el rendimiento es más pronunciada a partir del 15% de corrupción, lo que sugiere la existencia de un umbral crítico. A partir de este punto, el modelo parece tener más dificultades para adaptarse al ruido, y la degradación del rendimiento se vuelve más significativa. En general, el gráfico confirma que, aunque nuestro modelo optimizado es robusto, la calidad de las etiquetas es un factor determinante para mantener una alta capacidad de predicción.
+
+**Gráfico de hiperparámetros óptimos vs. corrupción**
+
+```{r}
+library(tidyr)
+
+# Preparar los datos en formato largo para ggplot
+df_params <- noise_df %>%
+  pivot_longer(
+    cols = c(maxdepth, minsplit, minbucket),
+    names_to = "hiperparametro",
+    values_to = "valor"
+  )
+
+# Crear el gráfico
+ggplot(df_params, aes(x = Corrupcion, y = valor, color = hiperparametro)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 3) +
+  labs(title = "Evolución de Hiperparámetros Óptimos",
+       x = "Porcentaje de Etiquetas Corruptas",
+       y = "Valor del Hiperparámetro") +
+  scale_color_manual(values = c("maxdepth" = "green", "minsplit" = "blue", "minbucket" = "pink")) +
+  theme_minimal()
+```
+
+El gráfico nos muestra cómo nuestro modelo, a través del proceso de optimización, adapta sus hiperparámetros de poda para volverse más robusto a medida que aumenta el ruido en los datos de entrenamiento. En general, se observa una clara tendencia: a medida que el porcentaje de etiquetas corruptas aumenta, los valores óptimos de maxdepth y minsplit tienden a disminuir, mientras que minbucket se mantiene de manera pronunciada, lo cual indica que el modelo prioriza estructuras más simples. La reducción de la maxdepth hace que el árbol sea más superficial y menos propenso a crear ramas que se ajusten al ruido, mientras que los valores de minsplit y minbucket más altos obligan al modelo a crear menos divisiones, agrupando más observaciones en los nodos finales. Es decir, para evitar el sobreajuste a las etiquetas erróneas, sacrifica la complejidad en favor de una mayor generalización.
+
+En conjunto, el modelo muestra cierta robustez a niveles moderados de ruido, pero el deterioro se vuelve notorio a partir de 20–30%.
+
+#### [**EJERCICIO 7**]{.underline}
+
+#### Conclusiones y discusión
+
+Nuestro análisis ha demostrado que el árbol de decisión es una herramienta altamente efectiva para nuestro problema de clasificación de ingresos, principalmente debido a su capacidad para manejar variables numéricas y categóricas.
+
+Tras la preparación inicial de los datos y la construcción de un modelo básico, la optimización de hiperparámetros demostró ser crucial: elevó significativamente el rendimiento del modelo de un AUC en testeo de 0.8473 a 0.9100. Este incremento de rendimiento confirma que el árbol optimizado es superior para nuestro problema. Además, el análisis de etiquetas corruptas reveló que nuestro modelo es robusto ante niveles moderados de ruido, adaptando sus hiperparámetros para volverse más conservador a medida que aumenta la corrupción. Esto demuestra su adaptabilidad, pero también subraya la importancia de la calidad de los datos para la capacidad predictiva.
+
+Para mejorar nuestro análisis, una dirección futura podría ser explorar modelos de conjunto o ensamble como Random Forests o el Gradient Boosting. Estos modelos se construyen a partir de múltiples árboles de decisión y suelen ofrecer un rendimiento superior y una mayor robustez al reducir el sobreajuste.
