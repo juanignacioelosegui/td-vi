@@ -1,0 +1,12 @@
+\documentclass{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{graphicx, xcolor} % Required for inserting images
+
+\title{Tecnología Digital VI: Inteligencia Artificial}
+\subtitle{Guía de Ejercicios 1}
+\author{Juan Ignacio Elosegui}
+\date{Septiembre 2025}
+
+\begin{document}
+    Texto de prueba
+\end{document}

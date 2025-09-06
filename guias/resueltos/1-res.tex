@@ -2,11 +2,65 @@
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage{graphicx, amssymb}
 
-\title{Guía 1}
+\title{Tecnología Digital VI - Guía de Ejercicios 1}
 \author{Juan Ignacio Elosegui}
-\date{Agosto 2025}
+\date{Septiembre 2025}
 
 \begin{document}
     \maketitle
     \section*{Ejercicio 1}
+        \subsection*{Inciso A}
+            Un \textbf{modelo determinístico} es aquel que, dado un único training set fijo, siempre produce el mismo resultado (las mismas predicciones o los mismos parámetros). Lo contrario sería un \textbf{modelo estocástico}.\\
+            \\
+            Recordar que \textit{leave-one-out-cross-validation} es un método de validación de modelos que entrena con todos las observaciones del \textit{training set} y prueba con un único dato aislado a modo de validación. Se hace $n$ veces y se promedian los resultados. Es bueno porque entrena y prueba con todos los datos, pero, es caro computacionalmente si tenés varias observaciones (tendrías que repetir el proceso muchas veces). \\
+            \\
+            Podemos tener una iteración $n_{1}$ de LOOCV y tener una performance de $0,5$, luego tener en la iteración $n_{2}$ una performance de $0.99$. Las iteraciones de LOOCV pueden llegar a ser (cosa que es muy poco probable) todas iguales o, más probable, todas distintas. Pero, en definitiva, se va a llegar siempre al mismo promedio dado que es un modelo determinístico y contamos con un training set fijo. \\
+            \\
+            \underline{Conclusión}: es \textbf{falso}. Siempre se consigue el mismo resultado exclusivamente en un modelo determinístico, no en uno estocástico.
+        \subsection*{Inciso B}
+            Recordar que una matriz densa guarda todos sus elementos explícitamente, aunque muchos sean ceros. Una \textbf{matriz rala o esparsa} tiene la mayoría de sus elementos en cero. \\
+            \\
+            En una matriz densa, digamos de $1000 x 1000$, hay que guardar $1.000.000$ de números. En una matriz rala se usa un formato especial: como la mayoría son ceros, directamente nos interesan los elementos de la matriz que NO son cero. Es más eficiente de buscar y de almacenar, por lo que termina usando muchísima menos RAM, pero sólo en el caso que sea muy esparsa la matriz. Ya llega un punto que ni conviene hacer esto. \\
+            \\
+            \underline{Conclusión}: es \textbf{falso}. Si la matriz esparsa es bien esparsa, sí conviene, porque ahorra RAM y tiempo, pero no siempre. Si la matriz es más o menos densa, no aplica el formato ralo porque puede llegar a consumir más RAM y tiempo de lo normal. En definitiva, depende qué tan esparsa sea para que adoptemos ese formato.
+        \subsection*{Inciso C}
+            Con los clasificadores que usan probabilidades (como regresión logística o un árbol de decisiones) se usa el \textit{threshold}, que es básicamente un umbral de corte:
+            \begin{itemize}
+                \item Si $\hat{p}(Y=1 | X) \geq threshold$ entonces predigo positivo.
+                \item Si $\hat{p}(Y=1 | X) < threshold$ entonces predigo negativo.
+            \end{itemize}
+            Subir el \textit{threshold} hará que el clasificador sea más exigente a la hora de predecir una observación como positivo. Vamos a tener menos positivos predichos y además se nos van a escapar los positivos verdaderos. Si bajamos el \textit{threshold}, no se nos van a escapar tan fácil los positivos verdaderos. \\
+            \\
+            Recordar que el \textit{recall} es la proporción de positivos reales que atrapa nuestro modelo:
+            \[ recall = \frac{TP}{TP+FN} \]
+            Es decir, de todos los casos que sí eran positivos, ¿cuántos marcó como positivos el modelo? \\
+            \\
+            En definitiva, si bajamos el \textit{threshold}, tendremos más positivos verdaderos pero también a costa de tener más falsos positivos. El recall subirá en este caso. Si subimos el \textit{threshold}, tenemos menos positivos predichos, así que por más que sean positivos verdaderos o falsos, el valor de recall bajará. \\
+            \\
+            \underline{Conclusión}: es \textbf{falso}. Aumentar el \textit{threshold} significa disminuir el recall.
+        \subsection*{Inciso D}
+            El valor de $F_{1}$ está dado por:
+            \[ F_{1} = 2 \frac{precision \cdot recall}{precision + recall} \]
+            y lo ideal sería que este valor sea lo más alto posible, ya que tiene una forma de Cobb-Douglas (más es mejor). \\
+            \\3
+            Si el score $F_{1}$ dio como valor $0.3$, se puede despejar de la siguiente manera la ecuación:
+            \[ F_{1} = 2 \frac{precision \cdot recall}{precision + recall} \]
+            \[ 0.3 = 2 \frac{precision \cdot recall}{precision + recall} \]
+            \[ 0.3 \cdot (precision+recall) = 2 \cdot (precision \cdot recall) \]
+            \[ 0.15 \cdot (precision+recall) = precision \cdot recall \]
+            \[ 0.15 \cdot precision + 0.15 \cdot recall = precision \cdot recall \]
+            \[ precision \cdot recall - 0.15 \cdot precision = 0.15 \cdot recall \]
+            \[ precision(recall - 0.15) = 0.15 \cdot recall \]
+            \[ precision = \frac{0.15 \cdot recall}{recall - 0.15} \]
+            Tendremos como resultado pares de la forma $(precision, recall)$ que den como resultado el score $F_{1} = 0.3$. Notar que $recall \neq 0.15$. Probemos valores para verificar si efectivamente los dos valores deben ser bajos para que el score sea bajo.
+            \begin{itemize}
+                \item $(precision, recall) = (precision, 0.8) \Rightarrow (0.18, 0.8)$ Precision bajo, Recall alto.
+                \item $(precision, recall) = (precision, 0.5) \Rightarrow (0.21, 0.5)$ Precision bajo, Recall intermedio.
+                \item $(precision, recall) = (precision, 0.16) \Rightarrow (2.4, 0.16)$ ???
+                \item $(precision, recall) = (precision, 0.3) \Rightarrow (0.3, 0.3)$ Precision y Recall bajos.
+            \end{itemize}
+            \underline{Conclusión}: el enunciado es \textbf{falso}. El primer ítem de la demostración es un contraejemplo: el $recall$ es alto, pero el $precision$ es bajo.
+        \subsection*{Inciso E}
+            \underline{Conclusión}: el enunciado es \textbf{verdadero}. La métrica $precision$ nos dice cuántos positivos verdaderos conseguimos de todos los positivos verdaderos y falsos positivos que clasificamos.
+            \[ precision = \frac{TP}{TP+FP} \]
 \end{document}
