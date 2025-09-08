@@ -63,4 +63,19 @@
         \subsection*{Inciso E}
             \underline{Conclusión}: el enunciado es \textbf{verdadero}. La métrica $precision$ nos dice cuántos positivos verdaderos conseguimos de todos los positivos verdaderos y falsos positivos que clasificamos.
             \[ precision = \frac{TP}{TP+FP} \]
+    \section*{Ejercicio 2}
+        \subsection*{Inciso A}
+            El objetivo es validar un modelo y estimar cómo rendirá ante un potencial \textit{test set}. La idea es separar los datos de entrenamiento y validar en una observación o un subconjunto de observaciones distinto. Es una simulación de \textit{test sets}.
+        \subsection*{Inciso B}
+            1) LOOCV 2) k-fold cross-validation y 3) holdout set.
+            \begin{itemize}
+                \item LOOCV es más completo, pero si querés validar todo el dataset con la única observación que quedó afuera, entonces deberías repetir el proceso de entrenamiento y validación tantas veces como tengas observaciones.
+                \item k-fold cross-validation con $k = 3$ implica dividir el dataset en 3 subconjuntos. Esto quiere decir, un subconjunto sirve como \textit{validation set}, y el resto como entrenamiento. Esto se debe repetir para todos los 3 subconjuntos. Es caro porque estamos hablando de subconjuntos grandes.
+                \item Holdout set es el más eficiente solamente porque es un k-fold cross-validation con dos \textit{folds}. Una mitad para entrenamiento, mientras que la otra mitad es para validación.
+            \end{itemize}
+        \subsection*{Inciso C}
+            Usaría k-fold cross-validation si quiero hacer una validación muy bien estimada de mi modelo, ya que puedo hacer más de dos \textit{folds} (como se usan dos o tres en \textit{holdout set}). Más \textit{folds} implica tener una mejor estimación de la performance de mi modelo. \\
+            Usaría \textit{holdout set} si no quisiera tener una estimación tan buena y estuviera corto de capacidad de cómputo en la máquina.
+        \subsection*{Inciso D}
+        \subsection*{Inciso E}
 \end{document}
