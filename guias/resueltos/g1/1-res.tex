@@ -12,15 +12,15 @@
         \subsection*{Inciso A}
             Un \textbf{modelo determinístico} es aquel que, dado un único training set fijo, siempre produce el mismo resultado (las mismas predicciones o los mismos parámetros). Lo contrario sería un \textbf{modelo estocástico}.\\
             \\
-            Recordar que \textit{leave-one-out-cross-validation} es un método de validación de modelos que entrena con todos las observaciones del \textit{training set} y prueba con un único dato aislado a modo de validación. Se hace $n$ veces y se promedian los resultados. Es bueno porque entrena y prueba con todos los datos, pero, es caro computacionalmente si tenés varias observaciones (tendrías que repetir el proceso muchas veces). \\
+            En \textit{leave-one-out-cross-validation} es un método de validación de modelos que entrena con todos las observaciones del \textit{training set} y prueba con un único dato aislado a modo de validación. Se hace $n$ veces y se promedian los resultados. Es bueno porque entrena y prueba con todos los datos, pero, es caro computacionalmente si tenés varias observaciones (tendrías que repetir el proceso muchas veces). \\
             \\
             Podemos tener una iteración $n_{1}$ de LOOCV y tener una performance de $0,5$, luego tener en la iteración $n_{2}$ una performance de $0.99$. Las iteraciones de LOOCV pueden llegar a ser (cosa que es muy poco probable) todas iguales o, más probable, todas distintas. Pero, en definitiva, se va a llegar siempre al mismo promedio dado que es un modelo determinístico y contamos con un training set fijo. \\
             \\
             \underline{Conclusión}: es \textbf{falso}. Siempre se consigue el mismo resultado exclusivamente en un modelo determinístico, no en uno estocástico.
         \subsection*{Inciso B}
-            Recordar que una matriz densa guarda todos sus elementos explícitamente, aunque muchos sean ceros. Una \textbf{matriz rala o esparsa} tiene la mayoría de sus elementos en cero. \\
+            Una matriz densa guarda todos sus elementos explícitamente, aunque muchos sean ceros. Una \textbf{matriz rala o esparsa} tiene la mayoría de sus elementos en cero. \\
             \\
-            En una matriz densa, digamos de $1000 x 1000$, hay que guardar $1.000.000$ de números. En una matriz rala se usa un formato especial: como la mayoría son ceros, directamente nos interesan los elementos de la matriz que NO son cero. Es más eficiente de buscar y de almacenar, por lo que termina usando muchísima menos RAM, pero sólo en el caso que sea muy esparsa la matriz. Ya llega un punto que ni conviene hacer esto. \\
+            En una matriz densa, digamos de $1000$ x $1000$, hay que guardar $1.000.000$ de números. En una matriz rala se usa un formato especial: como la mayoría son ceros, directamente nos interesan los elementos de la matriz que NO son cero. Es más eficiente de buscar y de almacenar, por lo que termina usando muchísima menos RAM, pero sólo en el caso que sea muy esparsa la matriz. Ya llega un punto que ni conviene hacer esto. \\
             \\
             \underline{Conclusión}: es \textbf{falso}. Si la matriz esparsa es bien esparsa, sí conviene, porque ahorra RAM y tiempo, pero no siempre. Si la matriz es más o menos densa, no aplica el formato ralo porque puede llegar a consumir más RAM y tiempo de lo normal. En definitiva, depende qué tan esparsa sea para que adoptemos ese formato.
         \subsection*{Inciso C}
@@ -31,7 +31,7 @@
             \end{itemize}
             Subir el \textit{threshold} hará que el clasificador sea más exigente a la hora de predecir una observación como positivo. Vamos a tener menos positivos predichos y además se nos van a escapar los positivos verdaderos. Si bajamos el \textit{threshold}, no se nos van a escapar tan fácil los positivos verdaderos. \\
             \\
-            Recordar que el \textit{recall} es la proporción de positivos reales que atrapa nuestro modelo:
+            El \textit{recall} es la proporción de positivos reales que atrapa nuestro modelo:
             \[ recall = \frac{TP}{TP+FN} \]
             Es decir, de todos los casos que sí eran positivos, ¿cuántos marcó como positivos el modelo? \\
             \\
@@ -77,5 +77,31 @@
             Usaría k-fold cross-validation si quiero hacer una validación muy bien estimada de mi modelo, ya que puedo hacer más de dos \textit{folds} (como se usan dos o tres en \textit{holdout set}). Más \textit{folds} implica tener una mejor estimación de la performance de mi modelo. \\
             Usaría \textit{holdout set} si no quisiera tener una estimación tan buena y estuviera corto de capacidad de cómputo en la máquina.
         \subsection*{Inciso D}
+            Porque es el que se usa en la práctica. El conjunto de validación es como la "prueba de fuego" antes de tirar nuestro modelo a la cancha. En el conjunto de test no podemos comparar las respuestas con los resultados reales, como sí podíamos hacer con el conjunto de validación.
         \subsection*{Inciso E}
+            No es una buena idea porque nos interesan los valores de \textit{Bitcoin} relativamente recientes si queremos predecir su valor de acá al mes que viene. No creo que sean tan relevantes los valores de \textit{Bitcoin} de hace unos años para predecir.
+    \section*{Ejercicio 3}
+        \subsection*{Inciso A}
+            \textbf{TPR} significa \textit{True Positive Rate} e indica la tasa de positivos verdaderos sobre todas las predicciones marcadas como verdaderas. \textbf{FPR} significa \textit{False Positive Rate} e indica la tasa de falsos positivos sobre todas las predicciones tildadas como verdaderas.
+        \subsection*{Inciso B}
+            Porque tanto TPR como FPR dependen del \textit{threshold} de decisión para clasificar a una observación como verdadera. Si bajamos este \textit{threshold}, vamos a tener más TPR y FPR porque no se pide mucho para que el modelo clasifique una observación como verdadera, entonces vamos a clasificar más fácil como positivo algo que por ahí es correcto o no. Las modificaciones en el \textit{threshold} hace que TPR y FPR se muevan de manera conjunta. Por eso la curva AUC-ROC tiene pendiente positiva.
+        \subsection*{Inciso C}
+            \begin{center}
+                \includegraphics[width=0.45\linewidth]{figs-1/3c.png}
+            \end{center}
+        \subsection*{Inciso D}
+            \begin{center}
+                \includegraphics[width=0.45\linewidth]{figs-1/3d.png}
+            \end{center}
+        \subsection*{Inciso E}
+            \begin{center}
+                \includegraphics[width=0.45\linewidth]{figs-1/3e.png}
+            \end{center}
+        \subsection*{Inciso F}
+            \begin{center}
+                \includegraphics[width=0.45\linewidth]{figs-1/3f.png}
+            \end{center}
+
+
+    
 \end{document}
