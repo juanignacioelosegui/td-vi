@@ -101,7 +101,13 @@
             \begin{center}
                 \includegraphics[width=0.45\linewidth]{figs-1/3f.png}
             \end{center}
-
-
+    \section*{Ejercicio 4}
+        \subsection*{Inciso A}
+            \textit{Label encoding}, \textit{target encoding}, \textit{embeddings} y \textit{hashing trick}.
+        \subsection*{Inciso B}
+            Solamente \textit{ordinal encoding}.
+        \subsection*{Inciso C}
+            Puede quedar la fila completamente inutilizable, llena de \texttt{NA}. Además, no todos los modelos son compatibles con missings. \\
+            Para solventar este problema, se puede generar una columna extra para manejar los valores \texttt{NA} en un atributo. Puede llegar a servir un missing a la hora de predecir. Otra posibilidad es quitar el missing y asignar el valor más frecuente de ese atributo.
     
 \end{document}
