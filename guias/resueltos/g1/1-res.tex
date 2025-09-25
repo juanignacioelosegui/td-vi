@@ -116,6 +116,11 @@
             \begin{center}
                 \includegraphics[width=0.45\linewidth]{figs-1/6b.png}
             \end{center}
-
-    
+    \section*{Ejercicio 7}
+        \subsection*{Pregunta 1}
+            El problema está en el inciso C, con el oversampling.
+        \subsection*{Pregunta 2}
+            El problema es que, como se está oversampleando la clase minoritaria, se generan datos muy parecidos a los que ya existen o incluso pueden haber duplicados en el conjunto de test y/o de validación. Por lo tanto, en entrenamiento el modelo va a reconocer observaciones muy parecidas a otras y no va a aprender adecuadamente, y resultará en una elección de hiperparámetros optimista. Las métricas de rendimiento van a estar infladas y, claramente, va a terminar rindiendo mal en observaciones nuevas.
+        \subsection*{Pregunta 3}
+            Se debería cambiar cuándo hacer el oversampling. Primero se tiene que dividir en entrenamiento y validation, y hacer oversampling en el subconjunto de entrenamiento, para que las observaciones sintéticas no joroben al validation set.
 \end{document}
