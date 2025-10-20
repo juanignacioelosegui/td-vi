@@ -52,9 +52,9 @@ def cast_column_types(df):
     print("  → Tipos de columna casteados.")
     return df
 
-# ------------------------------------------------------------------
+#   ------------------------------------------------------------------
 #   Features
-# ------------------------------------------------------------------
+#   ------------------------------------------------------------------
 
 def build_features(df):
     print("Armando features...")
@@ -134,8 +134,6 @@ def build_features(df):
     else:
         df["artist_freq"] = 1.0
 
-    # popularidad artista ya calculada arriba
-
     # sesiones mínimas
     gap = df["secs_since_prev"].fillna(0)
     new_session = (gap > 1800).astype("int8")
@@ -205,9 +203,6 @@ def train_and_predict(train_df, test_df, cat_cols, num_cols):
     pos_rate = float(y_trn.mean())
     spw = (1.0 - pos_rate) / pos_rate if pos_rate > 0 else 1.0
 
-    pos_rate = float(y_trn.mean())
-    spw = (1.0 - pos_rate) / pos_rate if pos_rate > 0 else 1.0
-
     clf = XGBClassifier(
         n_estimators=3000,
         learning_rate=0.03,
@@ -227,21 +222,22 @@ def train_and_predict(train_df, test_df, cat_cols, num_cols):
         scale_pos_weight=spw,
     )
 
-    print("Entrenando modelo (XGBoost baseline)...")
+    print("Entrenando modelo (XGBoost) con early stopping...")
     clf.fit(X_trn_t, y_trn, eval_set=[(X_val_t, y_val)])
 
-    val_pred = clf.predict_proba(X_val_t)[:, 1]
+    val_pred = clf.predict_proba(X_val_t)[:,1]
     val_auc = roc_auc_score(y_val, val_pred)
     print(f"  → AUC valid (temporal 10%): {val_auc:.5f}")
 
-    preds_proba = clf.predict_proba(X_test_t)[:, 1]
+    print("Generando predicciones para el test set...")
+    preds_proba = clf.predict_proba(X_test_t)[:,1]
     out = pd.DataFrame({"obs_id": test_df["obs_id"].astype(int), "pred_proba": preds_proba})
-    out.to_csv("test.csv", index=False)
+    out.to_csv("modelo_xgb.csv", index=False)
     print("  → Predicciones escritas a 'modelo_xgb.csv'")
     return {"pre":pre,"clf":clf}
 
 def main():
-    print("=== Arrancando pipeline (XGBoost mejorado con bagging) ===")
+    print("=== Arrancando pipeline (XGBoost baseline ganador) ===")
     df = load_competition_datasets(COMPETITION_PATH, sample_frac=1.0, random_state=1234)
     df = cast_column_types(df)
     df, cat_cols, num_cols = build_features(df)
@@ -251,4 +247,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
