@@ -11,10 +11,21 @@
     \section*{Ejercicio 1}
         \subsection*{Inciso 1}
             \textbf{Falso.} Un perceptrón simple puede representar solamente funciones linealmente separables. Se puede notar por la función que lo define: \(y = \phi(\mathbf{w} \cdot \mathbf{x} + b)\). \\
-            \\
             Siendo \(\mathbf{x} = [x_{1}, x_{2}, \ldots, x_{n}]\) las entradas, que pueden ser los features. Los pesos \(\mathbf{w} = [w_{1}, w_{2}, \ldots, w_{n}]\) denotan qué tan importante es cada feature. \(b\) es un escalar que funciona como sesgo único (en el caso de un perceptrón simple, ya que tiene una sola salida), pero puede ser un vector de sesgos si tiene varias salidas.
         \subsection*{Inciso 2}
-           
-        \subsection*{Inciso 2}
+           \textbf{Falso.} Habla de aproximación, no representación directamente. Además, sólo funciona para funciones continuas y solamente si es que el perceptrón tiene activaciones no lineales y suficientes neuronas. Se tienen que dar sí o sí estas cosas para que sea verdadero el enunciado.
+        \subsection*{Inciso 3}
+            \textbf{Falso.} Por el mismo motivo de arriba, se pueden representar si 1) la función es continua y 2) si el perceptrón tiene las suficientes neuronas.
+        \subsection*{Inciso 4}
+            \textbf{Falso.} Por el mismo motivo.
+        \subsection*{Inciso 5}
+            \textbf{Verdadero.} Sí se puede. Una imagen, digamos de dimensión 28 pixeles de alto y ancho, se puede aplanar en un vector de 784 componentes: \(\mathbf{x} \in \mathbb{R}^{784}\). \\
+            Este vector se puede pasar por una red neuronal \textit{fully-connected} de la siguiente manera: \(a^{(i)} = \phi\left(\mathbf{W}^{(i)}\mathbf{x} + \mathbf{b}^{(i)}\right)\), donde:
+            \begin{itemize}
+                \item \(\mathbf{x}\) es el vector de 784 entradas,
+                \item \(\mathbf{W}^{}\)
+            \end{itemize}
+
+            
             
 \end{document}
