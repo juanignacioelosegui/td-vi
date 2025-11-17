@@ -85,6 +85,24 @@
         \subsection*{Inciso (d)}
             Tiene \((6 \cdot 5)+(7 \cdot 6)+(7 \cdot 7)+(6 \cdot 7)+(5 \cdot 6) = 193\) parámetros $w$.
         \subsection*{Inciso (e)}
-            Tiene \(6+7+7+6+5 = 31\) parámtros $b$.
-        \subsection*{Inciso (d)}
+            Tiene \(6+7+7+6+5 = 31\) parámetros $b$.
+        \subsection*{Inciso (f)}
+            \(\ldots\)
+    \section*{Ejercicio 3}
+        \subsection*{Función AND}
+            Vamos a tener dos inputs a la neurona de entrada, porque la función AND y OR se pueden explicar de manera mínima con dos valores lógicos de \(x_{1}, x_{2} = \{0, 1\}\). Va a tener una sola salida, que será \(\{0, 1\}\), siendo falso o verdadero, respectivamente. \\
+            \\
+            Se pasan los tres parámetros: $x_{1} \cdot w_{1}$, $x_{2} \cdot w_{2}$ y $b$. En la neurona se suman los parámetros. En la salida, se aplica una función de activación para generar el output $y$.
+            \begin{center}
+                \includegraphics[width=0.5\linewidth]{figs-3/ej3a.png}
+            \end{center}
+    \section*{Ejercicio 4}
+        Ver \texttt{ej4.py}.
+    \section*{Ejercicio 5}
+       \noindent Los tres (perceptrón, regresión logística y SVM) construyen un hiperplano lineal para separar las clases y usan el mismo tipo de combinación lineal $\mathbf{w} \cdot \mathbf{x} + b$. Pero se diferencian en cómo entrenan, qué función de \textit{loss} usan y qué tipo de salida generan. \\
+       \\
+       El perceptrón no usa probabilidades, ajusta pesos solo cuando se equivoca y minimiza el error contando cuántas veces se equivocó. \\
+       La regresión lineal aplica la función sigmoide para usar una salida probabilística y busca minimizar la log-loss. \\
+       SVM busca maximizar el margen, usa la hinge loss y no usa probabilidades.
+
 \end{document}
