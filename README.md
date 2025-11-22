@@ -1,6 +1,6 @@
 # TD VI: Inteligencia Artificial
 
-Este repositorio contiene los recursos de la materia **Tecnología Digital VI: Inteligencia Artificial**, dictada en la Licenciatura en Tecnología Digital (UTDT), segundo semestre 2024.
+Este repositorio contiene los recursos de la materia **Tecnología Digital VI: Inteligencia Artificial**, dictada en la Licenciatura en Tecnología Digital (UTDT), segundo semestre 2025.
 
 ## 🎯 Objetivos
 
