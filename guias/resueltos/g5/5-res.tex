@@ -1,0 +1,44 @@
+\documentclass[12pt, a4paper]{article}
+
+% ====== PAQUETES BÁSICOS ======
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, graphicx, geometry}
+\geometry{margin=2.5cm}
+\usepackage{fancyhdr}
+
+% ====== ENCABEZADO ======
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Guía de Ejercicios 5 (Resuelta)}
+\rhead{Juan Ignacio Elosegui}
+\cfoot{\thepage}
+
+\begin{document}
+    \section*{Ejercicio 1}
+        \subsection*{Inciso (a)}
+            \noindent Si para todas las observaciones del dataset esa neurona recibe valores de preactivación $z = \mathbf{w}^{\top} \mathbf{x} + \mathbf{b} \leq 0$, cuando se active seguirá siendo cero el output por estar usando ReLU. Esto se ve únicamente viendo la salida de esa neurona.
+        \subsection*{Inciso (b)}
+            \noindent Una neurona puede quedar muerta si sus pesos y biases hacen que la preactivación $z \leq 0$ para la mayoría o todas las observaciones del dataset. Puede suceder cuando se inicializan mal, el learning rate es muy alto (hace que los pesos sean valores negativos de golpe) o que la neurona no pueda detectar algunos valores de las observaciones.
+        \subsection*{Inciso (c)}
+            \begin{enumerate}
+                \item Cambiar ReLU y usar en su lugar otra función de activación que no permita que se active la neurona con valores exactamente cero. Esto podría generar el problema de vanishing gradient de todas formas. Si queremos mantener la facilidad de entrenamiento, usaría Leaky ReLU, ELU o Swish.
+                \item Normalizar o estandarizar los datos o features para evitar que todas las preactivaciones sean menores o iguales a cero.
+                \item Inicialización de pesos adecuada.
+                \item Definir un learning rate adecuado antes del entrenamiento.
+            \end{enumerate}
+        \subsection*{Inciso (d)}
+            \noindent Si se inicializan pesos con valores negativos grandes, puede suceder que la activación de $z$ sea negativa o cero y muera. El hiperparámetro del learning rate seteado a un valor moderado disminuye la probabilidad de que muera la neurona.
+    \section*{Ejercicio 3}
+        \subsection*{Inciso (a)}
+            \noindent La función \textbf{sigmoide} sufre el problema de vanishing gradient, causada por la saturación en los extremos. La saturación se da cuando la función se acerca cada vez más al cero.
+        \subsection*{Inciso (b)}
+            \noindent La función \textbf{tanh} también sufre del problema de vanishing gradient por la saturación.
+        \subsection*{Inciso (c)}
+            \noindent La función \textbf{softmax} es una función de activación que se hace únicamente con las neuronas de output. Se usa para normalizar los logits (valores de salida antes de aplicar softmax) para conseguir una distribución de probabilidad. Los logits pueden ser positivos, negativos, grandes o pequeños. Luego de aplicar la función softmax, la suma de los logits activados suman 1.
+        \subsection*{Inciso (d)}
+            \noindent El rango de valores que produce la función es \(0 < \text{softmax}(x_{i}) < 1\).
+        \subsection*{Inciso (e)}
+            \noindent Calcular directamente la función softmax puede causar inestabilidad numérica por tener logits muy grandes y puede causar overflow. Para evitarlo se usa \textbf{log-softmax}, que usa un logaritmo para generar esa estabilidad que buscamos.
+\end{document}
