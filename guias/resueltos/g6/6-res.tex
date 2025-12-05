@@ -1,0 +1,30 @@
+\documentclass[12pt, a4paper]{article}
+
+% ====== PAQUETES BÁSICOS ======
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, graphicx, geometry}
+\geometry{margin=2.5cm}
+\usepackage{fancyhdr}
+
+% ====== ENCABEZADO ======
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Guía de Ejercicios 6 (Resuelta)}
+\rhead{Juan Ignacio Elosegui}
+\cfoot{\thepage}
+
+\begin{document}
+    \section*{Ejercicio 1}
+        \subsection*{Inciso (a)}
+            Es importante escalar los valores de entrada porque:
+            \begin{enumerate}
+                \item Acelera la convergencia del entrenamiento. Si las features tienen escalas muy distintas, los gradientes avanzan más hacia algunas direcciones (la de los features no escalados seguramente), haciendo que el descenso por gradiente zigzaguee y tarde en converger para encontrar el mínimo error.
+                \item Evita vanishing/exploding gradients. Mantener valores en rangos equiparados evita que las activaciones crezcan o se reduzcan mucho en backpropagation.
+                \item Mejora la estabilidad numérica. Sirve para ADAM y RMSProp.
+                \item Inicialización de pesos más fácil por tener distribuciones consistentes.
+            \end{enumerate}
+        \subsection*{Inciso (b)}
+            
+\end{document}

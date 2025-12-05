@@ -41,4 +41,16 @@
             \noindent El rango de valores que produce la función es \(0 < \text{softmax}(x_{i}) < 1\).
         \subsection*{Inciso (e)}
             \noindent Calcular directamente la función softmax puede causar inestabilidad numérica por tener logits muy grandes y puede causar overflow. Para evitarlo se usa \textbf{log-softmax}, que usa un logaritmo para generar esa estabilidad que buscamos.
+    \section*{Ejercicio 5}
+        \begin{itemize}
+            \item \textbf{Falso}. Es diferenciable en todo su dominio, menos en \(x = 0\).
+            \item \textbf{Verdadero}. Puede producir neuronas que queden permanentemente inactivas porque devuelven cero siempre. Ocurre cuando la preactivación es siempre negativa y la neurona deja de recibir gradiente.
+            \item \textbf{Falso}. Se usa únicamente en la capa de salida para producir probabilidades cuya suma conjunta es igual a uno.
+            \item \textbf{Falso}. Se usan en cada neurona de las capas ocultas y de la capa de salida.
+            \item \textbf{Verdadero}. Está diseñada para que no tenga nunca gradiente cero.
+            \item \textbf{Falso}. Una función lineal no restringe la salida entre 0 y 1. Esta función no produce probabilidades y no permite usar funciones de pérdida adecuadas. Para clasificación conviene usar la función de activación sigmoide $\sigma$.
+            \item \textbf{Verdadero}. En caso de no tener funciones de activación, una red neuronal colapsaría (sería solamente una combinación de transformaciones lineales) y se necesitaría una sola capa. Además, no aprendería relaciones no lineales. No es más que una regresión lineal.
+            \item \textbf{Falso}. En la práctica no se usa la función sigmoide más que nada por los problemas que atrae: vanishing gradient y el hecho de que no esté centrada en cero (todos los outputs son positivos).
+            \item \textbf{Falso}. Tiene un rango de salida entre -1 y 1.
+        \end{itemize}
 \end{document}
