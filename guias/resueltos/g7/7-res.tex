@@ -1,0 +1,64 @@
+\documentclass[12pt, a4paper]{article}
+
+% ====== PAQUETES BÁSICOS ======
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, graphicx, geometry}
+\geometry{margin=2.5cm}
+\usepackage{fancyhdr}
+
+% ====== ENCABEZADO ======
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Guía de Ejercicios 7 (Resuelta)}
+\rhead{Juan Ignacio Elosegui}
+\cfoot{\thepage}
+
+\begin{document}
+    \section*{Ejercicio 1}
+        \subsection*{Inciso (a)}
+            \noindent Porque aprenden características jerárquicas de los patrones locales (pixeles que están cercanos entre sí) sin necesidad de hacer una red compleja y profunda. Usa filtros compartidos -que reducen la cantidad de parámetros- y mantiene la invarianza sin importar dónde se aplique el filtro.
+        \subsection*{Inciso (b)}
+            \noindent Para prevenir el overfitting en una CNN se puede usar dropout aplicándolo sobre las activaciones de las capas convolucionales y también en las capas FC al final de la red. En training, dropout apaga alguna neuronas (pone algunas activaciones en cero) para evitar que el modelo dependa mucho de un grupo de neuronas y mejorando la capacidad de generalización.
+    \section*{Ejercicio 2}
+        \subsection*{Inciso (a)}
+            \noindent La función de pooling se usa para hacer downsampling de los feature maps y así reducir su tamaño. Se reemplazan los valores originales por un resumen estadístico para mantener la información más importante.
+        \subsection*{Inciso (b)}
+            \noindent La diferencia entre Max Pooling y Average Pooling es qué se hace con los valores originales. En Max Pooling se elige el valor más alto de la ventana del feature map para preservar las características más destacadas, mientras que en Average Pooling se hace un promedio de la ventana para generar una versión suavizada del mapa de activación.
+    \section*{Ejercicio 3}
+        \subsection*{Inciso (a)}
+            \noindent Si se usa un stride mayor, va a reducir el tamaño de la salida porque se aplica el filtro a más pixeles. A medida que se agranda el valor de stride, la salida se achica.
+        \subsection*{Inciso (b)}
+            \noindent Afecta a los datos de salida cuando se mueve en mayores saltos, porque reduce el número de activaciones calculadas y baja también el solapamiento de los píxeles analizados. El feature map será más pequeño, pero los detalles chicos seguro se perderán pero se consiguen patrones más grandes.
+    \section*{Ejercicio 4}
+        \subsection*{Inciso (a)}
+            \noindent El padding es importante para conseguir detalles de los bordes.
+        \subsection*{Inciso (b)}
+            \noindent Aumenta el tamaño de la entrada, entonces el tamaño de salida será más grande.
+        \subsection*{Inciso (c)}
+            \noindent Hace que los bordes participen aportando información en igual cantidad que los pixeles del centro. Si no hubiera padding, el filtro no se puede centrar sobre los bordes, por lo tanto no se tiene tan en cuenta a la hora de aportar información.
+    \section*{Ejercicio 5}
+        \noindent Fórmula a usar para encontrar el tamaño del mapa de activación: \[\text{Tamaño del mapa de activación} = \Bigl\lfloor\frac{N-K+2P}{S}\Bigr\rfloor + 1 \text{,}\] siendo $N = $ tamaño de entrada, $K = $ kernel, $P = $ padding, $S = $ stride. 
+        \subsection*{Inciso (a)}
+            \[\Bigl\lfloor\frac{32 - 5 + 2 \cdot 0}{2}\Bigr\rfloor + 1 =\]
+            \[\Bigl\lfloor\frac{27}{2}\Bigr\rfloor + 1 =\]
+            \[\Bigl\lfloor 13,5 \Bigr\rfloor + 1 =\]
+            \[13 + 1 =\]
+            \[14\]
+            \noindent Entonces, el tamaño del mapa de activación resultante termina siendo de 14x14.
+        \subsection*{Inciso (b)}
+            \[\Bigl\lfloor\frac{32 - 5 + 2 \cdot 1}{2}\Bigr\rfloor + 1 =\]
+            \[\Bigl\lfloor\frac{29}{2}\Bigr\rfloor + 1 =\]
+            \[\Bigl\lfloor 14,5 \Bigr\rfloor + 1 =\]
+            \[14 + 1 =\]
+            \[15\]
+            \noindent El mapa de activación resultante es 15x15.
+        \subsection*{Inciso (c)}
+            \[\Bigl\lfloor\frac{32 - 5 + 2 \cdot 2}{1}\Bigr\rfloor + 1 =\]
+            \[\Bigl\lfloor\frac{31}{1}\Bigr\rfloor + 1 =\]
+            \[\Bigl\lfloor 31 \Bigr\rfloor + 1 =\]
+            \[31 + 1 =\]
+            \[32\]
+            \noindent El mapa de activación resultante es 32x32. Igual que el original.
+\end{document}
