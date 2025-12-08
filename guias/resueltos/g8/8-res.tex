@@ -1,0 +1,121 @@
+\documentclass[12pt, a4paper]{article}
+
+% ====== PAQUETES BÁSICOS ======
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, graphicx, geometry}
+\geometry{margin=2.5cm}
+\usepackage{fancyhdr}
+
+% ====== ENCABEZADO ======
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Guía de Ejercicios 8 (Resuelta)}
+\rhead{Juan Ignacio Elosegui}
+\cfoot{\thepage}
+
+\begin{document}
+    \section*{Ejercicio 2}
+        \subsection*{Inciso (a)}
+            \noindent El autoencoder tiene incorporado un encoder (además de un decoder) para que los datos de entrada se compriman en una representación vectorial que se ubica en el espacio latente de la red neuronal.
+        \subsection*{Inciso (b)}
+            \noindent La capa de espacio latente funciona como un cuello de botella en el cual la información está bien comprimida y se retienen únicamente las características más importantes para que luego el decoder reconstruya los datos.
+        \subsection*{Inciso (c)}
+            \noindent Un autoencoder es una red neuronal no supervisada que recibe como entrada un dato y busca reconstruir ese mismo dato a la salida. Tiene un encoder y un decoder. Tiene la utilidad de que el dato que pasa por el autoencoder se comprime a una dimensión más pequeña para poder aprender sus características más importantes sin usar etiquetas.
+        \subsection*{Inciso (d)}
+        \subsection*{Inciso (e)}
+            \noindent Porque el autoencoder sólo aprende a reconstruir datos que ya vio en el entrenamiento, no es que aprende cómo se deberían reconstruir todos los vectores latentes. Si se quisieran "inyectar" datos en el espacio latente, probablemente se generen modificaciones de los datos de entrada que no sean realistas. Más que nada la limitación viene del punto de vista de arquitectura.
+    \section*{Ejercicio 3}
+        \subsection*{Inciso (a)}
+            \noindent La principal diferencia respecto del autoencoder es que el VAE agrega distribuciones de probabilidad en el vector latente. Además, agrega una regularización para forzar que el vector latente siga una distribución normal o cualquier otra. Estas modificaciones hacen que el VAE sea capaz de generar datos nuevos.
+        \subsection*{Inciso (b)}
+            \noindent El objetivo es maximizar la siguiente función: \[ \sum \log \text{P}\left(x_{n}, W_{f}, W_{n}\right) - \text{KL}\left(P(h | x_{n}; W_{f}) || \mathcal{N}(h, 0, t)\right) \]
+            \noindent El primer término es el término de reconstrucción, que hace que el VAE funcione como un autoencoder y permite que el espacio latente capture la información necesaria del dato para poder reconstruirlo. \\
+            El segundo término es el término de regularización, que usa una función especial KL-divergence para que el VAE pueda generar nuevos datos siguiendo una distribución normal.
+        \subsection*{Inciso (c)}
+            \noindent Como se fuerza a que las distribuciones del espacio latente sea un espacio continuo y suave por el término de regularización de KL-divergence, el VAE ahora es capaz de generar datos nuevos y válidos porque no aprende a reconstruir solamente las observaciones en training, sino que aprende la distribución para evitar que sea un espacio disconexo el espacio latente.
+        \subsection*{Inciso (d)}
+            \noindent Las ventajas de un VAE por sobre un autoencoder tradicional son:
+            \begin{enumerate}
+                \item La posibilidad de generar datos nuevos y válidos.
+                \item La posibilidad de manipular el espacio latente por ser modificado a un espacio continuo y con una distribución conocida.
+                \item Permite modificación de los datos de entrenamiento.
+                \item Permite interpolaciones suaves para encontrar transiciones suaves entre dos datos.
+            \end{enumerate}
+        \subsection*{Inciso (e)}
+            \noindent Los pasos para entrenar un VAE son:
+            \begin{enumerate}
+                \item El encoder recibe una observación y calcula su esperanza y desvío estándar. Esto sirve para describir la distribución de dónde podría estar el vector latente de esa observación.
+                \item Se elige un punto del espacio latente basándose en esa distribución. Ese punto se usará como un vector latente.
+                \item El decoder recibe ese punto e intenta reconstruir el dato original. Esto es igual al autoencoder tradicional.
+                \item El modelo compara el dato reconstruido con el dato original. Si es una mala reconstrucción, ajusta sus pesos para que el encoder extraiga mejor las características útiles.
+                \item También se ajusta al encoder para que pueda producir distribuciones ordenadas, lo más parecidas posibles a una normal.
+                \item El entrenamiento ajusta los pesos para que se equilibre que las reconstrucciones sean buenas y que el espacio latente esté ordenado.
+                \item Repetir para muchos datos.
+            \end{enumerate}
+    \section*{Ejercicio 4}
+        \subsection*{Inciso (a)}
+            \noindent Un GAN es un algoritmo diseñado para resolver el problema de modelado generativo. Un modelo generativo estudia una colección de observaciones en training y aprende su distribución de probabilidad que generó esas observaciones. El GAN puede generar más observaciones a partir de la distribución estimada de esas observaciones. \\
+
+            \noindent Los GANs están implementados con dos redes neuronales (una red generativa y otra red discriminadora) que compiten mutuamente para hacerle creer a un discriminador que estas imágenes creadas son reales. La red generativa genera las imágenes, y la red discriminativa tiene que diferenciar entre observaciones de la distribución de los datos originales y los candidatos producidos por el generador. \\
+
+            \noindent Se busca aumentar el índice de error de la red discriminativa, es decir, engañarla con datos generados para que crea que son verdaderos.
+        \subsection*{Inciso (b)}
+            \noindent La diferencia es que el generador genera las imágenes a partir de una distribución estimada del training y el discriminador debe decir si esas imágenes son verdaderas o inventadas. La idea es que el discriminador no las pueda diferenciar.
+        \subsection*{Inciso (c)}
+            \noindent El proceso de entrenamiento de una GAN es:
+            \begin{enumerate}
+                \item Entrenar el discriminador $\mathcal{D}$. Se le muestran los datos reales del dataset, el cual $\mathcal{D}$ debe clasificarlos como reales. Ajusta sus pesos para mejorar en esa tarea. También se le deben mostrar datos falsos generados por el generador $\mathcal{G}$, el cual $\mathcal{D}$ debe clasificarlos como falsos.
+                \item Entrenar el generador $\mathcal{G}$. No se tocan más los pesos del discriminador. Ahora $\mathcal{G}$ debe generar nuevos datos falsos con ruido aleatorio, sumado a lo que aprendió del dataset y pasárselos a $\mathcal{D}$. Queremos que $\mathcal{D}$ se equivoque, que piense que los nuevos datos son reales. Si $\mathcal{D}$ se da cuenta que son falsos (no se equivoca), $\mathcal{G}$ debe mejorar sus parámetros.
+                \item Iterar. En cada iteración se alterna para mejorar $\mathcal{G}$ para generar mejor o mejorar $\mathcal{D}$ para detectar mejor.
+            \end{enumerate}
+        \subsection*{Inciso (d)}
+            \noindent Se actualizan alternando entre $\mathcal{G}$ y $\mathcal{D}$. Si $\mathcal{D}$ se equivoca en distinguir un dato falso de uno verdadero, entonces se ajusta el discriminador. Si $\mathcal{D}$ dice que un dato es falso, entonces se actualiza el generador $\mathcal{G}$ para que pueda crear datos más realistas.
+        \subsection*{Inciso (e)}
+            \noindent Va a detectar los datos falsos porque el discriminador entrenó con datos reales. Sabe qué características tienen y qué patrones, lo que tiene que hacer es comparar los datos generados por $\mathcal{G}$ con los datos que usó el discriminador para aprender.
+        \subsection*{Inciso (f)}
+            \noindent El generador toma un vector de ruido aleatorio y lo usa para simular datos del dataset real. El generador ya aprendió a transformar ruido en datos, así que serán datos parecidos.
+    \section*{Ejercicio 5}
+        \subsection*{Inciso (a)}
+            \noindent Una red neuronal recurrente (RNN) es una red que maneja información secuencial, considera los datos actuales y anteriores y tiene memoria. Es una máquina de estados dentro de una red neuronal.
+        \subsection*{Inciso (b)}
+            \noindent El unfold significa representar la misma celda repetida en cada paso temporal para poder calcular los gradientes paso a paso. La celda de una RNN es la unidad que hace el cálculo recurrente en cada paso temporal, lo que hace es calcular el input con el estado anterior para producir un nuevo estado.
+        \subsection*{Inciso (c)}
+            \noindent Backpropagation Through Time (BPTT) se usa cuando los gradientes se propagan para atrás a través de todas las etapas de la secuencia. Es como un viaje al pasado retrocediendo en los estados guardados cuando se hace forward propagation.
+        \subsection*{Inciso (d)}
+            \noindent La estructura de una LSTM consiste de una celda de memoria con tres puertas:
+            \begin{itemize}
+                \item Puerta de entrada. Decide qué información nueva entra a la memoria.
+                \item Puerta de salida. Regula qué parte de la memoria se usa como salida, es cuándo impacta la memoria en la red.
+                \item Puerta de olvido. Decide qué información se descarta.
+            \end{itemize}
+            \noindent Esto permite a las redes LSTM retener o descartar la información que fluye a través de la red. Lo importante es que aprenda las dependencias a largo plazo.
+        \subsection*{Inciso (e)}
+            \noindent Una celda LSTM maneja la información de corto y largo plazo mediante dos estados separados:
+            \begin{itemize}
+                \item Estado de la celda $c_{t}$. Donde la LSTM guarda información que debe durar muchos pasos. Esta información se actualiza suavemente para que no se pierda rápido.
+                \item Estado oculto $h_{t}$. Es la información que se usa en el paso actual para producir la salida. Es la memoria a corto plazo.
+            \end{itemize}
+            \noindent Las puertas de salida deciden qué se guarda en la memoria y qué no para mantener las secuencias dependientes largas sin perder el contexto.
+    \section*{Ejercicio 6}
+        \begin{itemize}
+            \item \textbf{Verdadero}.
+            \item \textbf{Verdadero}.
+            \item \textbf{Verdadero}. 
+            \item \textbf{Falso}. La información a largo plazo puede tener gradientes muy chicos.
+            \item \textbf{Falso}. Es precisamente su mayor virtud.
+            \item \textbf{Verdadero}.
+            \item \textit{Esta pregunta está repetida.}
+            \item \textbf{Verdadero}.
+        \end{itemize}
+    \section*{Ejercicio 7}
+        \begin{itemize}
+            \item \textbf{Falso}. También pueden usarse para lenguaje natural y audios.
+            \item \textbf{Falso}. Sí permite eso.
+            \item \textbf{Verdadero}. No tienen recurrencia (no son RNN) y no usan convoluciones (no son CNN).
+            \item \textbf{Falso}. Sin el decoder no tenemos una salida generada.
+            \item \textbf{Falso}. Por definición, BERT procesa información (usa el mecanismo de self-attention) para ambas direcciones en una secuencia de palabras. Ve lo que le precede y lo que le sigue a una palabra.
+            \item \textbf{Verdadero}. En todas las subcapas de un transformer se mantiene la misma dimensionalidad interna.
+        \end{itemize}
+\end{document}
