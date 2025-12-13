@@ -1,0 +1,396 @@
+\documentclass[10pt]{memoir}
+
+% --- Desactivar encabezados y pies ---
+\pagestyle{empty}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\footskip}{0pt}
+
+\setstocksize{3in}{5in}
+\settrimmedsize{3in}{5in}{*}
+\settypeblocksize{2.8in}{4.8in}{*}
+\setlrmargins{0.1in}{*}{*}
+\setulmargins{0.1in}{*}{*}
+\checkandfixthelayout
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+
+\begin{document}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Puede haber ciclos en una red neuronal?} \\
+    \end{center}
+    
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Puede haber ciclos en una red neuronal?} \\
+    \end{center}
+        No. 
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Explicar la estructura del perceptrón} \\
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Explicar la estructura del perceptrón} \\
+    \end{center}
+        Se cuenta con los inputs (escalares), un peso de ese input y un bias (opcionalmente). \\
+        Se hace la suma de los inputs multiplicados por sus respectivos pesos. \\
+        Finalmente, se aplica una función de activación.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Qué es un MLP? ¿Cómo se organiza?} \\
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Qué es un MLP? ¿Cómo se organiza?} \\
+    \end{center}
+        Un MLP es un perceptrón multicapa. \\
+        Un MLP cuenta con todas capas fully connected (FC). Tiene una input layer, hidden layer(s) y una output layer.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Definir shallow y deep network} \\
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Definir shallow y deep network} \\
+    \end{center}
+        Una shallow network tiene más neuronas de input. Las hace más anchas viéndolas de manera horizontal. \\
+        Una deep network tiene más hidden layers. La hace más profunda.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Qué es un tensor? ¿Qué ventajas tiene?} \\
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Qué es un tensor? ¿Qué ventajas tiene?} \\
+    \end{center}
+        Un tensor es un arreglo multidimensional de escalares. \\
+        Sirve para datos de alta dimensionalidad (como imágenes o audios), es eficiente para GPU, y es una representación fácil de inputs, outputs, weights y biases.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Definir forward propagation y sus pasos a seguir.} \\
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Definir forward propagation y sus pasos a seguir.} \\
+    \end{center}
+        Forward propagation computa el output para un input. \\
+        \\
+        Se hacen los cálculos a través de cada capa en el sentido de IL/HL/OL para conseguir una predicción $\hat{y}$. A medida que se avanza, se guardan los parámetros para usar en backward propagation.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Definir backward propagation y su proceso. ¿Qué ventaja y desventaja tiene?} \\
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Definir backward propagation y su proceso. ¿Qué ventaja y desventaja tiene?} \\
+    \end{center}
+        Es el proceso de actualizar los pesos y biases usando el gradiente de la función loss. Se busca minimizar la función loss en el training set. Va en sentido contrario a forward propagation. \\
+        \\
+        Primero, se calcula la función loss definida por $\hat{y}-y$ a grandes rasgos. \\
+        Luego, se calculan los gradientes usando la regla de la cadena. Luego, se aplica el learning rate \textit{LR} al gradiente.
+        Finalmente, se actualizan los pesos y biases yendo en sentido contrario: OL/HL/IL. \\
+        \\
+        Ventaja: es eficiente, ya que una observación del dataset requiere una pasada forward y una pasada backward. \\
+        Desventaja: es sensible a la arquitectura de la red, porque afecta su estabilidad.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Nombrar los dos tipos de capas.} \\
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Nombrar los dos tipos de capas.} \\
+    \end{center}
+        Capas entrenables: sus pesos y biases se modifican en backpropagation. \\
+        Capas no entrenables: sus pesos y biases quedan fijos en training para mantener las features aprendidas previamente.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Qué es la vectorización y para qué sirve?} \\
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Qué es la vectorización y para qué sirve? ¿Cuáles son sus ventajas? ¿Cómo queda el cálculo de una neurona en una hidden layer?} \\
+    \end{center}
+        Es una práctica común para almacenar pesos, inputs y biases en vectores. \\
+        Sirve para simplificar las operaciones y acelerar los tiempos. \\
+        \\
+        Las ventajas que trae son la escalabilidad, la claridad, la capacidad de procesamiento en batch, performance y paralelismo. \\
+        \\
+        \[\phi(\mathbf{W}^{\top}\mathbf{x}+\mathbf{b})\]
+        Donde $\phi$ es la función de activación, $\mathbf{W}$ el vector de pesos, $\mathbf{x}$ el vector de inputs y $\mathbf{b}$ el vector de biases.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Qué es y para qué sirve la función loss?} \\
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Qué es y para qué sirve la función loss?} \\
+    \end{center}
+        Es una función que compara la predicción predicha con la etiqueta real en el proceso de training: \(\hat{y}-y\). \\
+        Sirve para guiar el entrenamiento de la red.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Para qué sirven los grafos computacionales?} \\
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Para qué sirven los grafos computacionales?} \\
+    \end{center}
+    Para reutilizar cálculos y ayudar con la eficiencia del backpropagation. Las librerías lo usan mucho. 
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Para qué sirven y por qué son importantes las funciones de activación?} \\
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large ¿Para qué sirven y por qué son importantes las funciones de activación?} \\
+    \end{center}
+        Sirven para aprender mapeos no lineales y para capturar estructuras complejas de los datos. \\
+        \\
+        Porque, de no tenerlas, la red se colapsaría a una única capa con la combinación lineal.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Nombrar y describir las funciones de activación lineales. ¿Qué ventajas y qué desventajas tiene?} \\
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Nombrar y describir la función de activación lineal. ¿Qué ventajas y qué desventajas tiene?} \\
+    \end{center}
+        Función de identidad: el output es el mismo que el input. \(f(x) = x\). \\
+        \\
+        Ventajas: simples y eficientes, son fáciles de interpretar. \\
+        Desventajas: limitadas con datos con patrones complejos, colapsa la red. Generalmente se usa en la capa de output.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Nombrar y describir las funciones escalonadas. ¿Qué ventajas y qué desventajas tienen?}
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Nombrar y describir las funciones escalonadas. ¿Qué ventajas y qué desventajas tienen?} \\
+    \end{center}
+        Heaviside step: cuando el valor está del lado izquierdo a un umbral tiene un valor. Cuando está del lado derecho tiene otro. \\
+        Función de signo: es una función heaviside step pero con -1 para valores negativos y 1 para valores positivos. \\
+        \\
+        Ventajas: son simples y fáciles de implementar y las salidas binarias convienen para problemas de clasificación. \\
+        Desventajas: no es diferenciable en el threshold, es sensible a pequeños cambios en el input y no posee información de gradiente para aprender.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Nombrar y describir las funciones lineales por partes. ¿Qué ventajas y qué desventajas tienen?}
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Nombrar y describir las funciones lineales por partes. ¿Qué ventajas y qué desventajas tienen?} \\
+    \end{center}
+    ReLU: si el input es negativo, el output es cero. Si el input es positivo, es la función identidad. \(f(x) = \max (0, x)\) \\
+    Leaky ReLU: el resultado para los valores negativos cambia. Es igual a ReLU solo que la parte negativa está inclinada. \\
+    Shifted ReLU: es ReLU pero con otro threshold. \\
+    \\
+    Ventajas (ReLU): simple y eficiente, introduce no linealidad en la red, ayuda con el problema de vanishing gradient. \\
+    Desventajas (ReLU): las neuronas con el input negativo pueden desactivarse. \\
+    \\
+    Ventajas (var. ReLU): threshold variable, la neurona no puede morir, mismos beneficios que ReLU. \\
+    Desventajas (var. ReLU): más hiperparámetros.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Nombrar y describir las funciones suaves. ¿Qué ventajas y qué desventajas tienen?}
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Nombrar y describir las funciones suaves. ¿Qué ventajas y qué desventajas tienen?} \\
+    \end{center}
+    Softplus: es la versión suave de la ReLU. \(f(x) = \ln(1+e^{x})\). \\
+    ELU: es la versión suave de la Shifted ReLU. \\
+    Sigmoide: es una curva con forma de S, con su output acotado entre 0 y 1. \\
+    Tanh: es igual que la sigmoide, con su output acotado entre -1 y 1. \\
+    Swish: es una combinación entre ReLU y Sigmoide. \\
+    \\
+    Ventajas: son suaves y diferenciables. La sigmoide sirve para clasificación, tanh para convergencia, swish usa self-gating y ELU evita que la neurona muera. \\
+    Desventajas: son costosas y sufren del vanishing gradient.
+  
+    \clearpage
+    \begin{center}
+        \textbf{\Large Describir el problema de Vanishing Gradient y Dying Neuron.}
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Describir el problema de Vanishing Gradient y Dying Neuron.}
+    \end{center}
+    Vanishing Gradient: cuando los gradientes se hacen muy pequeños durante backpropagation a través de las capas. \\
+    Dying Neuron: cuando las neuronas siempre están inactivas y sus pesos no se actualizan dado que su gradiente es cero.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Explicar la función Softmax y Log-Softmax.}
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large Explicar la función Softmax y Log-Softmax.}
+    \end{center}
+    Softmax: es una operación que se aplica únicamente y en simultáneo a todas las neuronas en la capa de output. Sirve para normalizar las salidas a una distribución de probabilidad. \\
+    Log-Softmax: es hacer el logaritmo de la función SoftMax. Sirve para aportar estabilidad a los números.
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+
+    \clearpage
+    \begin{center}
+        \textbf{\Large }
+    \end{center}
+
+
+\end{document}
