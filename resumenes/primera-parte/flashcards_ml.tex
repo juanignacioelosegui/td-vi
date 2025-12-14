@@ -19,637 +19,891 @@
 
 \begin{document}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es el aprendizaje automático? ¿Cuáles son los tres tipos? ¿Cuál es su objetivo?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es el aprendizaje automático? ¿Cuáles son los tres tipos? ¿Cuál es su objetivo?} \\
-    \end{center}
-        \noindent Es la resolución de problemas mediante modelos que aprenden patrones a partir de datos, sin ser programados explícitamente para cada caso. \\
-        \\
-        \noindent El aprendizaje automático supervisado es aquel que para cada observación tenemos una respuesta. \\
-        En el aprendizaje automático no supervisado no tenemos esas respuestas. \\
-        El objetivo es aprender una función que generalice bien y permita predecir una variable de interés sobre datos no vistos. \\
-        \\
-        \noindent El objetivo es predecir una variable concreta. 
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el aprendizaje automático? ¿Cuáles son los tres tipos? ¿Cuál es su objetivo?} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cuáles son los dos tipos de variables para predecir?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cuáles son los dos tipos de variables para predecir?} \\
-    \end{center}
-    \noindent La \textbf{variable continua} se usa para regresión. \\
-    La \textbf{variable categórica} se usa para clasificación binaria (sí/no) o multiclase (blanco/negro/rojo).
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el aprendizaje automático? ¿Cuáles son los tres tipos? ¿Cuál es su objetivo?} \\
+\end{center}
+\noindent Es la resolución de problemas mediante modelos que aprenden patrones a partir de datos, sin ser programados explícitamente para cada caso. \\
+\\
+\noindent El aprendizaje automático supervisado es aquel que para cada observación tenemos una respuesta. \\
+En el aprendizaje automático no supervisado no tenemos esas respuestas. \\
+El objetivo es aprender una función que generalice bien y permita predecir una variable de interés sobre datos no vistos. \\
+\\
+\noindent El objetivo es predecir una variable concreta.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Explicar las dos fases del aprendizaje automático} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Explicar las dos fases del aprendizaje automático} \\
-    \end{center}
-    \noindent La \textbf{primera fase} es el training. A un dataset se le aplica una función $f$ que no conocemos más un ruido que genera la respuesta. Acá quiero estimar $\hat{f} \approx f$ de la mejor manera posible para predecir bien. En esta parte entreno el modelo. \\
-    La \textbf{segunda fase} es el test. Sobre observaciones nuevas, aplico el modelo que hice antes para predecir las variables de respuesta.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cuáles son los dos tipos de variables para predecir?} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir la estructura de un dataset} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir la estructura de un training set} \\
-    \end{center}
-    \noindent El \textbf{dataset} o training set denotado como $\mathbf{X}$ contiene: \\
-    \begin{itemize}
-        \item Columnas. Son las \textbf{variables}. Cada variable tiene un valor asociado.
-        \item Filas. Son las \textbf{observaciones}.
-        \item Una columna más. Esta es la \textbf{respuesta} $y$.
-    \end{itemize}
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cuáles son los dos tipos de variables para predecir?} \\
+\end{center}
+\noindent La \textbf{variable continua} se usa para regresión. \\
+La \textbf{variable categórica} se usa para clasificación binaria (sí/no) o multiclase (blanco/negro/rojo).
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir la estructura de un test set} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir la estructura de un test set} \\
-    \end{center}
-    \noindent Tiene las mismas variables que el training set. Quiero predecir la respuesta y que sea acertada.
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar las dos fases del aprendizaje automático} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir el problema de regresión y el problema de clasificación} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir el problema de regresión y el problema de clasificación} \\
-    \end{center}
-    \noindent \textbf{Problema de regresión}: se busca predecir un valor numérico \(\hat{y}_{i}\), lo más cercano posible al valor real \(y_{i}\). \\
-    \\
-    \textbf{Problema de clasificación}: se busca estimar las probabilidades \(\hat{\text{P}} = (y = k | \mathbf{X}_{i})\) para cada clase $k$. Si la clase real de $i$ es $k$, entonces \(\hat{\text{P}} = (y = k | \mathbf{X}_{i}) \approx 1\), que las otras probabilidades sean cero. La probabilidad estima la clasificación. La clase predicha suele ser la de mayor probabilidad.
-    
-    \clearpage
-    \begin{center}
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar las dos fases del aprendizaje automático} \\
+\end{center}
+\noindent La \textbf{primera fase} es el training. A un dataset se le aplica una función $f$ que no conocemos más un ruido que genera la respuesta. Acá quiero estimar $\hat{f} \approx f$ de la mejor manera posible para predecir bien. En esta parte entreno el modelo. \\
+La \textbf{segunda fase} es el test. Sobre observaciones nuevas, aplico el modelo que hice antes para predecir las variables de respuesta.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la estructura de un dataset} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la estructura de un training set} \\
+\end{center}
+\noindent El \textbf{dataset} o training set denotado como $\mathbf{X}$ contiene: \\
+\begin{itemize}
+	\item Columnas. Son las \textbf{variables}. Cada variable tiene un valor asociado.
+	\item Filas. Son las \textbf{observaciones}.
+	\item Una columna más. Esta es la \textbf{respuesta} $y$.
+\end{itemize}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la estructura de un test set} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la estructura de un test set} \\
+\end{center}
+\noindent Tiene las mismas variables que el training set. Quiero predecir la respuesta y que sea acertada.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir el problema de regresión y el problema de clasificación} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir el problema de regresión y el problema de clasificación} \\
+\end{center}
+\noindent \textbf{Problema de regresión}: se busca predecir un valor numérico \(\hat{y}_{i}\), lo más cercano posible al valor real \(y_{i}\). \\
+\\
+\textbf{Problema de clasificación}: se busca estimar las probabilidades \(\hat{\text{P}} = (y = k | \mathbf{X}_{i})\) para cada clase $k$. Si la clase real de $i$ es $k$, entonces \(\hat{\text{P}} = (y = k | \mathbf{X}_{i}) \approx 1\), que las otras probabilidades sean cero. La probabilidad estima la clasificación. La clase predicha suele ser la de mayor probabilidad.
+
+\clearpage
+\begin{center}
 	\textbf{\Large ¿Por qué el training set y el test set deben ser mutuamente excluyentes?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Por qué el training set y el test set deben ser mutuamente excluyentes?} \\
-    \end{center}
-    \noindent Para evitar que el modelo se pruebe con datos que no vio durante el entrenamiento, para evitar sesgos. 
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir el espacio de atributos.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir el espacio de atributos.} \\
-    \end{center}
-    \noindent El \textbf{espacio de atributos} hace referencia a todos los posibles valores de las variables. Por ejemplo \texttt{COLOR} = \{\texttt{BLANCO, NEGRO, ROJO}\}.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Por qué el training set y el test set deben ser mutuamente excluyentes?} \\
+\end{center}
+\noindent Para evitar que el modelo se pruebe con datos que no vio durante el entrenamiento, para evitar sesgos.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es un árbol de decisión?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es un árbol de decisión?} \\
-    \end{center}
-    \noindent Es un modelo de aprendizaje supervisado que se usa en clasificación binaria o multiclase y en regresión.
+\clearpage
+\begin{center}
+	\textbf{\Large Definir el espacio de atributos.} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cómo funciona un árbol de decisión aplicado para regresión? ¿Qué estructura tiene?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cómo funciona un árbol de decisión para regresión? ¿Qué estructura tiene?} \\
-    \end{center}
-    \noindent En un árbol de decisión para regresión se busca predecir una variable continua. La \textbf{medida de calidad de predicción} es la suma de los errores al cuadrado (SSE), la que se busca minimizar. \\
-    \\
-    Un árbol particiona el espacio de atributos en regiones. Los nodos internos dividen el espacio de predictores y las hojas dicen en qué región termina clasificada una observación. Se busca un conjunto de regiones que minimicen el SSE. Las regiones se consiguen de manera recursiva: se hace una partición donde se consiga mayor ganancia y se repite hasta llegar a algún criterio de parada. \\
-    \\
-    El árbol puede detectar interacciones entre las variables y detectar no linealidades.
+\clearpage
+\begin{center}
+	\textbf{\Large Definir el espacio de atributos.} \\
+\end{center}
+\noindent El \textbf{espacio de atributos} hace referencia a todos los posibles valores de las variables. Por ejemplo \texttt{COLOR} = \{\texttt{BLANCO, NEGRO, ROJO}\}.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cómo funciona un árbol de decisión para clasificación? ¿Qué hiperparámetros tiene?} \\
-    \end{center}
-     
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cómo funciona un árbol de decisión para clasificación? ¿Qué hiperparámetros tiene?} \\
-    \end{center}
-    \noindent Se busca predecir probabilidades de clase. No se usa SSE, sino medidas de impureza (Gini, cross-entropy, error de clasificación). El costo total del árbol está definido por suma de la impureza de todas las hojas, ponderadas por su tamaño. Estos árboles pueden trabajar con variables categóricas con splits binarios o múltiples. \\
-    \\
-    Los hiperparámetros usados son: \texttt{max\_depth} para controlar la profundidad máxima, \texttt{min\_samples\_split} para un mínimo de ubservaciones en un nodo para hacer un split, \texttt{min\_samples\_leaf} para el mínimo de observaciones de las hojas y \texttt{min\_impurity\_decrease} que es la ganancia mínima para alcanzar antes de hacer un split. 
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un árbol de decisión?} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large De los hiperparámetros nombrados anteriormente, ¿cuáles pueden causar overfitting?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large De los hiperparámetros nombrados anteriormente, ¿cuáles pueden causar overfitting?} \\
-    \end{center}
-    \noindent Un valor demasiado alto de \texttt{max\_depth}, o valores muy bajos de \texttt{min\_samples\_split} y \texttt{min\_samples\_leaf},
-pueden provocar overfitting, ya que permiten al árbol ajustarse excesivamente a los datos de entrenamiento. 
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Explicar en qué consisten las técnicas de pre-pruning y post-pruning.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Explicar en qué consisten las técnicas de pre-pruning y post-pruning.} \\
-    \end{center}
-    \noindent Se usan en árboles de decisión de clasificación. \\
-    \\
-    \noindent \textbf{Pre-pruning}: no permitir splits que no reduzcan lo suficiente el error. \\
-    \textbf{Post-pruning}: podar hojas luego crecer el árbol completo, usando el parámetro $\alpha$. Es costoso computacionalmente.    
-    
-    \clearpage
-    \begin{center}
-	    \textbf{\Large ¿Qué pasa con el árbol cuando hay valores faltantes (missings)? Explicar en entrenamiento y en test.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué pasa con el árbol cuando hay valores faltantes (missings)? Explicar en entrenamiento y en test.} \\
-    \end{center}
-    \noindent \textbf{En entrenamiento}: se ignoran observaciones con NA al calcular la ganancia de un split. Esto quiere decir que el split se elige sólo con los datos completos. \\
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un árbol de decisión?} \\
+\end{center}
+\noindent Es un modelo de aprendizaje supervisado que se usa en clasificación binaria o multiclase y en regresión.
 
-    \noindent \textbf{En test}: si un valor está faltante en la variable para hacer un split, se usan surrogate splits (particiones sustitutas) aprendidos en el entrenamiento que intentan imitar el split original.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo funciona un árbol de decisión aplicado para regresión? ¿Qué estructura tiene?} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cuáles son las ventajas y las desventajas de los árboles de decisión?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cuáles son las ventajas y las desventajas de los árboles de decisión?} \\
-    \end{center}
-    \noindent \textbf{Ventajas}: (1) son intuitivos y fáciles de explicar, (2) reflejan la lógica de la decisión humana, (3) interpretables gráficamente, (4) manejan bien los missings y (5) soportan las variables categóricas.\\
-    \\
-    \noindent \textbf{Desventajas}: alta varianza (poco robustos a pequeñas perturbaciones del dataset).
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo funciona un árbol de decisión para regresión? ¿Qué estructura tiene?} \\
+\end{center}
+\noindent En un árbol de decisión para regresión se busca predecir una variable continua. La \textbf{medida de calidad de predicción} es la suma de los errores al cuadrado (SSE), la que se busca minimizar. \\
+\\
+Un árbol particiona el espacio de atributos en regiones. Los nodos internos dividen el espacio de predictores y las hojas dicen en qué región termina clasificada una observación. Se busca un conjunto de regiones que minimicen el SSE. Las regiones se consiguen de manera recursiva: se hace una partición donde se consiga mayor ganancia y se repite hasta llegar a algún criterio de parada. \\
+\\
+El árbol puede detectar interacciones entre las variables y detectar no linealidades.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué factores hacen que un modelo funcione mejor o peor?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué factores hacen que un modelo funcione mejor o peor?} \\
-    \end{center}
-    \begin{enumerate}
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo funciona un árbol de decisión para clasificación? ¿Qué hiperparámetros tiene?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo funciona un árbol de decisión para clasificación? ¿Qué hiperparámetros tiene?} \\
+\end{center}
+\noindent Se busca predecir probabilidades de clase. No se usa SSE, sino medidas de impureza (Gini, cross-entropy, error de clasificación). El costo total del árbol está definido por suma de la impureza de todas las hojas, ponderadas por su tamaño. Estos árboles pueden trabajar con variables categóricas con splits binarios o múltiples. \\
+\\
+Los hiperparámetros usados son: \texttt{max\_depth} para controlar la profundidad máxima, \texttt{min\_samples\_split} para un mínimo de ubservaciones en un nodo para hacer un split, \texttt{min\_samples\_leaf} para el mínimo de observaciones de las hojas y \texttt{min\_impurity\_decrease} que es la ganancia mínima para alcanzar antes de hacer un split.
+
+\clearpage
+\begin{center}
+	\textbf{\Large De los hiperparámetros nombrados anteriormente, ¿cuáles pueden causar overfitting?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large De los hiperparámetros nombrados anteriormente, ¿cuáles pueden causar overfitting?} \\
+\end{center}
+\noindent Un valor demasiado alto de \texttt{max\_depth}, o valores muy bajos de \texttt{min\_samples\_split} y \texttt{min\_samples\_leaf},
+pueden provocar overfitting, ya que permiten al árbol ajustarse excesivamente a los datos de entrenamiento.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar en qué consisten las técnicas de pre-pruning y post-pruning.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar en qué consisten las técnicas de pre-pruning y post-pruning.} \\
+\end{center}
+\noindent Se usan en árboles de decisión de clasificación. \\
+\\
+\noindent \textbf{Pre-pruning}: no permitir splits que no reduzcan lo suficiente el error. \\
+\textbf{Post-pruning}: podar hojas luego crecer el árbol completo, usando el parámetro $\alpha$. Es costoso computacionalmente.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué pasa con el árbol cuando hay valores faltantes (missings)? Explicar en entrenamiento y en test.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué pasa con el árbol cuando hay valores faltantes (missings)? Explicar en entrenamiento y en test.} \\
+\end{center}
+\noindent \textbf{En entrenamiento}: se ignoran observaciones con NA al calcular la ganancia de un split. Esto quiere decir que el split se elige sólo con los datos completos. \\
+
+\noindent \textbf{En test}: si un valor está faltante en la variable para hacer un split, se usan surrogate splits (particiones sustitutas) aprendidos en el entrenamiento que intentan imitar el split original.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cuáles son las ventajas y las desventajas de los árboles de decisión?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cuáles son las ventajas y las desventajas de los árboles de decisión?} \\
+\end{center}
+\noindent \textbf{Ventajas}: (1) son intuitivos y fáciles de explicar, (2) reflejan la lógica de la decisión humana, (3) interpretables gráficamente, (4) manejan bien los missings y (5) soportan las variables categóricas.\\
+\\
+\noindent \textbf{Desventajas}: alta varianza (poco robustos a pequeñas perturbaciones del dataset).
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué factores hacen que un modelo funcione mejor o peor?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué factores hacen que un modelo funcione mejor o peor?} \\
+\end{center}
+\begin{enumerate}
 	\item El training set que se usó para entrenar.
 	\item El algoritmo de aprendizaje que se usó para entrenarlo.
-    \end{enumerate}
+\end{enumerate}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir underfitting y overfitting.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir underfitting y overfitting.} \\
-    \end{center}
-    \noindent \textbf{Underfitting}: se consigue un modelo rígido que no captura patrones del training set. Tendrá mala performance en training y testing. \\
-    \textbf{Overfitting}: se consigue un modelo demasiado flexible. Se ajusta demasiado a las particularidades del training set. Tendrá buena performance en training y una mala performance en testing.
+\clearpage
+\begin{center}
+	\textbf{\Large Definir underfitting y overfitting.} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cómo se relaciona la flexibilidad, el error en training y el error en testing?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cómo se relaciona la flexibilidad, el error en training y el error en testing?} \\
-    \end{center}
-    \noindent Al tener más flexibilidad en un modelo, voy a tener menos error en training, pero más error en testing.
+\clearpage
+\begin{center}
+	\textbf{\Large Definir underfitting y overfitting.} \\
+\end{center}
+\noindent \textbf{Underfitting}: se consigue un modelo rígido que no captura patrones del training set. Tendrá mala performance en training y testing. \\
+\textbf{Overfitting}: se consigue un modelo demasiado flexible. Se ajusta demasiado a las particularidades del training set. Tendrá buena performance en training y una mala performance en testing.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cómo sé a priori la performance de un modelo antes de usarlo en testing?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cómo sé a priori la performance de un modelo antes de usarlo en testing?} \\
-    \end{center}
-    \noindent Se estima el error de test con distintos métodos de validación.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo se relaciona la flexibilidad, el error en training y el error en testing?} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir y explicar los tres métodos de validación.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir y explicar los tres métodos de validación.} \\
-    \end{center}
-    \noindent \textbf{Validation Set}: separar al azar una parte del dataset para validar. Es un método simple, pero depende de la partición y del tamaño del dataset. \\
-    \\
-    \noindent \textbf{Leave-One-Out Cross-Validation}: se valida dejando una observación afuera en cada iteración. Se usan casi todas las observaciones para entrenar, pero es computacionalmente caro. \\
-    \\
-    \noindent \textbf{k-fold Cross-Validation}: se divide el dataset en $k$ partes, se entrena el modelo en $k-1$ partes y se valida en la restante. Se puede repetir varias veces para reducir la variabilidad de los resultados.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo se relaciona la flexibilidad, el error en training y el error en testing?} \\
+\end{center}
+\noindent Al tener más flexibilidad en un modelo, voy a tener menos error en training, pero más error en testing.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es model selection? ¿Y model assessment?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es model selection? ¿Y model assessment?} \\
-    \end{center}  
-    \noindent \textbf{Model selection} trata de elegir el mejor modelo comparando performance. El que mejor rinda será elegido. \\
-    \\
-    \noindent \textbf{Model assessment} estima el error de generalización del modelo elegido.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo sé a priori la performance de un modelo antes de usarlo en testing?} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué son las métricas de performance y para qué sirven?} \\
-    \end{center}
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo sé a priori la performance de un modelo antes de usarlo en testing?} \\
+\end{center}
+\noindent Se estima el error de test con distintos métodos de validación.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué son las métricas de performance y para qué sirven?} \\
-    \end{center}
-    \noindent Las métricas cuantifican la performance del modelo en distintos datasets y guían el entrenamiento en ciertos modelos. Se busca ver qué tan bien el modelo logra el objetivo apuntado.
+\clearpage
+\begin{center}
+	\textbf{\Large Definir y explicar los tres métodos de validación.} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir las cinco métricas usadas para regresión.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir las cinco métricas usadas para regresión.} \\
-    \end{center}
-    \begin{enumerate}
+\clearpage
+\begin{center}
+	\textbf{\Large Definir y explicar los tres métodos de validación.} \\
+\end{center}
+\noindent \textbf{Validation Set}: separar al azar una parte del dataset para validar. Es un método simple, pero depende de la partición y del tamaño del dataset. \\
+\\
+\noindent \textbf{Leave-One-Out Cross-Validation}: se valida dejando una observación afuera en cada iteración. Se usan casi todas las observaciones para entrenar, pero es computacionalmente caro. \\
+\\
+\noindent \textbf{k-fold Cross-Validation}: se divide el dataset en $k$ partes, se entrena el modelo en $k-1$ partes y se valida en la restante. Se puede repetir varias veces para reducir la variabilidad de los resultados.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es model selection? ¿Y model assessment?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es model selection? ¿Y model assessment?} \\
+\end{center}
+\noindent \textbf{Model selection} trata de elegir el mejor modelo comparando performance. El que mejor rinda será elegido. \\
+\\
+\noindent \textbf{Model assessment} estima el error de generalización del modelo elegido.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué son las métricas de performance y para qué sirven?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué son las métricas de performance y para qué sirven?} \\
+\end{center}
+\noindent Las métricas cuantifican la performance del modelo en distintos datasets y guían el entrenamiento en ciertos modelos. Se busca ver qué tan bien el modelo logra el objetivo apuntado.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir las cinco métricas usadas para regresión.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir las cinco métricas usadas para regresión.} \\
+\end{center}
+\begin{enumerate}
 	\item \textbf{Sum of Squared Errors (SSE)}.
 	\item \textbf{Mean Squared Error (MSE)}. Es el promedio de SSE, para no depender del número de observaciones.
 	\item \textbf{Root Mean Squared Error (RMSE)}. Es la raíz cuadrada del MSE, para expresar el valor en la unidad original.
 	\item \textbf{Mean Absolute Error (MAE)}. Usa el valor absoluto para ser robusto con los valores extremos.
 	\item \textbf{Root Mean Squared Logarithmic Error (RMSLE)}. Las sutilezas relevantes del dataset se pueden capturar por el logaritmo del error.
-    \end{enumerate}
+\end{enumerate}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir las cinco métricas usadas para clasificación.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir las cinco métricas usadas para clasificación.} \\
-    \end{center}
-    \begin{enumerate}
+\clearpage
+\begin{center}
+	\textbf{\Large Describir las cinco métricas usadas para clasificación.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir las cinco métricas usadas para clasificación.} \\
+\end{center}
+\begin{enumerate}
 	\item \textbf{Accuracy}: mide la cantidad de aciertos, dependiendo del threshold elegido. \(\frac{TP+TN}{P+N}\).
 	\item \textbf{F1-Score}: es una ponderación de precision y recall. \(\frac{2 \cdot \text{precision} \cdot \text{recall}}{\text{precision} + \text{recall}}\).
 	\item \textbf{Cross-Entropy}: sirve para guiar la construcción y la evaluación de los modelos.
 	\item \textbf{ROC-AUC}: su puntaje no depende del threshold que se elija. Es una relación entre true positive rate y false negative rate. Entre más área haya bajo la curva, mejor.
 	\item \textbf{Curva PR-AUC}: es un gráfico de valores de precision y recall a medida que se cambia el threshold. El área bajo la curva es importante también.
-    \end{enumerate}
+\end{enumerate}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir precision y recall.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir precision y recall.} \\
-    \end{center}
-    \noindent \textbf{Precision} indica: "de los que el modelo dijo que son verdaderos, ¿cuántos realmente son verdaderos?. \[\text{Precision} = \frac{TP}{TP+FP}\]
-    \noindent \textbf{Recall} indica: "de los que realmente son verdaderos, ¿cuántos dijo el modelo que son verdaderos?". \[\text{Recall} = \frac{TP}{TP+FN}\]
+\clearpage
+\begin{center}
+	\textbf{\Large Definir precision y recall.} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar cuatro técnicas de ingeniería de atributos con variables numéricas.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar cuatro técnicas de ingeniería de atributos con variables numéricas.} \\
-    \end{center}
-    \begin{enumerate}
+\clearpage
+\begin{center}
+	\textbf{\Large Definir precision y recall.} \\
+\end{center}
+\noindent \textbf{Precision} indica: "de los que el modelo dijo que son verdaderos, ¿cuántos realmente son verdaderos?. \[\text{Precision} = \frac{TP}{TP+FP}\]
+\noindent \textbf{Recall} indica: "de los que realmente son verdaderos, ¿cuántos dijo el modelo que son verdaderos?". \[\text{Recall} = \frac{TP}{TP+FN}\]
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar cuatro técnicas de ingeniería de atributos con variables numéricas.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar cuatro técnicas de ingeniería de atributos con variables numéricas.} \\
+\end{center}
+\begin{enumerate}
 	\item \textbf{Log-transformation}: es una estandarización de escala para variables con distribución asimétrica.
 	\item \textbf{Scaling y estandarización}: se usa para modelos sensibles a la varianza, y no modifica la forma de la distribución, solo los valores de los ejes.
 	\item \textbf{Binarización}: se convierte un valor de una variable en cero o uno según un threshold.
 	\item \textbf{Binning}: se agrupan las observaciones en bins (intervalos). Esto genera variables categóricas ordinales.
-    \end{enumerate}
+\end{enumerate}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar tres técnicas de ingeniería de atributos con variables categóricas.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar tres técnicas de ingeniería de atributos con variables categóricas.} \\
-    \end{center}
-    \begin{enumerate}
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar tres técnicas de ingeniería de atributos con variables categóricas.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar tres técnicas de ingeniería de atributos con variables categóricas.} \\
+\end{center}
+\begin{enumerate}
 	\item \textbf{One-Hot Encoding (OHE)}: transforma una variable categórica en varias variables binarias, una por cada categoría posible. Permite que los modelos que trabajan con variables numéricas también puedan manejar variables categóricas. Si hay muchas categorías, van a generarse muchas más columnas (curse of dimensionality), por lo que conviene usar matrices densas.
 	\item \textbf{Mapeo Categoría-Números}: se le asigna un número a cada categoría ordinal, así el modelo entiende las jerarquías.
 	\item \textbf{Estrategias derivadas}: conteos, target encoding, interacciones, variables temporales y panel data.
-    \end{enumerate}
+\end{enumerate}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar los tres tipos de missings y cómo solucionarlos.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar los tres tipos de missings y cómo solucionarlos.} \\
-    \end{center}
-    \begin{enumerate}
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar los tres tipos de missings y cómo solucionarlos.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar los tres tipos de missings y cómo solucionarlos.} \\
+\end{center}
+\begin{enumerate}
 	\item \textbf{Missing Completely at Random (MCAR)}: el missing no depende de ninguna variable. Alguien se olvidó de indicar su trabajo.
 	\item \textbf{Missing at Random (MAR)}: el missing se dio por valores de otras variables. Las mujeres no dicen cuánto pesan.
 	\item \textbf{Missing not at Random (MNAR)}: el missing se dio por un valor de la misma variable. El que cobra mucho no suele decir cuánto cobra.
-    \end{enumerate}
-    \noindent Se pueden (1) eliminar filas y columnas con missings, (2)NA es una nueva categoría, (3) llenar missings a mano con la media o algún otro cálculo, o (4) agregar una columna indicadora de missing si pongo los valores a mano.
+\end{enumerate}
+\noindent Se pueden (1) eliminar filas y columnas con missings, (2)NA es una nueva categoría, (3) llenar missings a mano con la media o algún otro cálculo, o (4) agregar una columna indicadora de missing si pongo los valores a mano.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Por qué seleccionar variables? ¿Cuáles saco?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Por qué seleccionar variables? ¿Cuáles saco?} \\
-    \end{center}
-    \noindent Hay que seleccionar variables para que no haya tantas en el modelo. Menos variables implica mejor performance y mejor interpretación. \\
-    \\
-    \noindent Las variables a quitar son las redundantes, irrelevantes o pesadas.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Por qué seleccionar variables? ¿Cuáles saco?} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué clases de métodos de selección existen?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué clases de métodos de selección existen?} \\
-    \end{center}
-    \begin{enumerate}
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Por qué seleccionar variables? ¿Cuáles saco?} \\
+\end{center}
+\noindent Hay que seleccionar variables para que no haya tantas en el modelo. Menos variables implica mejor performance y mejor interpretación. \\
+\\
+\noindent Las variables a quitar son las redundantes, irrelevantes o pesadas.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué clases de métodos de selección existen?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué clases de métodos de selección existen?} \\
+\end{center}
+\begin{enumerate}
 	\item \textbf{Embedded}: la selección se hace dentro del mismo entrenamiento.
 	\item \textbf{Wrapper}: se entrenan modelos con distintas combinaciones de variables. Se elige la combinación de variables que arroje el mejor modelo.
 	\item \textbf{Filter}: la selección se da antes del entrenamiento usando tests estadísticos.
-    \end{enumerate}
+\end{enumerate}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir cuatro métodos de tipo embedded.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir cuatro métodos de tipo embedded.} \\
-    \end{center}
-    \begin{enumerate}
+\clearpage
+\begin{center}
+	\textbf{\Large Describir cuatro métodos de tipo embedded.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir cuatro métodos de tipo embedded.} \\
+\end{center}
+\begin{enumerate}
 	\item \textbf{Árboles de Decisión}: se seleccionan las variables más relevantes al hacer splits.
 	\item \textbf{Regresión Ridge}: se penalizan los coeficientes grandes aproximándolos (no igualándolos) a cero. Siempre se usan todas las variables, solo que algunas en menor o mayor medida.
 	\item \textbf{Regresión Lasso}: se penalizan los valores absolutos y sí puede hacer que los coeficientes de algunas variables sean exactamente cero. Puede no usar todas las variables.
 	\item \textbf{Elastic Net}: es una combinación de Ridge y Lasso.
-    \end{enumerate}
+\end{enumerate}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir dos métodos de tipo wrapper.} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir dos métodos de tipo wrapper.} \\
-    \end{center}
-    \begin{enumerate}
+\clearpage
+\begin{center}
+	\textbf{\Large Describir dos métodos de tipo wrapper.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir dos métodos de tipo wrapper.} \\
+\end{center}
+\begin{enumerate}
 	\item \textbf{Forward Selection}: se comienza el modelo sin variables, se las agrega de a poco.
 	\item \textbf{Backward Selection}: se comienza el modelo con todas las variables, se las quita de a poco.
-    \end{enumerate}
+\end{enumerate}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cuántos modelos se entrenan en un modelo wrapper de tipo greedy?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cuántos modelos se entrenan en un modelo wrapper de tipo greedy?} \\
-    \end{center}
-    \noindent Se entrenan \(p = 1 + \frac{p(p+1)}{2}\) modelos.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cuántos modelos se entrenan en un modelo wrapper de tipo greedy?} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir data leakage. ¿Cuándo sucede? ¿Qué consecuencias trae?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir data leakage. ¿Cuándo sucede? ¿Qué consecuencias trae?} \\
-    \end{center}
-    \noindent Data leakage es la información del validation o test set que se filtra al entrenamiento. \\
-    \\
-    \noindent Sucede cuando (1) se hace selección de variables usando información de validation o test set (2) hacer scaling usando todo el dataset o bien cuando (3) se hace oversampling antes de separar el dataset. \\
-    \\
-    \noindent Como consecuencia se tiene una performance inflada, lo que termina invalidando las métricas.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cuántos modelos se entrenan en un modelo wrapper de tipo greedy?} \\
+\end{center}
+\noindent Se entrenan \(p = 1 + \frac{p(p+1)}{2}\) modelos.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cómo solucionar el data leakage?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cómo solucionar el data leakage?} \\
-    \end{center}
-    \begin{enumerate}
+\clearpage
+\begin{center}
+	\textbf{\Large Definir data leakage. ¿Cuándo sucede? ¿Qué consecuencias trae?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Definir data leakage. ¿Cuándo sucede? ¿Qué consecuencias trae?} \\
+\end{center}
+\noindent Data leakage es la información del validation o test set que se filtra al entrenamiento. \\
+\\
+\noindent Sucede cuando (1) se hace selección de variables usando información de validation o test set (2) hacer scaling usando todo el dataset o bien cuando (3) se hace oversampling antes de separar el dataset. \\
+\\
+\noindent Como consecuencia se tiene una performance inflada, lo que termina invalidando las métricas.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo solucionar el data leakage?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo solucionar el data leakage?} \\
+\end{center}
+\begin{enumerate}
 	\item La selección de variables debe hacerse únicamente con el training set.
 	\item El scaling debe hacerse únicamente con el training set.
 	\item El oversampling se debe hacer luego de separar el dataset en train, validation y test.
-    \end{enumerate}
+\end{enumerate}
 
-    % Acá empieza la clase 7.
+% Acá empieza la clase 7.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cómo se descompone el error de un modelo?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Cómo se descompone el error de un modelo?} \\
-    \end{center}
-    \noindent Se descompone en sesgo, varianza y ruido irreducible.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo se descompone el error de un modelo?} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es el tradeoff sesgo-varianza?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es el tradeoff sesgo-varianza?} \\
-    \end{center}
-    \noindent En un modelo poco flexible tengo alto sesgo y baja varianza, lo que lleva a underfitting. \\
-    \\
-    \noindent En un modelo muy flexible tengo bajo sesgo y alta varianza, lo que lleva a overfitting. \\
-    \\
-    \noindent El tradeoff se da cuando subo o bajo la flexibilidad del modelo.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo se descompone el error de un modelo?} \\
+\end{center}
+\noindent Se descompone en sesgo, varianza y ruido irreducible.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es bagging?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es bagging?} \\
-    \end{center}
-    \noindent \textbf{Bagging} es un método de ensamble de modelos que busca reducir la varianza del modelo promediando muchos otros modelos. Se reduce la varianza para que el modelo no erre tanto en las predicciones. \\
-    \\
-    Se generan muchos training sets con \textbf{bootstrap}, que es una muestra con reposición del dataset original para generar nuevas observaciones pero con distinto ruido. Un dataset bootstrappeado contiene dos tercios del dataset original y el tercio restante queda out-of-bag. Luego, se entrena un modelo muy flexible en cada dataset y se promedian todas las predicciones que generen esos modelos. El resultado es un modelo de bajo sesgo y baja varianza. Entre más modelos se promedien, mejor. \\
-    \\
-    Promediar más modelos mejora la performance pero pierde interpretabilidad. Además, lo que pasa con el bootsrapping es que los modelos están muy correlacionados porque comparten datasets similares.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el tradeoff sesgo-varianza?} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es Random Forest?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es Random Forest?} \\
-    \end{center}
-    \noindent Es otro método de ensamble de modelos con árboles que soluciona esa correlación de datasets que sufría el método de bagging. \\
-    \\
-    En cada split del árbol, se elige un subconjunto aleatorio de variables. Esto consigue menor correlación y menor varianza cuando se promedien los modelos (el ensamble), pero cada árbol de por sí tiene mucha varianza. Se puede usar out-of-bag error y calcular la importancia de las variables. \\
-    \\
-    Usa tres hiperparámetros: (1) la cantidad de variables por split, (2) la profundidad de los árboles y (3) la cantidad de árboles.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el tradeoff sesgo-varianza?} \\
+\end{center}
+\noindent En un modelo poco flexible tengo alto sesgo y baja varianza, lo que lleva a underfitting. \\
+\\
+\noindent En un modelo muy flexible tengo bajo sesgo y alta varianza, lo que lleva a overfitting. \\
+\\
+\noindent El tradeoff se da cuando subo o bajo la flexibilidad del modelo.
 
-    % Acá empieza la clase 8
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es bagging?} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es el boosting básico? ¿En qué consiste?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es el boosting básico? ¿En qué consiste?} \\
-    \end{center}
-    \noindent En \textbf{boosting} se entrena un árbol, se nota en qué observaciones predijo mal y en el entrenamiento del próximo árbol se enfoca en las observaciones que erró el anterior. La predicción final será alguna combinación de las predicciones de los árboles. \\
-    \\
-    \noindent Los árboles son de baja profundidad y cada uno depende de todos los anteriores. Se usa un learning rate $\lambda$ para estabilizar cuánto aporta cada nuevo árbol.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es bagging?} \\
+\end{center}
+\noindent \textbf{Bagging} es un método de ensamble de modelos que busca reducir la varianza del modelo promediando muchos otros modelos. Se reduce la varianza para que el modelo no erre tanto en las predicciones. \\
+\\
+Se generan muchos training sets con \textbf{bootstrap}, que es una muestra con reposición del dataset original para generar nuevas observaciones pero con distinto ruido. Un dataset bootstrappeado contiene dos tercios del dataset original y el tercio restante queda out-of-bag. Luego, se entrena un modelo muy flexible en cada dataset y se promedian todas las predicciones que generen esos modelos. El resultado es un modelo de bajo sesgo y baja varianza. Entre más modelos se promedien, mejor. \\
+\\
+Promediar más modelos mejora la performance pero pierde interpretabilidad. Además, lo que pasa con el bootsrapping es que los modelos están muy correlacionados porque comparten datasets similares.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es XGBoost? ¿Cómo funciona?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es XGBoost? ¿Cómo funciona?} \\
-    \end{center}
-    \noindent \textbf{XGBoost} es un modelo y una librería de boosting usado en regresión y clasificación. \\
-    \\
-    \noindent Se tiene una función objetivo $Obj$, un error de entrenamiento $L$ y $\omega$ es un parámetro de regularización que penaliza la complejidad. Consiste en hacer un entrenamiento secuencial de árboles, donde cada árbol le asigna un valor a cada una de sus hojas. La predicción final será la suma de las predicciones de $K$ árboles.
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es Random Forest?} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué hiperparámetros requiere XGBoost? ¿Cuáles pueden causar overfitting?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué hiperparámetros requiere XGBoost? ¿Cuáles pueden causar overfitting?} \\
-    \end{center}
-    \begin{itemize}
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es Random Forest?} \\
+\end{center}
+\noindent Es otro método de ensamble de modelos con árboles que soluciona esa correlación de datasets que sufría el método de bagging. \\
+\\
+En cada split del árbol, se elige un subconjunto aleatorio de variables. Esto consigue menor correlación y menor varianza cuando se promedien los modelos (el ensamble), pero cada árbol de por sí tiene mucha varianza. Se puede usar out-of-bag error y calcular la importancia de las variables. \\
+\\
+Usa tres hiperparámetros: (1) la cantidad de variables por split, (2) la profundidad de los árboles y (3) la cantidad de árboles.
+
+% Acá empieza la clase 8
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el boosting básico? ¿En qué consiste?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el boosting básico? ¿En qué consiste?} \\
+\end{center}
+\noindent En \textbf{boosting} se entrena un árbol, se nota en qué observaciones predijo mal y en el entrenamiento del próximo árbol se enfoca en las observaciones que erró el anterior. La predicción final será alguna combinación de las predicciones de los árboles. \\
+\\
+\noindent Los árboles son de baja profundidad y cada uno depende de todos los anteriores. Se usa un learning rate $\lambda$ para estabilizar cuánto aporta cada nuevo árbol.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es XGBoost? ¿Cómo funciona?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es XGBoost? ¿Cómo funciona?} \\
+\end{center}
+\noindent \textbf{XGBoost} es un modelo y una librería de boosting usado en regresión y clasificación. \\
+\\
+\noindent Se tiene una función objetivo $Obj$, un error de entrenamiento $L$ y $\omega$ es un parámetro de regularización que penaliza la complejidad. Consiste en hacer un entrenamiento secuencial de árboles, donde cada árbol le asigna un valor a cada una de sus hojas. La predicción final será la suma de las predicciones de $K$ árboles.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué hiperparámetros requiere XGBoost? ¿Cuáles pueden causar overfitting?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué hiperparámetros requiere XGBoost? ¿Cuáles pueden causar overfitting?} \\
+\end{center}
+\begin{itemize}
 	\item \texttt{nrounds} es el número de árboles. Alto $\Rightarrow$ overfitting.
 	\item \texttt{max\_depth} es la profundidad máxima de cada árbol. Alto $\Rightarrow$ overfitting.
 	\item \texttt{eta} es el learning rate. Alto $\Rightarrow$ overfitting.
 	\item \texttt{gamma} es la reducción mínima del error para hacer un split. Bajo $\Rightarrow$ overfitting.
-	\item \texttt{colsample\_bytree} es la fracción de variables usadas en cada árbol.
+	\item \texttt{colsample\_bytree} es la fracción de variables usadas en cada árbol. Alto $\Rightarrow$ overfitting.
 	\item \texttt{min\_child\_weight} es el mínimo de observaciones en un nodo hijo. Bajo $\Rightarrow$ overfitting.
-	\item \texttt{subsample} es la fracción de observaciones usadas en cada árbol.
-    \end{itemize}
+	\item \texttt{subsample} es la fracción de observaciones usadas en cada árbol. Alto $\Rightarrow$ overfitting.
+\end{itemize}
 
+% Acá empieza la clase 9
 
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué busca resolver un Support Vector Machine (SVM)?} \\
+\end{center}
 
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué busca resolver un Support Vector Machine (SVM)?} \\
+\end{center}
+\noindent Busca generar un hiperplano para separar un dataset en clasificación binaria. De un lado del hiperplano deben caer algunas observaciones, y del otro lado deben caer las otras. \\
+\\
+\noindent El mejor hiperplano será aquel que tenga el mayor margen, el que separa más tranquilo a los datos. El margen es la distancia del punto más cercano al hiperplano. El hiperplano que maximice el margen se llama \textbf{Maximal Margin Classifier}.\\
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar el procedimiento del SVM.} \\
+\end{center}
 
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar el procedimiento del SVM.} \\
+\end{center}
+\begin{enumerate}
+	\item Maximizar el margen \(\mathcal{M}\) más grande. \[\max_{\beta_{0}, \beta_{1}, ..., \beta_{p}} \mathcal M\]
+	\item Restricciones: la suma de los coeficientes al cuadrado es 1. La distancia de cada punto al hiperplano debe ser mayor o igual al margen.
+	\item Si el dataset no es linealmente separable, las restricciones no tienen solución.
+\end{enumerate}
 
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo se maneja en el caso de tener un dataset no linealmente separable?} \\
+\end{center}
 
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo se maneja en el caso de tener un dataset no linealmente separable?} \\
+\end{center}
+\noindent Se usa \textbf{Support Vector Classifier (Soft Margin)}, donde se usa un parámetro $C$ para tolerar más o menos errores de clasificación.
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large } \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large } \\
-    \end{center}
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un kernel? Nombrar dos tipos.} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large } \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large } \\
-    \end{center}
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un kernel? Nombrar dos tipos.} \\
+\end{center}
+\noindent Es una función que toma dos observaciones y devuelve el producto interno de ambas. \\
+\\
+\noindent Se aplican dos tipos para regresión lineal: polinómico y Radial Basis Function (RBF).
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large } \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large } \\
-    \end{center}
+% Acá empieza la clase 10
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large } \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large } \\
-    \end{center}
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar las cuatro clases de modelos de ML.} \\
+\end{center}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large } \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large } \\
-    \end{center}   
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar las cuatro clases de modelos de ML.} \\
+\end{center}
+\begin{enumerate}
+	\item \textbf{Paramétricos}: las variables en el dataset se relacionan de manera fija y predefinida con la respuesta. Trato yo de imponer un modelo que explique la relación entre ellas y hay una cantidad finita de parámetros. Por ejemplo: regresión lineal y logística.
+	\item \textbf{No paramétricos}: no existe una forma que diga cómo se relacionan las variables con la respuesta porque no hay un número fijo de parámetros. Por ejemplo: KNN y SVM con RBF.
+	\item \textbf{Discriminativos}: modelan la probabilidad condicional de la respuesta. Por ejemplo: árboles de decisión y regresión logística.
+	\item \textbf{Generativos}: usan un approach menos directo respecto de un modelo discriminativo usando el Teorema de Bayes. Pueden simular observaciones.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es Bayes Ingenuo? ¿Cómo funciona? Nombrar ventajas y desventajas.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es Bayes Ingenuo? ¿Cómo funciona? Nombrar ventajas y desventajas.} \\
+\end{center}
+\noindent Es un algoritmo de clasificación generativo que usa las probabilidades prior para calcular probabilidades condicionales con el Teorema de Bayes. Supone la independencia condicional entre las variables (ingenuo). \\
+Si una probabilidad es cero, entonces toda la productoria del cálculo de la probabilidad es cero. Esto se soluciona con el suavizado aditivo, que agrega una observación fantasma para evitar ceros. \\
+\\
+Es un modelo simple y rápido, funciona bien con pocos datos, ocupa poco espacio y las variables irrelevantes no estorban. Por otro lado, el supuesto de independencia condicional no es realista y tampoco puede capturar relaciones complejas entre las variables.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es KNN? ¿Cómo funciona? Nombrar ventajas y desventajas.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es KNN? ¿Cómo funciona? Nombrar ventajas y desventajas.} \\
+\end{center}
+\noindent Es un modelo no paramétrico y discriminativo al mismo tiempo. Se usa para clasificación y para regresión. \\
+\\
+\noindent \textbf{Clasificación}: se define una medida de distancia (euclídea), para una nueva observación se buscan sus $K$ vecinos más cercanos y se predice la clase de esa observación según la mayoría de sus vecinos. \\
+\textbf{Regresión}: no se usa más el criterio de mayoría, sino que se usa el promedio de la respuesta $y$ de los vecinos. \\
+\\
+\noindent Es un modelo simple, flexible con las métricas e intuitivo para clasificación multiclase. Por otro lado, es costoso en predicción porque compara la observación con todas las anteriores y pesado de almacenar.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir el problema Curse of Dimentionality.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir el problema Curse of Dimentionality.} \\
+\end{center}
+\noindent Sucede en KNN cuando tengo muchas variables. Al tener muchas variables, habrá muchas dimensiones; por lo que es difícil encontrar vecinos cercanos que me sirvan.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cuál es la diferencia entre eager y lazy learning?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cuál es la diferencia entre eager y lazy learning?} \\
+\end{center}
+\noindent En un modelo \textbf{eager learning} el modelo aprende cuando entrena y guarda el resumen en forma de modelo. Estos modelos hacen una predicción rápida. Bayes Ingenuo es un modelo de tipo eager learning. \\
+\\
+\noindent En un modelo \textbf{lazy learning} el modelo no aprende cuando entrena y sólo hace el trabajo a la hora de predecir. La predicción es costosa. KNN es un modelo de tipo lazy learning.
+
+% Acá empieza la clase 11
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿En qué consiste el vector semantics?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿En qué consiste el vector semantics?} \\
+\end{center}
+\noindent \textbf{Vector semantics} es un método de transformación de una palabra hacia un vector en un espacio multidimensional (word embeddings). Esto se hace para capturar su significado.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es word2vec? ¿Por qué funciona?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es word2vec? ¿Por qué funciona?} \\
+\end{center}
+\noindent Es el modelo para hacer word embeddings. Las palabras que son parecidas estarán cerca en el espacio. \\
+\\
+\noindent Esto funciona porque las palabras que aparecen en contextos similares tienden a tener significados similares.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo se construye un word embedding?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo se construye un word embedding?} \\
+\end{center}
+\begin{enumerate}
+	\item Se define el contexto de una palabra como las $n$ palabras anteriores y $n$ palabras en el texto (denominado corpus).
+	\item Se entrena un modelo que aprenda a decir si dos palabras tienden a aparecer juntas.
+	\item No importa la predicción del modelo, sino que importa que se aprendan los vectores.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar el funcionamiento de word2vec} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar el funcionamiento de word2vec} \\
+\end{center}
+\begin{enumerate}
+	\item Se tiene que \texttt{t} es el target word y \texttt{c} es el context word ordenados en un par (\texttt{t}, \texttt{c}).
+	\item La probabilidad de que sean parecidas \texttt{t} y \texttt{c} será alta si comparten contexto. Caso contrario, será baja si no comparten contexto.
+	\item La similitud entre dos palabras de calcula como el producto interno \texttt{t} $\cdot$ \texttt{c}.
+	\item Ese producto interno es pasado como parámetro a la función sigmoide.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué datos de entrenamiento se usan para word2vec?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué datos de entrenamiento se usan para word2vec?} \\
+\end{center}
+\noindent Se tienen casos positivos y negativos. Son palabras que sí aparecen en la ventana $n$ y otras palabras que son ruido elegidas al azar.
+
+% Acá empieza la clase 12
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿De qué trata el clustering?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿De qué trata el clustering? Nombrar los tipos de algoritmos de clustering.} \\
+\end{center}
+\noindent Quiero encontrar subgrupos -llamados \textbf{clusters}- dentro de un dataset. Las observaciones dentro de un cluster serán similares, mientras que las observaciones de un cluster respecto de otro serán distintas.
+\begin{enumerate}
+	\item \textbf{Partitioning}: se divide el dataset en clusters excluyentes.
+	\item \textbf{Clustering Jerárquico}: se arma una estructura jerárquica de clusters.
+	\item \textbf{Density-based}: se agrupan observaciones en áreas de alta densidad.
+	\item \textbf{Grid-based}: se divide el espacio en grillas para crear clusters.
+	\item \textbf{Model-based}: se tiene un modelo estadístico para crear clusters.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es K-Means Clustering? ¿Cómo es su procedimiento?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es K-Means Clustering? ¿Cómo es su procedimiento?} \\
+\end{center}
+\noindent Es un algoritmo de tipo partitioning en el cual se crea un número $K$ de clusters sin intersecciones entre ellos. Se busca minimizar la variabilidad de las observaciones dentro de un cluster. Para eso, se elige una forma de medición y un centroide por cluster. \\
+\\
+\noindent Primero se elige el $K$ y los centroides iniciales. Cada observación es asignada al centroide más cercano. Luego se recalculan los centroides. Este proceso se repite hasta converger. \\
+\\
+\noindent La inicialización aleatoria influye en el resultado, por lo que conviene correrlo varias veces. El $K$ conveniente es aquel que forme un codo en el gráfico donde se muestra la cantidad de variación asociada al número de clusters.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el clustering jerárquico? ¿Qué tipos de linkage se pueden hacer?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el clustering jerárquico? ¿Qué tipos de linkage se pueden hacer?} \\
+\end{center}
+\noindent Es un algoritmo aglomerativo, dado que junta los clusters más similares dentro de uno solo. En este algoritmo no es necesario definir un $K$ a priori. \\
+El resultado es un dendrograma, donde cada hoja es una observación y se unen los clusters según su similitud. Entre más abajo se unan los grupos, serán más parecidas sus observaciones. \\
+La deinición de distancia entre los clusters afecta el resultado.
+\begin{itemize}
+	\item \textbf{Single linkage}: se toma la mínima distancia entre un par de puntos.
+	\item \textbf{Complete linkage}: se toma la máxima distancia.
+	\item \textbf{Average linkage}: se toma el promedio.
+\end{itemize}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar qué es una matriz de covarianzas y qué es una matriz de correlaciones.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar qué es una matriz de covarianzas y qué es una matriz de correlaciones.} \\
+\end{center}
+\noindent \textbf{Matriz de covarianzas}: tiene las varianzas de una variable en la diagonal y las covarianzas por fuera de la diagonal. La suma de todas las varianzas se llama varianza total. \\
+\\
+\noindent \textbf{Matriz de correlaciones:} tiene unos en la diagonal y los coeficientes de Pearson fuera de la diagonal.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿En qué consiste el análisis de componentes principales (PCA)?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿En qué consiste el análisis de componentes principales (PCA)?} \\
+\end{center}
+\noindent Es un método no supervisado en el cual se reducen las dimensiones del espacio de variables, pero manteniendo la mayor varianza posible. Los nuevos ejes serán los componentes principales, que son combinaciones lineales de las variables originales.\\
+\\
+\noindent El primer componente $Z_{1}$ es una combinación lineal normalizada de las variables que maximiza la varianza. El segundo componente $Z_{2}$ maximiza la varianza restante y es ortogonal a todos los componentes anteriores. Se pueden tener tantos componentes como variables. \\
+\\
+\noindent PCA busca superficies lineales de baja dimensión que se aproximen a los datos originales. Siempre conviene estandarizar las variables antes de usar este método.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo se interpreta PCA?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo se interpreta PCA?} \\
+\end{center}
+\noindent En el plano de los componentes principales, la posición de las observaciones marca la similitud entre ellas, y la dirección de las flechas marca la correlación entre las variables.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la relación de PCA con la varianza.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la relación de PCA con la varianza.} \\
+\end{center}
+\noindent La \textbf{varianza total explicada} es la suma de las varianzas de las variables originales. \\
+La \textbf{varianza explicada por el componente $m$} es cuánta información reúne ese eje. \\
+La \textbf{proporción de la varianza explicada} es el cociente entre la suma de todas las varianzas de los componentes principales sobre la varianza total.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cuántos componentes principales se necesitan?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cuántos componentes principales se necesitan?} \\
+\end{center}
+\noindent Se usa un \textbf{scree plot} en el cual se ve la varianza explicada por cada componente. No hay un criterio único de decisión de número de componentes, pero también sirve buscar el codo en el gráfico para tener un número de componentes que juntos expliquen mínimo el 80\% de la varianza.
+
 \end{document}
