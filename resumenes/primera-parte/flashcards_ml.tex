@@ -33,8 +33,6 @@
 \noindent El aprendizaje automático supervisado es aquel que para cada observación tenemos una respuesta. \\
 En el aprendizaje automático no supervisado no tenemos esas respuestas. \\
 El objetivo es aprender una función que generalice bien y permita predecir una variable de interés sobre datos no vistos. \\
-\\
-\noindent El objetivo es predecir una variable concreta.
 
 \clearpage
 \begin{center}
@@ -329,8 +327,8 @@ pueden provocar overfitting, ya que permiten al árbol ajustarse excesivamente a
 \begin{enumerate}
 	\item \textbf{Accuracy}: mide la cantidad de aciertos, dependiendo del threshold elegido. \(\frac{TP+TN}{P+N}\).
 	\item \textbf{F1-Score}: es una ponderación de precision y recall. \(\frac{2 \cdot \text{precision} \cdot \text{recall}}{\text{precision} + \text{recall}}\).
-	\item \textbf{Cross-Entropy}: sirve para guiar la construcción y la evaluación de los modelos.
-	\item \textbf{ROC-AUC}: su puntaje no depende del threshold que se elija. Es una relación entre true positive rate y false negative rate. Entre más área haya bajo la curva, mejor.
+	\item \textbf{Cross-Entropy}: para guiar la construcción y la evaluación de los modelos.
+	\item \textbf{ROC-AUC}: su puntaje no depende del threshold que se elija. Es una relación entre True Positive Rate vs False Negative Rate. Entre más área haya bajo la curva, mejor.
 	\item \textbf{Curva PR-AUC}: es un gráfico de valores de precision y recall a medida que se cambia el threshold. El área bajo la curva es importante también.
 \end{enumerate}
 
@@ -531,7 +529,7 @@ pueden provocar overfitting, ya que permiten al árbol ajustarse excesivamente a
 \end{center}
 \noindent \textbf{Bagging} es un método de ensamble de modelos que busca reducir la varianza del modelo promediando muchos otros modelos. Se reduce la varianza para que el modelo no erre tanto en las predicciones. \\
 \\
-Se generan muchos training sets con \textbf{bootstrap}, que es una muestra con reposición del dataset original para generar nuevas observaciones pero con distinto ruido. Un dataset bootstrappeado contiene dos tercios del dataset original y el tercio restante queda out-of-bag. Luego, se entrena un modelo muy flexible en cada dataset y se promedian todas las predicciones que generen esos modelos. El resultado es un modelo de bajo sesgo y baja varianza. Entre más modelos se promedien, mejor. \\
+Se generan muchos training sets con \textbf{bootstrap}, que es una muestra con reposición del dataset original para generar nuevas observaciones pero con distinto ruido. Un dataset bootstrappeado contiene dos tercios del dataset original y el tercio restante queda out-of-bag. Luego, se entrena un modelo muy flexible en cada dataset y se promedian todas las predicciones que generen esos modelos. El resultado es un modelo con varianza reducida respecto a un árbol individual. Entre más modelos se promedien, mejor. \\
 \\
 Promediar más modelos mejora la performance pero pierde interpretabilidad. Además, lo que pasa con el bootsrapping es que los modelos están muy correlacionados porque comparten datasets similares.
 
@@ -546,7 +544,7 @@ Promediar más modelos mejora la performance pero pierde interpretabilidad. Adem
 \end{center}
 \noindent Es otro método de ensamble de modelos con árboles que soluciona esa correlación de datasets que sufría el método de bagging. \\
 \\
-En cada split del árbol, se elige un subconjunto aleatorio de variables. Esto consigue menor correlación y menor varianza cuando se promedien los modelos (el ensamble), pero cada árbol de por sí tiene mucha varianza. Se puede usar out-of-bag error y calcular la importancia de las variables. \\
+En cada split del árbol, se elige un subconjunto aleatorio de variables. Esto consigue menor correlación y menor varianza cuando se promedien los modelos (el ensamble). Cada árbol individual es de alta varianza, pero el promedio de muchos árboles poco correlacionados reduce la varianza del ensamble. Se puede usar out-of-bag error y calcular la importancia de las variables. \\
 \\
 Usa tres hiperparámetros: (1) la cantidad de variables por split, (2) la profundidad de los árboles y (3) la cantidad de árboles.
 
