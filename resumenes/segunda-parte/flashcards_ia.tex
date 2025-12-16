@@ -19,378 +19,866 @@
 
 \begin{document}
 
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Puede haber ciclos en una red neuronal?} \\
-    \end{center}
-    
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Puede haber ciclos en una red neuronal?} \\
-    \end{center}
-        No. 
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Explicar la estructura del perceptrón} \\
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Explicar la estructura del perceptrón} \\
-    \end{center}
-        Se cuenta con los inputs (escalares), un peso de ese input y un bias (opcionalmente). \\
-        Se hace la suma de los inputs multiplicados por sus respectivos pesos. \\
-        Finalmente, se aplica una función de activación.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es un MLP? ¿Cómo se organiza?} \\
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es un MLP? ¿Cómo se organiza?} \\
-    \end{center}
-        Un MLP es un perceptrón multicapa. \\
-        Un MLP cuenta con todas capas fully connected (FC). Tiene una input layer, hidden layer(s) y una output layer.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir shallow y deep network} \\
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir shallow y deep network} \\
-    \end{center}
-        Una shallow network tiene más neuronas de input. Las hace más anchas viéndolas de manera horizontal. \\
-        Una deep network tiene más hidden layers. La hace más profunda.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es un tensor? ¿Qué ventajas tiene?} \\
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es un tensor? ¿Qué ventajas tiene?} \\
-    \end{center}
-        Un tensor es un arreglo multidimensional de escalares. \\
-        Sirve para datos de alta dimensionalidad (como imágenes o audios), es eficiente para GPU, y es una representación fácil de inputs, outputs, weights y biases.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir forward propagation y sus pasos a seguir.} \\
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir forward propagation y sus pasos a seguir.} \\
-    \end{center}
-        Forward propagation computa el output para un input. \\
-        \\
-        Se hacen los cálculos a través de cada capa en el sentido de IL/HL/OL para conseguir una predicción $\hat{y}$. A medida que se avanza, se guardan los parámetros para usar en backward propagation.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir backward propagation y su proceso. ¿Qué ventaja y desventaja tiene?} \\
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Definir backward propagation y su proceso. ¿Qué ventaja y desventaja tiene?} \\
-    \end{center}
-        Es el proceso de actualizar los pesos y biases usando el gradiente de la función loss. Se busca minimizar la función loss en el training set. Va en sentido contrario a forward propagation. \\
-        \\
-        Primero, se calcula la función loss definida por $\hat{y}-y$ a grandes rasgos. \\
-        Luego, se calculan los gradientes usando la regla de la cadena. Luego, se aplica el learning rate \textit{LR} al gradiente.
-        Finalmente, se actualizan los pesos y biases yendo en sentido contrario: OL/HL/IL. \\
-        \\
-        Ventaja: es eficiente, ya que una observación del dataset requiere una pasada forward y una pasada backward. \\
-        Desventaja: es sensible a la arquitectura de la red, porque afecta su estabilidad.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar los dos tipos de capas.} \\
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar los dos tipos de capas.} \\
-    \end{center}
-        Capas entrenables: sus pesos y biases se modifican en backpropagation. \\
-        Capas no entrenables: sus pesos y biases quedan fijos en training para mantener las features aprendidas previamente.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es la vectorización y para qué sirve?} \\
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es la vectorización y para qué sirve? ¿Cuáles son sus ventajas? ¿Cómo queda el cálculo de una neurona en una hidden layer?} \\
-    \end{center}
-        Es una práctica común para almacenar pesos, inputs y biases en vectores. \\
-        Sirve para simplificar las operaciones y acelerar los tiempos. \\
-        \\
-        Las ventajas que trae son la escalabilidad, la claridad, la capacidad de procesamiento en batch, performance y paralelismo. \\
-        \\
-        \[\phi(\mathbf{W}^{\top}\mathbf{x}+\mathbf{b})\]
-        Donde $\phi$ es la función de activación, $\mathbf{W}$ el vector de pesos, $\mathbf{x}$ el vector de inputs y $\mathbf{b}$ el vector de biases.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es y para qué sirve la función loss?} \\
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Qué es y para qué sirve la función loss?} \\
-    \end{center}
-        Es una función que compara la predicción predicha con la etiqueta real en el proceso de training: \(\hat{y}-y\). \\
-        Sirve para guiar el entrenamiento de la red.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Para qué sirven los grafos computacionales?} \\
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Para qué sirven los grafos computacionales?} \\
-    \end{center}
-    Para reutilizar cálculos y ayudar con la eficiencia del backpropagation. Las librerías lo usan mucho. 
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Para qué sirven y por qué son importantes las funciones de activación?} \\
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large ¿Para qué sirven y por qué son importantes las funciones de activación?} \\
-    \end{center}
-        Sirven para aprender mapeos no lineales y para capturar estructuras complejas de los datos. \\
-        \\
-        Porque, de no tenerlas, la red se colapsaría a una única capa con la combinación lineal.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar y describir las funciones de activación lineales. ¿Qué ventajas y qué desventajas tiene?} \\
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar y describir la función de activación lineal. ¿Qué ventajas y qué desventajas tiene?} \\
-    \end{center}
-        Función de identidad: el output es el mismo que el input. \(f(x) = x\). \\
-        \\
-        Ventajas: simples y eficientes, son fáciles de interpretar. \\
-        Desventajas: limitadas con datos con patrones complejos, colapsa la red. Generalmente se usa en la capa de output.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar y describir las funciones escalonadas. ¿Qué ventajas y qué desventajas tienen?}
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar y describir las funciones escalonadas. ¿Qué ventajas y qué desventajas tienen?} \\
-    \end{center}
-        Heaviside step: cuando el valor está del lado izquierdo a un umbral tiene un valor. Cuando está del lado derecho tiene otro. \\
-        Función de signo: es una función heaviside step pero con -1 para valores negativos y 1 para valores positivos. \\
-        \\
-        Ventajas: son simples y fáciles de implementar y las salidas binarias convienen para problemas de clasificación. \\
-        Desventajas: no es diferenciable en el threshold, es sensible a pequeños cambios en el input y no posee información de gradiente para aprender.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar y describir las funciones lineales por partes. ¿Qué ventajas y qué desventajas tienen?}
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar y describir las funciones lineales por partes. ¿Qué ventajas y qué desventajas tienen?} \\
-    \end{center}
-    ReLU: si el input es negativo, el output es cero. Si el input es positivo, es la función identidad. \(f(x) = \max (0, x)\) \\
-    Leaky ReLU: el resultado para los valores negativos cambia. Es igual a ReLU solo que la parte negativa está inclinada. \\
-    Shifted ReLU: es ReLU pero con otro threshold. \\
-    \\
-    Ventajas (ReLU): simple y eficiente, introduce no linealidad en la red, ayuda con el problema de vanishing gradient. \\
-    Desventajas (ReLU): las neuronas con el input negativo pueden desactivarse. \\
-    \\
-    Ventajas (var. ReLU): threshold variable, la neurona no puede morir, mismos beneficios que ReLU. \\
-    Desventajas (var. ReLU): más hiperparámetros.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar y describir las funciones suaves. ¿Qué ventajas y qué desventajas tienen?}
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Nombrar y describir las funciones suaves. ¿Qué ventajas y qué desventajas tienen?} \\
-    \end{center}
-    Softplus: es la versión suave de la ReLU. \(f(x) = \ln(1+e^{x})\). \\
-    ELU: es la versión suave de la Shifted ReLU. \\
-    Sigmoide: es una curva con forma de S, con su output acotado entre 0 y 1. \\
-    Tanh: es igual que la sigmoide, con su output acotado entre -1 y 1. \\
-    Swish: es una combinación entre ReLU y Sigmoide. \\
-    \\
-    Ventajas: son suaves y diferenciables. La sigmoide sirve para clasificación, tanh para convergencia, swish usa self-gating y ELU evita que la neurona muera. \\
-    Desventajas: son costosas y sufren del vanishing gradient.
-  
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir el problema de Vanishing Gradient y Dying Neuron.}
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Describir el problema de Vanishing Gradient y Dying Neuron.}
-    \end{center}
-    Vanishing Gradient: cuando los gradientes se hacen muy pequeños durante backpropagation a través de las capas. \\
-    Dying Neuron: cuando las neuronas siempre están inactivas y sus pesos no se actualizan dado que su gradiente es cero.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Explicar la función Softmax y Log-Softmax.}
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large Explicar la función Softmax y Log-Softmax.}
-    \end{center}
-    Softmax: es una operación que se aplica únicamente y en simultáneo a todas las neuronas en la capa de output. Sirve para normalizar las salidas a una distribución de probabilidad. \\
-    Log-Softmax: es hacer el logaritmo de la función SoftMax. Sirve para aportar estabilidad a los números.
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
-
-    \clearpage
-    \begin{center}
-        \textbf{\Large }
-    \end{center}
-
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Puede haber ciclos en una red neuronal?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Puede haber ciclos en una red neuronal?} \\
+\end{center}
+\noindent Si es una red feedforward, no se puede. Sí en RNNs y arquitecturas recurrentes.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar la estructura del perceptrón} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar la estructura del perceptrón} \\
+\end{center}
+\noindent Se cuenta con los inputs (escalares), un peso de ese input y un bias (opcionalmente). \\
+Se hace la suma de los inputs multiplicados por sus respectivos pesos. \\
+Finalmente, se aplica una función de activación.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un MLP? ¿Cómo se organiza?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un MLP? ¿Cómo se organiza?} \\
+\end{center}
+\noindent Un MLP es un perceptrón multicapa. \\
+\\
+\noindent Un MLP cuenta con todas capas fully connected (FC). Tiene una input layer, hidden layer(s) y una output layer.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Definir shallow y deep network} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Definir shallow y deep network} \\
+\end{center}
+\noindent Una shallow network tiene pocas capas ocultas (es más ancha).
+\\
+\noindent Una deep network tiene muchas capas ocultas (es más profunda).
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un tensor? ¿Qué ventajas tiene?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un tensor? ¿Qué ventajas tiene?} \\
+\end{center}
+Un tensor es un arreglo multidimensional de escalares. \\
+\\
+\noindent Sirve para datos de alta dimensionalidad (como imágenes o audios), es eficiente para GPU, y es una representación fácil de inputs, outputs, weights y biases.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Definir forward propagation y su procedimiento.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Definir forward propagation y su procedimiento.} \\
+\end{center}
+\noindent Forward propagation computa el output para un input. \\
+\\
+\noindent Se hacen los cálculos a través de cada capa en el sentido de IL/HL/OL para conseguir una predicción $\hat{y}$. A medida que se avanza, se guardan los parámetros para usar en backward propagation.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Definir backward propagation y su procedimiento. ¿Qué ventaja y desventaja tiene?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Definir backward propagation y su procedimiento. ¿Qué ventaja y desventaja tiene?} \\
+\end{center}
+\noindent Es el proceso de actualizar los pesos y biases usando el gradiente de la función loss. Se busca minimizar la función loss en el training set. Va en sentido contrario a forward propagation. \\
+\\
+\noindent Primero, se calcula la función loss definida por $\hat{y}-y$ a grandes rasgos. \\
+Luego, se calculan los gradientes usando la regla de la cadena. Luego, se aplica el learning rate \textit{LR} al gradiente.
+Finalmente, se actualizan los pesos y biases yendo en sentido contrario: OL/HL/IL. \\
+\\
+\noindent Ventaja: es eficiente, ya que una observación del dataset requiere una pasada forward y una pasada backward. \\
+Desventaja: puede sufrir vanishing/exploding gradients, lo que dificulta entrenar redes profundas.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar los dos tipos de capas.} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar los dos tipos de capas.} \\
+\end{center}
+\noindent Capas entrenables: sus pesos y biases se modifican en backpropagation. \\
+Capas no entrenables: sus pesos y biases quedan fijos en training para mantener las features aprendidas previamente.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es la vectorización y para qué sirve? ¿Cuáles son sus ventajas? ¿Cómo queda el cálculo de una neurona en una hidden layer?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es la vectorización y para qué sirve? ¿Cuáles son sus ventajas? ¿Cómo queda el cálculo de una neurona en una hidden layer?}
+\end{center}
+\noindent Es una práctica común para almacenar pesos, inputs y biases en vectores. \\
+\\
+Sirve para simplificar las operaciones y acelerar los tiempos. \\
+\\
+Las ventajas que trae son la escalabilidad, la claridad, la capacidad de procesamiento en batch, performance y paralelismo.
+\[\phi(\mathbf{W}^{\top}\mathbf{x}+\mathbf{b})\]
+Donde $\phi$ es la función de activación, $\mathbf{W}$ el vector de pesos, $\mathbf{x}$ el vector de inputs y $\mathbf{b}$ el vector de biases.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es y para qué sirve la función loss?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es y para qué sirve la función loss?} \\
+\end{center}
+\noindent Es una función que mide la discrepancia entre \(\hat{y}\) e $y$. \\
+\\
+\noindent Sirve para guiar el entrenamiento de la red.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Para qué sirven los grafos computacionales?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Para qué sirven los grafos computacionales?} \\
+\end{center}
+\noindent Para reutilizar cálculos y ayudar con la eficiencia del backpropagation. Las librerías lo usan mucho.
+
+% Acá empieza la clase 13
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Para qué sirven y por qué son importantes las funciones de activación?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Para qué sirven y por qué son importantes las funciones de activación?} \\
+\end{center}
+\noindent Sirven para aprender mapeos no lineales y para capturar estructuras complejas de los datos. \\
+\\
+\noindent De no tenerlas, la red se colapsaría a una única capa con la combinación lineal.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar y describir las funciones de activación lineales. ¿Qué ventajas y qué desventajas tiene?} \\
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar y describir la función de activación lineal. ¿Qué ventajas y qué desventajas tiene?} \\
+\end{center}
+\noindent \textbf{Función de identidad}: el output es el mismo que el input. \(f(x) = x\). \\
+Ventajas: simples y eficientes, son fáciles de interpretar. \\
+\\
+\noindent Desventajas: limitadas con datos con patrones complejos, colapsa la red. Generalmente se usa en la capa de output.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar y describir las funciones escalonadas. ¿Qué ventajas y qué desventajas tienen?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar y describir las funciones escalonadas. ¿Qué ventajas y qué desventajas tienen?} \\
+\end{center}
+\noindent \textbf{Heaviside step}: cuando el valor está del lado izquierdo a un umbral tiene un valor. Cuando está del lado derecho tiene otro. \\
+\textbf{Función de signo}: es una función heaviside step pero con -1 para valores negativos y 1 para valores positivos. \\
+\\
+Ventajas: son simples y fáciles de implementar y las salidas binarias convienen para problemas de clasificación. \\
+Desventajas: no es diferenciable en el threshold, es sensible a pequeños cambios en el input y no posee información de gradiente para aprender.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar y describir las funciones lineales por partes. ¿Qué ventajas y qué desventajas tienen?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar y describir las funciones lineales por partes. ¿Qué ventajas y qué desventajas tienen?}
+\end{center}
+\noindent \textbf{ReLU}: si el input es negativo, el output es cero. Si el input es positivo, es la función identidad. \(f(x) = \max (0, x)\) \\
+\textbf{Leaky ReLU}: el resultado para los valores negativos cambia. Es igual a ReLU solo que la parte negativa está inclinada. \\
+\textbf{Shifted ReLU}: es ReLU pero con otro threshold. \\
+\\
+\noindent Ventajas (ReLU): simple y eficiente, introduce no linealidad en la red, ayuda con el problema de vanishing gradient. \\
+Desventajas (ReLU): las neuronas con el input negativo pueden desactivarse. \\
+Ventajas (var. ReLU): threshold variable, la neurona no puede morir, mismos beneficios que ReLU. \\
+Desventajas (var. ReLU): más hiperparámetros.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar y describir las funciones suaves. ¿Qué ventajas y qué desventajas tienen?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar y describir las funciones suaves. ¿Qué ventajas y qué desventajas tienen?}
+\end{center}
+\noindent \textbf{Softplus}: es la versión suave de la ReLU. \(f(x) = \ln(1+e^{x})\). \\
+\textbf{ELU}: es la versión suave de la Shifted ReLU. \\
+\textbf{Sigmoide}: es una curva con forma de S, con su output acotado entre 0 y 1. \\
+\textbf{Tanh}: es igual que la sigmoide, con su output acotado entre -1 y 1. \\
+\textbf{Swish}: es una combinación entre ReLU y Sigmoide. \\
+\\
+\noindent Ventajas: son suaves y diferenciables. La sigmoide sirve para clasificación, tanh para convergencia, swish usa self-gating y ELU evita que la neurona muera. \\
+Desventajas: son costosas y sufren del vanishing gradient.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir el problema de Vanishing Gradient y Dying Neuron.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir el problema de Vanishing Gradient y Dying Neuron.}
+\end{center}
+\noindent \textbf{Vanishing Gradient}: cuando los gradientes se hacen muy pequeños durante backpropagation a través de las capas. \\
+\\
+\noindent \textbf{Dying Neuron}: cuando las neuronas siempre están inactivas y sus pesos no se actualizan dado que su gradiente es cero.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar la función Softmax y Log-Softmax.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar la función Softmax y Log-Softmax.} \\
+\end{center}
+\noindent \textbf{Softmax}: es una operación que se aplica únicamente y en simultáneo a todas las neuronas en la capa de output. Sirve para normalizar las salidas a una distribución de probabilidad. \\
+\\
+\noindent \textbf{Log-Softmax}: es hacer el logaritmo de la función SoftMax. Sirve para aportar estabilidad a los números.
+
+% Acá empieza la clase 14
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un gradiente? ¿Para qué sirve?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un gradiente? ¿Para qué sirve?}
+\end{center}
+\noindent Es un vector de derivadas parciales que indica la dirección de máximo aumento de la función loss. \\
+\\
+\noindent Sirve para minimizar la función loss, entonces se avanza en el sentido contrario al gradiente.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el error landscape? ¿Qué problema sufren?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el error landscape? ¿Qué problema sufren?}
+\end{center}
+\noindent El \textbf{Error Landscape} es la geometría de la función loss. Puede haber posibles representaciones de esta geometría: máximos y mínimos, mesetas y sillas de montar. \\
+\\
+\noindent Las representaciones suelen dificultar la optimización.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el learning rate? ¿Para qué sirve? ¿Cómo responde un optimizador ante ciertos valores del LR?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el learning rate? ¿Para qué sirve? ¿Cómo responde un optimizador ante ciertos valores del LR?}
+\end{center}
+\noindent Es un hiperparámetro denotado con $\epsilon$. \\
+\\
+\noindent Controla el tamaño del paso para actualizar los pesos. \\
+\\
+\noindent Si se tiene un \texttt{LR} grande, el modelo diverge. Si se tiene un \texttt{LR} chico, el modelo aprende lentamente. La trayectoria en el espacio de parámetros depende de este hiperparámetro.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un schedule? ¿Qué tipos de schedules hay?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un schedule? ¿Qué tipos de schedules hay?}
+\end{center}
+\noindent Es el ajuste del \texttt{LR} en el tiempo para que no sea constante siempre. \\
+\\
+\begin{enumerate}
+	\item \textbf{Decaimiento exponencial}.
+	\item \textbf{Decaimiento exponencial retrasado}. El \texttt{LR} constante y luego decrece.
+	\item \textbf{Decaimiento basado en el error}. Disminuye el \texttt{LR} siempre y cuando baje el error.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar tres tipos de descenso de gradiente. ¿Qué ventajas y desventajas tienen?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar tres tipos de descenso de gradiente. ¿Qué ventajas y desventajas tienen?}
+\end{center}
+\begin{enumerate}
+	\item \textbf{Batch (BGD)}: se utiliza todo el dataset de una. Es estable y preciso, pero costoso y lento.
+	\item \textbf{Estocástico (SGD)}: se usa una observación por paso. Es rápido y simple, pero inestable y ruidoso.
+	\item \textbf{Mini-Batch}: usa pequeños grupos de observaciones por paso. Es barato y preciso, pero el resultado depende del tamaño del batch.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el momentum? ¿Para qué se usa?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el momentum? ¿Para qué se usa?}
+\end{center}
+\noindent Es un hiperparámetro que agrega inercia al update de los pesos. \\
+\\
+\noindent Sirve para suavizar la trayectoria y para escapar de las mesetas.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir tres optimizadores de LR adaptativos. ¿Qué ventajas y desventajas tienen?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir tres optimizadores de LR adaptativos. ¿Qué ventajas y desventajas tienen?}
+\end{center}
+\begin{enumerate}
+	\item \textbf{AdaGrad}: escala \texttt{LR} inversamente a la raíz de la suma de los gradientes acumulados. Este funciona bien con features esparsas, pero el \texttt{LR} decae demasiado.
+	\item \text{Adadelta / RMSprop}: usa la suma decay. Este converge más rápido pero introduce otro hiperparámetro \texttt{decay}.
+	\item \textbf{ADAM}: combina promedios de primer y segundo momento (el gradiente y su cuadrado). Es muy eficiente y común, pero suma dos hiperparámetros: $\beta_{1}$ y $\beta_{2}$.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir tres métodos de búsqueda de hiperparámetros.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir tres métodos de búsqueda de hiperparámetros.}
+\end{center}
+\begin{enumerate}
+	\item \textbf{Grid Search}: se prueban todas las combinaciones posibles de hiperparámetros. Es un proceso simple pero muy costoso.
+	\item \textbf{Random Search}: se toman combinaciones de hiperparámetros al azar. Es más eficiente que Grid Search, pero no garantiza el óptimo.
+	\item \textbf{Optimización Bayesiana}: se hacen evaluaciones previas para guiar la búsqueda de hiperparámetros. Es un método eficiente y adaptativo pero es difícil de implementar.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar seis métodos de regularización.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar seis métodos de regularización.}
+\end{center}
+\begin{enumerate}
+	\item \textbf{L1}: penaliza valores absolutos y genera modelos simples y esparsos.
+	\item \textbf{L2}: penaliza cuadrados y genera pesos más suaves y distribuidos.
+	\item \textbf{Dropout}: desactiva un porcentaje de las neuronas aleatoriamente. Esto mejora la generalización.
+	\item \textbf{Data Augmentation}.
+	\item \textbf{Noise Injection}.
+	\item \textbf{Early Stopping}.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es y para qué sirve una convolución? Explicar sus componentes.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es y para qué sirve una convolución? Explicar sus componentes.}
+\end{center}
+\noindent Una \textbf{convolución} es una operación matemática que toma dos funciones o dos matrices y genera una tercera a partir de ellas. Sirve para medir cómo cambia una función cuando interactúa con otra. Se nota con \((f * g)(x)\). \\
+\\
+\noindent $f$ es el input y $g$ es el kernel. El input suele ser una imagen y el kernel es una matriz chica. El resultado es el feature map, que son algunas características que capturó el kernel.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Por qué son convenientes las convoluciones multidimensionales?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Por qué son convenientes las convoluciones multidimensionales?}
+\end{center}
+\noindent Se pueden hacer convoluciones entre dos tensores, lo que permite hacer cálculos en más de una dimensión a la vez. \\
+Además, se usan menos parámetros y los pesos se comparten (porque el mismo kernel se aplica en toda la imagen). Tiene muchos menos parámetros que una capa fully-connected.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un filtro? ¿Para qué sirve?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un filtro? ¿Para qué sirve?}
+\end{center}
+\noindent Un filtro está compuesto por un kernel por cada canal de entrada y produce un feature map. \\
+\\
+\noindent Sirve para producir más de un feature map.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar padding, stride y pooling.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar padding, stride y pooling.}
+\end{center}
+\begin{itemize}
+	\item \textbf{Padding}: agrega bordes de píxeles extras para mantener el tamaño espacial de la salida y no perder información de los bordes.
+	\item \textbf{Stride}: controla el desplazamiento del kernel por sobre la imagen. Afecta al tamaño del output y la cantidad de downsampling.
+	\item \textbf{Pooling}: reduce la dimensión espacial de la imagen (downsampling). Se reemplaza una porción de la imagen por un resumen estadístico de sus valores. Este proceso reduce el cálculo de las capas siguientes. Se puede hacer max pooling o average pooling.
+\end{itemize}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar la arquitectura de una CNN.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar la arquitectura de una CNN.}
+\end{center}
+\begin{enumerate}
+	\item Capas iniciales: aprenden bordes o direcciones.
+	\item Capas intermedias: aprenden texturas o formas simples.
+	\item Capas finales: aprenden partes de objetos o patrones complejos.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el campo receptivo? ¿Cómo cambia a medida que se acerca a las capas finales?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es el campo receptivo? ¿Cómo cambia a medida que se acerca a las capas finales?}
+\end{center}
+\noindent Es la zona del input que ve una neurona. \\
+\\
+\noindent En las capas bajas, los campos pequeños detectan detalles simples. En las capas altas, los campos grandes detectan patrones globales.
+
+% Acá empieza la clase 17
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir las tres tareas de reconocimiento.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir las tres tareas de reconocimiento.}
+\end{center}
+\begin{enumerate}
+	\item \textbf{Clasificación}: hay una etiqueta por imagen.
+	\item \textbf{Clasificación con localización}: etiqueta y posición de un único objeto por imagen.
+	\item \textbf{Detección}: reconocimiento de múltiples objetos y sus posiciones en la imagen.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura LeNet.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura LeNet.}
+\end{center}
+\noindent \textbf{LeNet} es una (de las primeras) CNN que se usa para reconocimiento de dígitos. Muestra cómo pasar de una imagen grande a varias representaciones más chicas, usando el kernel para extraerle características.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura AlexNet y sus hiperparámetros.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura AlexNet y sus hiperparámetros.}
+\end{center}
+\noindent \textbf{AlexNet} una CNN que aprovecha las GPUs. Tiene las siguientes características:
+\begin{itemize}
+	\item Tiene una función de activación ReLU para evitar saturación y apurar el training.
+	\item Usa dropout para reducir el overfitting.
+	\item Usa aumentación de datos para generalizar mejor.
+	\item Hace preprocesamiento para mejorar la estabilidad y el rendimiento normalizando las entradas.
+\end{itemize}
+\noindent Los hiperparámetros que tiene son: \texttt{Mini-batch}, \texttt{Momentum}, \texttt{Decay}, \texttt{LR}.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura VGGNet.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura VGGNet.}
+\end{center}
+\noindent Es una CNN que estudia cómo la profundidad afecta a la performance. Tiene las siguientes características:
+\begin{itemize}
+	\item Usa kernels chicos para reducir los parámetros.
+	\item Usa la optimización L2 para weight decay.
+	\item No tiene local response normalization.
+	\item Preprocesamiento: resta la media RBG del training set.
+\end{itemize}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura GoogLeNet con Inception.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura GoogLeNet con Inception.}
+\end{center}
+\noindent Es una CNN más rápida y eficiente que AlexNet.
+\begin{itemize}
+	\item Tiene capas de módulos Inception. Usa convoluciones 1x1 para reducir dimensionalidad y luego concatena los outputs de distintos tamaños de kernel.
+	\item Se hace average pooling para evitar overfitting.
+	\item Se usan funciones de loss intermedias para evitar vanishing gradient.
+\end{itemize}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura ResNet.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura ResNet.}
+\end{center}
+\noindent Es una CNN que usa conexiones residuales (skip connections) para que los gradientes fluyan directamente. Se usan bloques residuales apilados que permiten que la red sea más profunda pero sin bajar su rendimiento. Entre más profunda es ResNet, mejor su representación.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura CAM.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura CAM.}
+\end{center}
+\noindent Muestra qué partes de la imagen son las más importantes para predecir una clase. La red aprende los pesos por clase para cada feature map. Se hace un global average pooling antes de aplicar softmax.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura Grad-CAM.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir la arquitectura Grad-CAM.}
+\end{center}
+\noindent Es una variante de CAM. Usa gradiente del score de clase respecto al último feature map. Resalta las zonas con mayor influencia en la decisión final. Permite interpretar CNNs y muestran qué ven esas redes al clasificar.
+
+% Acá empieza la clase 18
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un encoder? ¿Y un decoder? ¿Por qué querríamos usarlos?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un encoder? ¿Y un decoder? ¿Por qué querríamos usarlos?}
+\end{center}
+\noindent Un \textbf{encoder} toma una imagen y la convierte a una representación compacta, que es un vector de característica. \\
+\\
+\noindent Un \textbf{decoder} toma la representación compacta y hace la reconstrucción de la imagen original o genera otra salida visual. \\
+\\
+\noindent Sirven por si queremos un output más sofisticado que no sea un número o una etiqueta cuando le paso una imagen.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es la interpolación? Nombrar dos tipos.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es la interpolación? Nombrar dos tipos.}
+\end{center}
+\noindent Es un método de upscaling (aumentar la resolución) de una imagen generando nuevos pixeles en base a la imagen pasada por parámetro. Es una fórmula fija.
+\begin{itemize}
+	\item \textbf{Vecino más Cercano}: cada nuevo pixel toma el valor del píxel existente más cercano. Es un método simple y rápido.
+	\item \textbf{Bilineal}: cada nuevo pixel es un promedio ponderado de los cuatro pixeles vecinos, para obtener resultados más suaves.
+\end{itemize}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es una convolución transpuesta? ¿Qué hace?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es una convolución transpuesta? ¿Qué hace?}
+\end{center}
+\noindent Hace el proceso inverso a la convolución, es decir, aprende el upsampling. \\
+\\
+\noindent Con el stride y el padding, la convolución transpuesta devuelve una imagen expandida (lo opuesto a una convolución normal). Esta operación permite a la red aprender a generar los pixeles.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué se busca lograr con la segmentación de imágenes?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué se busca lograr con la segmentación de imágenes?}
+\end{center}
+\noindent Se busca predecir una etiqueta por pixel.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir los cinco tipos de segmentación de imágenes.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir los cinco modelos de reconocimiento visual.}
+\end{center}
+\begin{enumerate}
+	\item \textbf{U-Net}: tiene una arquitectura encoder-decoder con forma de "U". En la última capa se hace una convolución de 1x1 para luego pasar el output por softmax.
+	\item \textbf{YOLO}: divide la imagen en una grilla y predice la clase y atributos de cada celda. Optimiza usando una loss que combina el tamaño de las bounding box, confianza y probabilidad de clase.
+	\item \textbf{R-CNN}: genera regiones candidatas y extrae características. Luego, usa una red para clasificar el objeto en cada región.
+	\item \textbf{SAM}: permite segmentar cualquier objeto de una imagen con un prompt.
+	\item \textbf{FAN}: detecta puntos de interés en las caras usando convoluciones y capas FC. Predice heatmaps que indican la probabilidad de cada punto.
+\end{enumerate}
+
+% Acá empieza la clase 19
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un autoencoder? ¿Qué arquitectura tiene?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un autoencoder? ¿Qué arquitectura tiene?}
+\end{center}
+\noindent Un \textbf{autoencoder} es una red neuronal que busca aprender una representación comprimida de los datos. Toma una entrada $x$ y busca reconstruirla como $\hat{x}$. \\
+\\
+\noindent Tiene un encoder que reduce la dimensionalidad de un input y consigue un código latente, y tiene un decoder para recontruir la entrada original a partir del código latente.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir los variational autoencoders (VAEs).}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir los variational autoencoders (VAEs).}
+\end{center}
+\noindent Funcionan como una extensión de los autoencoders clásicos usando probabilidades. \\
+\\
+\noindent El encoder produce las distribuciones (media y varianza) sobre el espacio latente, que es donde se radica el código latente. El modelo hace que las distribuciones se parezcan a una distribución normal. Eso sirve para que se puedan muestrear puntos del espacio latente y generar nuevos datos gracias al decoder.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir los generative adversarial networks (GANs).}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir los generative adversarial networks (GANs).}
+\end{center}
+\noindent Tienen dos redes entrenadas en conjunto: un generador que produce muestras falsas y un discriminador que estima una probabilidad de que esa muestra sea real. \\
+\\
+\noindent En el entrenamiento, el generador y el discriminador compiten: el generador intenta engañar al discriminador, mientras que el discriminador intenta adivinar si la muestra es verdadera o falsa (generada).
+
+% Acá empieza la clase 20
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es una red neuronal recurrente? ¿Por qué se necesitan?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es una red neuronal recurrente? ¿Por qué se necesitan?}
+\end{center}
+\noindent Es una red con ciclos en su estructura para recordar estados previos y poder procesar datos secuenciales. \\
+\\
+\noindent Se necesitan porque las redes feedforward solamente procesan información hacia adelante, no pueden procesar datos secuenciales ni pueden recordar estados previos.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo es el entrenamiento de una RNN?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Cómo es el entrenamiento de una RNN?}
+\end{center}
+\noindent Se usa el mecanismo de backpropagation through time (BPTT), donde los gradientes se propagan para atrás a través de todas las etapas de la secuencia. Si la secuencia es muy larga, se usa BPTT truncado para que no sea tan costoso.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar las ventajas y desventajas de una RNN.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar las ventajas y desventajas de una RNN.}
+\end{center}
+\noindent Ventajas:
+\begin{itemize}
+	\item Manejan secuencias de longitud variable.
+	\item Tienen memoria interna.
+	\item Comparten pesos.
+	\item Pueden combinarse con CNNs.
+\end{itemize}
+\noindent Desventajas:
+\begin{itemize}
+	\item Entrenamiento lento.
+	\item Propenso a vanishing y exploding gradient.
+	\item No capturan las dependencias largas.
+\end{itemize}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es una LSTM? ¿Qué componentes tiene?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es una LSTM? ¿Qué componentes tiene?}
+\end{center}
+\noindent Es una RNN diseñada para resolver el vanishing/explodint gradient y capturar dependencias. Usa el producto de Hadamard $\odot$ para conservar información útil a lo largo del tiempo. \\
+\\
+\noindent Tiene un funcionamiento de tres puertas:
+\begin{itemize}
+	\item Puerta de entrada: decide qué información nueva entra a la memoria.
+	\item Puerta de olvido: decide qué información se descarta.
+	\item Puerta de salida: decide qué información se usa como salida.
+\end{itemize}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir un LSTM bidireccional (BiLSTM).}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir un LSTM bidireccional (BiLSTM).}
+\end{center}
+\noindent No es más que un LSTM que procesa la información en ambas direcciones. Permite la incorporación del contexto completo, porque a veces las palabras tienen un significado particular según lo que venga después.
+
+\clearpage
+\begin{center}
+	\textbf{\Large }
+\end{center}
+
+% Acá empieza la clase 21
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar las limitaciones de las RNNs.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Nombrar las limitaciones de las RNNs.}
+\end{center}
+\begin{enumerate}
+	\item Operar secuencialmente con la información es un proceso lento.
+	\item La información del pasado se olvida con la longitud de la secuencia.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar el mecanismo attention.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar el mecanismo attention.}
+\end{center}
+\noindent Este mecanismo permite que la red se enfoque en lo importante de la entrada. Se le asignan pesos a cada palabra (token) según su relevancia contextual y se puede procesar el contexto global, sea corta o larga la secuencia. \\
+\\
+\noindent El procesamiento deja de ser secuencial, sino que se mira toda la secuencia al mismo tiempo.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar el mecanismo self-attention.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar el mecanismo self-attention.}
+\end{center}
+\noindent Usa el mismo mecanismo que attention, solo con la restricción de que la secuencia se atiende a sí misma, es decir que cada token mira a todos los otros tokens de la misma oración.
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un transformer? ¿Qué estructura tiene?}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large ¿Qué es un transformer? ¿Qué estructura tiene?}
+\end{center}
+\noindent Un \textbf{transformer} es un reemplazo de las RNNs que permite la paralelización del procesamiento de las palabras. \\
+\\
+\noindent En la arquitectura original se usan seis encoders apilados y seis decoders apilados. Tiene embeddings posicionales para indicar el orden de las palabras. \\
+Cada encoder tiene self-attention, una red neuronal feedforward y conexiones residuales. \\
+Cada decoder tiene lo mismo, solo que el self-attention usa una máscara.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir qué es BERT.}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Describir qué es BERT.}
+\end{center}
+\noindent Es un modelo basado únicamente en encoders. Es un modelo bidireccional donde se analiza el contexto a la izquierda y derecha de una palabra. \\
+\\
+\noindent En el preentrenamiento se usa Masked Language Modeling (MLM) y Next Sentence Prediction (NSP). Luego, se aplica fine-tuning para ajustar el modelo a tareas específicas.
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar el proceso de Vision Transformer (ViT).}
+\end{center}
+
+\clearpage
+\begin{center}
+	\textbf{\Large Explicar el proceso de Vision Transformer (ViT).}
+\end{center}
+\begin{enumerate}
+	\item La imagen se divide en patches.
+	\item Cada patch se convierte en un embedding.
+	\item Se le aplica un transformer como si fuera una secuencia de tokens.
+\end{enumerate}
 
 \end{document}
