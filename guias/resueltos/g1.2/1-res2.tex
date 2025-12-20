@@ -1,0 +1,82 @@
+\documentclass[12pt, a4paper]{article}
+
+% ====== PAQUETES BÁSICOS ======
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, graphicx, geometry}
+\geometry{margin=2.5cm}
+\usepackage{fancyhdr}
+
+% ====== ENCABEZADO ======
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Guía de Ejercicios 1 (Resuelta)}
+\rhead{Juan Ignacio Elosegui}
+\cfoot{\thepage}
+
+\begin{document}
+\section*{Ejercicio 1}
+\subsection*{Inciso A}
+\noindent \textbf{Falso}. No varían los resultados, porque siempre se usa LOOCV en el mismo dataset.
+
+\subsection*{Inciso B}
+\noindent \textbf{Falso}. Solo son convenientes cuando la mayoría de sus entradas son cero, por lo que depende solamente de la proporción.
+
+\subsection*{Inciso C}
+\noindent \textbf{Falso}. Aumentar el threshold implica ser más exigente para tomar a una observación como verdadera, por lo que el recall puede mantenerse igual o disminuir.
+
+\subsection*{Inciso D}
+\noindent \textbf{Falso}. No implica que precision y recall sean cercanos a 0,3. Si precision es igual a 0,30 y recall es igual a 0,2, el resultado del F1-score es 0,3.
+
+\subsection*{Inciso E}
+\noindent \textbf{Falso}. Uno mide la tasa de positivos verdaderos sobre todos los falsos positivos más los positivos verdaderos, mientras que el otro mide cuántos verdaderos acertó entre los verdaderos positivos y los falsos negativos.
+
+\section*{Ejercicio 2}
+\subsection*{Inciso A}
+\noindent La idea es validar que el rendimiento de un modelo es lo suficientemente bueno como para usarlo en test. Se entrena con el dataset y se valida con una observación o un grupo de observaciones del mismo dataset que no se usó en entrenamiento, sino que fueron separadas para validar.
+
+\subsection*{Inciso B}
+\noindent El orden de más a menos costoso es: LOOCV - k-fold CV con $k = 3$ y holdout set, solamente si este es un conjunto menor a un tercio del dataset.
+
+\subsection*{Inciso C}
+\noindent Usaría k-fold por sobre holdout set si el $k$ es alto, por lo que el accuracy en validación será más realista porque se hacen más validaciones. Caso contrario, usaría holdout si el dataset es grande para que no sea tan caro.
+
+\subsection*{Inciso D}
+\noindent Porque el test set funciona como una estimación imparcial que no se vio en entrenamiento. Evita el sesgo introducido por haber usado el validation set para la selección del modelo.
+
+\subsection*{Inciso E}
+\noindent No es una buena idea porque sus resultados estarán sesgados. Por eso se entrena únicamente en train, y para validación se hace otro proceso aparte.
+
+\section*{Ejercicio 4}
+\subsection*{Inciso A}
+\noindent Usaría -además de OHE- conteos o target encoding.
+
+\subsection*{Inciso B}
+\noindent Usaría un mapeo numérico.
+
+\subsection*{Inciso C}
+\noindent Muchos algoritmos no soportan NA. Antes de aplicar OHE, trataría a NA como una categoría explícita más, o imputaría a mano esos valores faltantes por la moda. Cualquier cambio implica marcar en una columna especial que esa observación tiene NA.
+
+\subsection*{Inciso D}
+\noindent El colega está errado porque si se da el data leakage, las métricas quedarían muy optimistas y poco confiables.
+
+\section*{Ejercicio 5}
+\noindent Cuando $\beta = 0$: \[F_{0} = \frac{\text{precision} \cdot \text{recall}}{\text{recall}} = \text{precision}\]
+\noindent Cuando $\beta = \infty$: \[F_{0} = \lim_{\beta \to \infty} = \text{recall}\]
+
+\section*{Ejercicio 6}
+\subsection*{Inciso A}
+\noindent Se recomienda usar un valor de \(\beta < 1\), ya que el banco prioriza la precision por sobre el recall, advirtiende que enviar la oferta a clientes que no se darían de baja tiene un costo.
+\subsection*{Inciso B}
+\noindent Dado que el clasificador estima correctamente las probabilidades, el threshold óptimo se mantiene comparando los costos esperados de enviar o no enviar la oferta. Enviar la oferta tiene un costo fijo de 800, mientras que no enviarla tiene un costo esperado de $5000p+10(1-p)$. Igualando ambos costos, se tiene un threshold óptimo de $t^{*} \approx 0,16$.
+
+\section*{Ejercicio 7}
+\subsection*{Inciso 1}
+\noindent El error grave está en el paso C. No debería hacerse oversampling antes de separar train y validation, porque van a haber varias observaciones muy parecidas.
+\subsection*{Inciso 2}
+\noindent Tener observaciones parecidas en train y otra en test va a sesgar la performance del modelo, por lo que generará data leakage: las métricas de validación serán falsamente altas y los hiperparámetros estarán mal elegidos.
+\subsection*{Inciso 3}
+\noindent (1) Cargar datos, (2) separar train y validation, (3) oversampling únicamente en training, (4) ingeniería de atributos, (5) entrenar y validar, (6) entrenar de nuevo con train y validation juntos; y (7) llevar el modelo a producción.
+
+\end{document}

@@ -1,0 +1,30 @@
+\documentclass[12pt, a4paper]{article}
+
+% ====== PAQUETES BÁSICOS ======
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, graphicx, geometry}
+\geometry{margin=2.5cm}
+\usepackage{fancyhdr}
+
+% ====== ENCABEZADO ======
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Guía de Ejercicios 2 (Resuelta)}
+\rhead{Juan Ignacio Elosegui}
+\cfoot{\thepage}
+
+\begin{document}
+  \section*{Ejercicio 1}
+    \begin{itemize}
+      \item \textbf{Falso}. Aumentar \texttt{min\_child\_weight} puede aliviar el problema de overfitting.
+      \item \textbf{Verdadero}. Aumentar \texttt{C} implica una penalización más grande a los errores, por lo que se va a tener un margen más chico y voy a tener un modelo más flexible.
+      \item \textbf{Falso}. Pasa justamente lo contrario: aumentar el tamaño de la ventana genera más pares de target y context.
+      \item \textbf{Verdadero}. Les debo la justificación.
+      \item \textbf{Falso}. La primera parte de k-means es verdadera, pero en clustering jerárquico sucede que si se cambian los valores de las variables cambiarán las uniones de clusters y, por ende, el dendrograma.
+      \item \textbf{Falso}. Bayes Ingenuo se formula para variables categóricas, pero existe una extensión llamada Bayes Ingenuo Gaussiano.
+      \item \textbf{Falso}. Hay que buscar en el scree plot el codo para ver el número justo de componentes en PCA. También sirve encontrar un número de componentes que tengan un porcentaje alto (ochenta por ciento) de la varianza explicada.
+    \end{itemize}
+  \section*{Ejercicio 2}
+\end{document}
