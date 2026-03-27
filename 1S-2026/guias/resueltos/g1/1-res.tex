@@ -1,0 +1,99 @@
+\documentclass[a4paper,12pt]{article} 
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\usepackage{hyperref}
+\usepackage{microtype} 
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Guía de Ejercicios 1}
+\rhead{Tecnología Digital VI}
+\cfoot{\thepage}
+
+\title{\vspace{-2cm}\textbf{Guía de Ejercicios 1}\\[0.2cm]
+\large Tecnología Digital VI}
+\author{Juan Ignacio Elosegui}
+\date{Universidad Torcuato Di Tella \\ Marzo 2026}
+
+\begin{document}
+    \maketitle
+    \section*{Introducción}
+        \subsection*{Ejercicio 3}
+            \begin{itemize}
+                \item \textbf{Descriptivos}: ¿qué está pasando? Se busca entender y resumir los datos existentes, sin hacer predicciones.
+                \item \textbf{Predictivos}: ¿qué va a pasar? Se usan datos históricos para predecir datos futuros. Es el problema típico en machine learning.
+                \item \textbf{Prescriptivos}: ¿qué debería hacer? Se recomiendan acciones usando predicciones más optimización de decisiones.
+            \end{itemize}
+            \noindent El problema de la predicción de abandono de un cliente es predictivo.
+        \subsection*{Ejercicio 4}
+            \begin{itemize}
+                \item \textbf{Aprendizaje supervisado}: en el dataset se cuenta con features y labels. Se quiere encontrar algún tipo de función que explique cómo los features explican el label.
+                \item \textbf{Aprendizaje no supervisado}: en el dataset se cuenta únicamente con features. Se quiere encontrar estructuras o patrones en estos datos.
+                \item \textbf{Aprendizaje por refuerzos}: el dataset no es más fijo, sino que son problemas en los cuales se deben elegir decisiones para llegar a outputs deseables.
+            \end{itemize}
+        \subsection*{Ejercicio 5}
+            \noindent En regresión se busca predecir una variable numérica, como puede ser un número; mientras que en un problema de clasificación se busca predecir una variable categórica. Las variables numéricas son continuas mientras que las variables categóricas son discretas.
+    \section*{Preprocesamiento de datos}
+        \subsection*{Ejercicio 6}
+            \subsubsection*{Inciso (a)}
+                \noindent Si el dataset es muy pequeño como para imputar valores con la media, esta no será realista. Podría ser una buena idea si se tienen muchos datos como para tener una media bien definida y robusta. Por otro lado, si el dataset es grande, no es mala idea quitar las filas con faltantes, ya que el dataset es robusto a cambios si es que no tiene muchas filas con faltantes.
+            \subsubsection*{Inciso (b)}
+                \noindent 
+        \subsection*{Ejercicio 7}
+            \subsubsection*{Inciso (a)}
+                \noindent Si se usa un modelo basado en distancias, como KNN o K-means, el modelo estará dominado por la variable de mayor escala, \texttt{Sueldo Anual}. Esto pasará porque las distancias euclídeas dependen del valor absoluto, y \texttt{Sueldo Anual} tiene valores muchos más altos que \texttt{Edad}.
+            \subsubsection*{Inciso (b)}
+                \begin{itemize}
+                    \item \textbf{Min-Max Scaling}: se reescalan los datos en un rango fijo, casi siempre \([0, 1]\), para mantener la forma de la distribución. Esto es sensible a outliers, porque un valor extremo aplastará al resto.
+                    \item \textbf{Standard Scaling (Z-score)}: se centran los datos según la media y el desvío estándar. Este scaling se ve menos afectado por la escala real de los datos, y funciona mejor si los datos son casi normales.
+                \end{itemize}
+                \noindent La diferencia principal es según en qué criterio se basa para estandarizar.
+        \subsection*{Ejercicio 8}
+            \subsubsection*{Inciso (a)}
+                \noindent Podría ser perjudicial porque introduce una ordinalidad que no es correcta y además es arbitraria. Básicamente quiere decir que \texttt{Rojo} $<$ \texttt{Verde} porque $0 < 1$.
+            \subsubsection*{Inciso (b)}
+                \noindent One-Hot Encoding transforma cada categoría en una variable binaria independiente para que no haya relaciones ordinales.
+        \subsection*{Ejercicio 9}
+            \subsubsection*{Inciso (a)}
+                \noindent Los \textbf{filter methods} seleccionan variables usando métodos estadísticos independientes del modelo, mientras que los \textbf{wrapper methods} evalúan subconjuntos de variables entrenando y validando un modelo.
+            \subsubsection*{Inciso (b)}
+                \noindent El problema es el costo computacional, en especial si un dataset tiene muchas variables.
+        \subsection*{Ejercicio 10}
+            \begin{itemize}
+                \item \textbf{Oversampling}: se aumenta la cantidad de observaciones de la clase minoritaria, ya sea duplicándolos o generándolos. No se pierde información y mejora la representación de la minoría, pero puede generar overfitting y aumentar el tamaño del dataset.
+                \item \textbf{Undersampling}: se reduce la cantidad de observaciones de la clase mayoritaria removiéndolas. En general es más rápido de entrenar porque es más pequeño el dataset y termina más balanceado, pero se pierde información valiosa.
+            \end{itemize}
+        \subsection*{Ejercicio 11}
+            \subsubsection*{Inciso (a)}
+                \noindent El error es que se hizo el scaling luego de dividir el dataset. Esto se debe hacer siempre después. Esto va a generar \textbf{data leakage}.
+            \subsubsection*{Inciso (b)}
+                \noindent El \textbf{data leakage} sucede cuando se filtra información del test set al training set. El modelo ya vio cómo es el test, entonces las métricas van a ser muy optimistas. Primero se divide el dataset en train y test, y luego se hace el scaling.
+    \section*{Model Selection}
+        \subsection*{Ejercicio 12}
+            \noindent \textbf{Overfitting} es cuando el modelo aprende demasiado los detalles más finos del dataset. Funcionará muy bien en training pero lo hará muy mal en testing. \\
+            El \textbf{underfitting} se da cuando el modelo no puede aprender los patrones relevantes del dataset. Un modelo con underfitting funcionará mal en training y testing.
+        \subsection*{Ejercicio 13}
+            \noindent En el \textbf{training set} se entrena el modelo, en \textbf{validation set} se ``prueba'' el modelo antes de utilizarlo para saber su rendimiento de antemano, y el \textbf{test set} es un conjunto de datos no visto sobre el cual se busca predecir usando el modelo que mejor rindió en el conjunto de validación. \\
+            Si usásemos únicamente un \emph{holdout set} estaríamos usando el modelo a ciegas sin saber a priori si funciona bien o mal. \\
+            \\
+            \noindent Para poner un ejemplo: nosotros armamos un auto y directamente se lo vendemos al cliente. Probablemente el cliente se mate si no probamos el auto antes. Analógicamente, armar el auto es el training set: vemos que todas las partes estén en condiciones; probarlo dentro del taller es el validation set: nos fijamos que las ruedas giren, que el motor pueda hacer la combustión; y sacar el auto a la calle es el test set: queremos que funcione siempre bien.
+        \subsection*{Ejercicio 14}
+            \noindent \textbf{K-fold Cross-Validation} consiste en dividir el dataset en $k$ folds (particiones), para que se pueda entrenar en $k-1$ y validar en el $k$ donde no se entrenó. Esto tiene la ventaja de tener una evaluación más robusta (porque no depende de una sola partición), se reduce el azar (porque no depende de cómo se particionaron los datos) y se consigue una mejor estimación de la performance en testing.
+        \subsection*{Ejercicio 15}
+            \noindent \textbf{Leave-one-out Cross-Validation} tiene la \emph{ventaja} de que se aprovechan al máximo las observaciones del dataset para entrenar el modelo en cada iteración, pero la \emph{desventaja} aparece cuando tenemos un dataset con muchas observaciones, porque se dispara la complejidad computacional.
+        \subsection*{Ejercicio 16}
+            \noindent Las particiones aleatorias estándar pueden introducir \emph{data leakage} o distorsionar la estructura del problema, por lo que se pueden usar las siguientes estrategias:
+        \begin{enumerate}
+            \item \textbf{Stratified K-Fold}. Se usa cuando el dataset está \emph{desbalanceado}, que es justamente lo que soluciona. Sería un problema si por fold haya muchas o pocas observaciones de la clase mayoritaria o minoritaria.
+            \item \textbf{Time Series Split}. Se usa cuando los datos tienen un \emph{orden temporal}. Estas observaciones no se deben mezclar de manera arbitraria, porque se usaría información del futuro para predecir el pasado, derivando en data leakage.
+            \item \textbf{Leave One Group Out}. Se usa cuando los datos están agrupados bajo algún criterio. Evita que los datos del mismo grupo aparezcan en entrenamiento y en validación, cosa que resultaría en métricas infladas.
+        \end{enumerate}
+\end{document}

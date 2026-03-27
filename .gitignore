@@ -1,10 +1,15 @@
-tp/tp2/competition_data/spotify_api_data
-guias/resueltos/*.aux
-guias/resueltos/*.out
-guias/resueltos/*.log
-tp/tp2/competition_data
-practicas/p10/td6-p10-d-datos-imdb.zip
-practicas/p10/td6-p10-e-review-tokens.p
+2S-2025/tp/tp2/competition_data/spotify_api_data
+2S-2025/guias/resueltos/*.aux
+2S-2025/guias/resueltos/*.out
+2S-2025/guias/resueltos/*.log
+1S-2026/guias/resueltos/*.aux
+1S-2026/guias/resueltos/*.out
+1S-2026/guias/resueltos/*.log
+2S-2025/tp/tp2/competition_data
+2S-2025/practicas/p10/td6-p10-d-datos-imdb.zip
+2S-2025/practicas/p10/td6-p10-e-review-tokens.p
+1S-2026/clases/practicas/2 - Taller de Datos/td6-p02-c-datos-vuelos.txt
+1S-2026/clases/practicas/4 - Métricas/heart.csv
 *.aux
 *.out
 *.log
