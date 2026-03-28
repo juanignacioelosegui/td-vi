@@ -4,7 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
-\usepackage{geometry}
+\usepackage{geometry, amsmath}
 \geometry{margin=2.5cm}
 
 \usepackage{hyperref}
@@ -91,9 +91,66 @@
             \noindent \textbf{Leave-one-out Cross-Validation} tiene la \emph{ventaja} de que se aprovechan al máximo las observaciones del dataset para entrenar el modelo en cada iteración, pero la \emph{desventaja} aparece cuando tenemos un dataset con muchas observaciones, porque se dispara la complejidad computacional.
         \subsection*{Ejercicio 16}
             \noindent Las particiones aleatorias estándar pueden introducir \emph{data leakage} o distorsionar la estructura del problema, por lo que se pueden usar las siguientes estrategias:
-        \begin{enumerate}
-            \item \textbf{Stratified K-Fold}. Se usa cuando el dataset está \emph{desbalanceado}, que es justamente lo que soluciona. Sería un problema si por fold haya muchas o pocas observaciones de la clase mayoritaria o minoritaria.
-            \item \textbf{Time Series Split}. Se usa cuando los datos tienen un \emph{orden temporal}. Estas observaciones no se deben mezclar de manera arbitraria, porque se usaría información del futuro para predecir el pasado, derivando en data leakage.
-            \item \textbf{Leave One Group Out}. Se usa cuando los datos están agrupados bajo algún criterio. Evita que los datos del mismo grupo aparezcan en entrenamiento y en validación, cosa que resultaría en métricas infladas.
-        \end{enumerate}
+            \begin{enumerate}
+                \item \textbf{Stratified K-Fold}. Se usa cuando el dataset está \emph{desbalanceado}, que es justamente lo que soluciona. Sería un problema si por fold haya muchas o pocas observaciones de la clase mayoritaria o minoritaria.
+                \item \textbf{Time Series Split}. Se usa cuando los datos tienen un \emph{orden temporal}. Estas observaciones no se deben mezclar de manera arbitraria, porque se usaría información del futuro para predecir el pasado, derivando en data leakage.
+                \item \textbf{Leave One Group Out}. Se usa cuando los datos están agrupados bajo algún criterio. Evita que los datos del mismo grupo aparezcan en entrenamiento y en validación, cosa que resultaría en métricas infladas.
+            \end{enumerate}
+    \section*{Métricas}
+        \subsection*{Ejercicio 17}
+            \noindent Lo que interesa es la métrica \emph{recall}, porque nuestro modelo debe poder capturar la mayor parte de los positivos entre los positivos verdaderos detectados más los falsos negativos (que serían los que se ``pasan''). \\
+            \\
+            \noindent \textbf{Precision} se puede interpretar como las veces que nuestro clasificó a alguien como un paciente con alta probabilidad de desarrollar la enfermedad, y estos \emph{realmente} eran propensos a enfermarse. \\
+            \textbf{Recall} es cuántos pacientes con alta probabilidad de desarrollar la enfermedad \emph{reales} pudo capturar nuestro modelo.
+        \subsection*{Ejercicio 18}
+            \noindent En datasets altamente desbalanceados, la curva ROC puede resultar engañosa porque la tasa de falsos positivos (FPR) se calcula sobre una gran cantidad de negativos, lo que hace que incluso un número considerable de falsos positivos produzca un FPR bajo. Esto devolverá estadísticas muy optimistas de más. \\
+            \\
+            \noindent En cambio, la curva precision-recall es más sensible a los falsos positivos, ya que la precision penaliza directamente su presencia. Por ello, en problemas donde la clase positiva es minoritaria y de mayor interés, la curva precision-recall resulta más informativa para evaluar el rendimiento del modelo.
+        \subsection*{Ejercicio 19}
+            \begin{itemize} 
+                \item \textbf{RMSE.} Prioriza los errores \emph{grandes} (porque está elevado al cuadrado). Se puede usar en modelos de predicción de salario, donde el mismo es positivo y puede haber valores extremos a los cuales esta métrica es sensible.
+                \item \textbf{RMSLE.} Prioriza los errores \emph{en su proporción}. Es útil en problemas donde importa más el error porcentual que el error absoluto, como en predicción de crecimiento o cantidades que varían en órdenes de magnitud.
+            \end{itemize}
+        \subsection*{Ejercicio 20}
+            \begin{itemize}
+                \item \textbf{MAE.} Se prioriza el error absoluto promedio. Esto puede servir para predicción de distancias.
+                \item \textbf{MAPE.} Se prioriza el error relativo. Equivocarse en un valor pequeño es mucho más grave que equivocarse en un valor grande.
+            \end{itemize}
+        \subsection*{Ejercicio 21}
+            \subsubsection*{Inciso (a)}
+                \[\text{Accuracy} = \frac{TP+TN}{TP+TN+FP+FN}\]
+                \[\text{Accuracy} = \frac{99.000+0}{99.000+0+1.000+0}\]
+                \[\text{Accuracy} = \frac{99.000}{99.000+1.000}\]
+                \[\text{Accuracy} = \frac{99.000}{100.000}\]
+                \[\text{Accuracy} = 0,99\]
+
+                \[\text{Precision} = \frac{TP}{TP+FP}\]
+                \[\text{Precision} = \frac{99.000}{99.000+1.000}\]
+                \[\text{Precision} = 0,99\]
+
+                \[\text{Recall} = \frac{TP}{TP+FN}\]
+                \[\text{Recall} = \frac{99.000}{99.000+0}\]
+                \[\text{Recall} = 1\]
+            \subsubsection*{Inciso (b)}
+                \noindent Porque da una precisión del 99\% sobre un modelo que clasifica que una clase es positiva siempre.
+            \subsubsection*{Inciso (c)}
+                \noindent El F1-Score utiliza la \emph{media armónica} entre precision y recall porque esta penaliza fuertemente los casos en los que una de las dos métricas es muy baja. En cambio, la \emph{media aritmética} puede dar un valor relativamente alto aunque una de las dos sea muy mala, dando una impresión engañosa del rendimiento del modelo. \\
+                \\
+                La idea es que, para que el F1-Score sea alto, tanto la precision como el recall deben ser altos al mismo tiempo. Si una de las dos cae mucho, el F1-Score también cae de manera importante. \\
+                \\
+                Por ejemplo, si un modelo tiene: \[ \text{Precision} = 1 \quad \text{y} \quad \text{Recall} = 0.01 \]
+                \noindent la media aritmética sería: \[ \frac{1 + 0.01}{2} = 0.505 \]
+                \noindent lo cual podría sugerir erróneamente un desempeño aceptable. \\
+                \\
+                \noindent En cambio, el F1-Score sería: \[ F1 = 2 \cdot \frac{1 \cdot 0.01}{1 + 0.01} \approx 0.0198 \]
+                \noindent Este valor refleja mucho mejor que el modelo en realidad tiene un rendimiento muy pobre, ya que aunque su precision sea perfecta, casi no logra recuperar positivos reales.
+            \subsection*{Ejercicio 22}
+                \subsubsection*{Inciso (a)}
+                    \noindent El enfoque que más prioriza el rendimiento sobre las clases minoritarias es el \textbf{Macro-averaging}, porque calcula la métrica por separado para cada clase y luego promedia todas por igual, tenga la cantidad de observaciones que tenga. Así, las clases minoritarias como \texttt{Pantalones }y \texttt{Camperas} tienen el mismo peso que la clase mayoritaria \texttt{Remeras}. \\
+                    \\
+                    \noindent El \textbf{Micro-averaging} suma globalmente los verdaderos positivos, falsos positivos y falsos negativos de todas las clases antes de calcular la métrica, por lo que las clases mayoritarias dominan el resultado final. Por eso, el Micro-averaging refleja más el rendimiento global del modelo, mientras que el Macro-averaging permite evaluar mejor si el modelo también funciona bien en las clases minoritarias.
+                \subsubsection*{Inciso (b)}
+                    \noindent El \textbf{Micro-F1}, el \textbf{Micro-Precision}, el \textbf{Micro-Recall} y el \textbf{Accuracy} global toman exactamente el mismo valor en un problema de \emph{clasificación multiclase de etiqueta única}, es decir, cuando cada instancia pertenece a una sola clase y el modelo predice exactamente una sola clase por ejemplo. \\
+                    \\
+                    Esto pasa porque en ese caso cada error cuenta simultáneamente como un falso positivo para una clase y un falso negativo para otra, mientras que cada acierto suma un verdadero positivo. Al agregar globalmente todas las clases, las expresiones de Micro-Precision y Micro-Recall coinciden entre sí y también con el Accuracy, por lo que el Micro-F1 termina tomando ese mismo valor.
 \end{document}
