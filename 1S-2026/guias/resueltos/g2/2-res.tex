@@ -1,0 +1,72 @@
+\documentclass[a4paper,12pt]{article} 
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{geometry, amsmath, amssymb}
+\geometry{margin=2.5cm}
+
+\usepackage{hyperref}
+\usepackage{microtype} 
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Guía de Ejercicios 2}
+\rhead{Tecnología Digital VI}
+\cfoot{\thepage}
+
+\title{\vspace{-2cm}\textbf{Guía de Ejercicios 2}\\[0.2cm]
+\large Tecnología Digital VI}
+\author{Juan Ignacio Elosegui}
+\date{Universidad Torcuato Di Tella \\ Abril 2026}
+
+\begin{document}
+    \maketitle
+    \section*{Modelos Lineales}
+        \subsection*{Ejercicio 1}
+            \begin{itemize}
+                \item \(Y_{i}\) es la variable dependiente.
+                \item \(\beta_{0}\) es el intercepto.
+                \item \(\beta_{1}\) es la pendiente del atributo.
+                \item \(X_{i}\) es la observación $i$ del \textit{feature} $X$.
+                \item \(\epsilon_{i}\) es el error aleatorio de la observación $i$.
+            \end{itemize}
+        \subsection*{Ejercicio 2}
+            \noindent No es lo óptimo usar \textit{gradient descent}, porque es un proceso iterativo. Si querés, podés usarlo igual. Lo mejor para resolver un problema de regresión lineal es usar mínimos cuadrados, porque tiene una fórmula cerrada. Seguramente haya excepciones, pero en general conviene la segunda opción.
+        \subsection*{Ejercicio 3}
+            \noindent Sigue siendo un modelo lineal porque se usa la combinación lineal de los atributos almacenada en la variable $z$ en la función sigmoide. La sigmoide solamente es una transformación que se aplica sobre esa combinación lineal.
+        \subsection*{Ejercicio 4}
+            \noindent A ver qué pasa si la combinación lineal es cero, es decir: \[z = 0\]
+            \[\Rightarrow \sigma(0) = \frac{1}{1+e^{-0}}\]
+            \[\Rightarrow \sigma(0) = \frac{1}{1+1}\]
+            \[\Rightarrow \sigma(0) = \frac{1}{2}\]
+            \[\therefore \sigma(0) = 0,5\]
+            \noindent La probabilidad asignada da $0,5$. Esto quiere decir que la clasificación binaria resultante depende de dónde esté ubicada la frontera de decisión.
+        \subsection*{Ejercicio 5}
+            \noindent Para optimizar una regresión logística se suele usar \textit{Log-Loss} porque es continua y derivable, lo que lo hace genial para usar el método de \textit{gradient descent}.
+
+            \noindent La métrica de evaluación es \textit{Accuracy} -claramente está también \textit{Precision}, \textit{Recall}, etcétera- las cuales no son derivables en todo su dominio, por lo que no sirve para \textit{gradient descent}. \\
+            \\
+            \noindent Aunque son distintas, ambas persiguen el mismo objetivo: cuando la \textit{Log-Loss} baja, la \textit{Accuracy} tiende a subir. Minimizar la incertidumbre probabilística del modelo termina mejorando las clasificaciones. \\
+            \\
+            \noindent Supongamos dos modelos: A y B.
+            \begin{itemize}
+                \item \textbf{Modelo A.} Predijo las probabilidades \(\{0.9, 0.8, 0.9, 0.95\}\), que son todas clasificadas como clase 1. Este modelo tiene un \textit{Accuracy} de 100\%.
+                \item \textbf{Modelo B.} Predijo las probabilidades \(\{0.5, 0.55, 0.6, 0.5\}\), que son todas clasificadas como clase 1. Este modelo tiene un \textit{Accuracy} de 100\% también.
+            \end{itemize}
+            Tienen la misma \textit{Accuracy} los dos modelos, pero lo que hace la \textit{Log-Loss} es -básicamente- calcular qué tan seguro está el modelo de la clasificación que le puso a una observación. Es como una métrica de calidad de la clasificación. El \textit{Log-Loss} del Modelo A es mucho menor porque sus probabilidades están más cerca de su clase real (1) que el Modelo B.
+        \subsection*{Ejercicio 6}
+            \noindent Una Regresión Logística estándar no puede separar este dataset de manera efectiva, ya que su frontera de decisión es un hiperplano, y no existe ninguna recta capaz de separar un círculo interior de un anillo exterior. Pero, mediante ingeniería de atributos, es posible lograrlo. \\
+            \\
+            \noindent Si se introduce un atributo \(X_3 = X_1^2 + X_2^2\), este representa la distancia al origen al cuadrado. De esta forma, en el espacio expandido de atributos $(X_1, X_2, X_3)$, las clases se vuelven linealmente separables y la regresión logística puede encontrar un umbral sobre $X_3$ que los separe correctamente. \\
+            \\
+            \noindent El modelo sigue siendo lineal en sus parámetros ($\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3$), pero al operar sobre atributos con transformaciones no lineales, logra capturar una frontera que en el espacio original es circular.
+    \section*{Árboles de Decisión}
+        \subsection*{Ejercicio 7}
+            \noindent En un \textbf{modelo lineal}, la frontera de decisión es un único hiperplano que divide todo el espacio de atributos en dos regiones. Esta frontera puede tener cualquier orientación, es decir, puede ser diagonal a los ejes. \\
+            \\
+            \noindent En un \textbf{árbol de decisión}
+\end{document}
