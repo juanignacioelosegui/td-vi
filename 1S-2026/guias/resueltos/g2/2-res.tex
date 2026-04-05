@@ -68,5 +68,85 @@
         \subsection*{Ejercicio 7}
             \noindent En un \textbf{modelo lineal}, la frontera de decisión es un único hiperplano que divide todo el espacio de atributos en dos regiones. Esta frontera puede tener cualquier orientación, es decir, puede ser diagonal a los ejes. \\
             \\
-            \noindent En un \textbf{árbol de decisión}
+            \noindent En un \textbf{árbol de decisión}, este divide el espacio de atributos en rectángulos tras hacer cortes de manera sucesiva de a un atributo por vez. Las fronteras son paralelas a los ejes.
+        \subsection*{Ejercicio 8}
+            \begin{itemize}
+                \item \textbf{Para datos faltantes.} El árbol puede usar \textbf{surrogate splits}, que funcionan como \emph{divisiones sustitutas}. Cuando el árbol encuentra que para una observación falta el valor de la variable por la que quiere partir, busca otra variable que produzca una partición \emph{similar} y usa esa en su lugar.
+                \item \textbf{Para variables categóricas.} En lugar de necesitar \textit{One-Hot Encoding}, el árbol puede partir directamente evaluando \emph{subconjuntos} de categorías. \\
+                    Por ejemplo, si tenemos una variable \texttt{Color} con valores \{\texttt{Rojo}, \texttt{Azul}, \texttt{Verde}\}, el árbol puede \emph{evaluar particiones} como \{\texttt{Rojo}, \texttt{Azul}\} vs \{\texttt{Verde}\}, probando distintas agrupaciones de categorías y \emph{eligiendo la que mejor separe las clases}.
+            \end{itemize}
+        \subsection*{Ejercicio 9}
+            \noindent Un índice de \textit{Gini} igual a cero implica que la pureza de ese nodo es \emph{total}, es decir, todas las observaciones dentro del nodo son de la misma clase. \\
+            \\
+            \noindent El índice Gini se calcula como: \[ Gini = 1 - \sum_{i=1}^{C} p_{i}^{2} \]
+            \noindent donde $p_{i}$ es la proporción de muestras de la clase $i$ en el nodo y $C$ es la cantidad de clases. Si todas las muestras pertenecen a una misma clase, entonces una proporción vale 1 y las demás valen 0, por lo que \[Gini = 1 - 1^2 = 0\] 
+            \noindent En el extremo opuesto, si se tienen dos clases perfectamente mezcladas en proporciones 50/50, \[Gini = 1 - (0.5^2 + 0.5^2) = 0.5\]
+            \noindent que es el valor máximo de impureza para clasificación binaria. \\
+        
+            \noindent Intuitivamente, el índice Gini mide la \textbf{probabilidad de clasificar incorrectamente una muestra si se la etiquetara al azar según la distribución de clases del nodo}. Si todas las muestras son de la misma clase, esa probabilidad es cero.
+        \subsection*{Ejercicio 10}
+            \noindent Consideremos un nodo padre con 200 muestras: 100 de clase A y 100 de clase B (proporción 50/50).
+
+            \noindent Se evalúa el siguiente split:
+            \begin{itemize}
+                \item Hijo izquierdo: 60 de clase A, 40 de clase B (100 muestras)
+                \item Hijo derecho: 40 de clase A, 60 de clase B (100 muestras)
+            \end{itemize}
+
+            \noindent El \textbf{Missclassification Error} se calcula como $1 - \max(p_i)$, es decir, la proporción de la clase que no es mayoritaria.
+            \[ ME_{\text{padre}} = 1 - \max\left(\frac{100}{200}, \frac{100}{200}\right) = 1 - 0,5 = 0,5 \]
+            \[ ME_{\text{izq}} = 1 - \max\left(\frac{60}{100}, \frac{40}{100}\right) = 1 - 0,6 = 0,4 \]
+            \[ ME_{\text{der}} = 1 - \max\left(\frac{40}{100}, \frac{60}{100}\right) = 1 - 0,6 = 0,4 \]
+            \[ ME_{\text{hijos}} = \frac{100}{200} \times 0.4 + \frac{100}{200} \times 0,4 = 0,4 \]
+
+            \noindent \textit{Misclassification Error} baja de 0,5 a 0,4. Ahora bien, supongamos que el \textit{split} anterior no está disponible y el mejor \textit{split} posible genera:
+
+            \begin{itemize}
+                \item Hijo izquierdo: 50 de clase A, 50 de clase B (100 muestras)
+                \item Hijo derecho: 50 de clase A, 50 de clase B (100 muestras)
+            \end{itemize}
+
+            \[ ME_{\text{izq}} = 1 - 0,5 = 0,5; \quad ME_{\text{der}} = 1 - 0,5 = 0,5 \]
+            \[ ME_{\text{hijos}} = 0,5 \]
+
+            \noindent En este caso, \textit{Misclassification Error} no detecta ningún progreso (se mantiene en 0,5), y el árbol no puede avanzar. \\
+
+            \noindent Ahora, con el \textbf{índice Gini}, volvemos al primer \textit{split} (60A/40B vs 40A/60B):
+            \[ Gini_{\text{padre}} = 1 - \left(0,5^2 + 0,5^2\right) = 1 - 0,5 = 0,5 \]
+            \[ Gini_{\text{izq}} = 1 - \left(0,6^2 + 0,4^2\right) = 1 - 0,52 = 0,48 \]
+            \[ Gini_{\text{der}} = 1 - \left(0,4^2 + 0,6^2\right) = 1 - 0,52 = 0,48 \]
+            \[ Gini_{\text{hijos}} = \frac{100}{200} \times 0,48 + \frac{100}{200} \times 0,48 = 0,48 \]
+
+            \noindent \textit{Gini} detecta una mejora (de 0,5 a 0,48), lo que permite al árbol seguir creciendo hacia nodos más puros. Esto se debe a que Gini es sensible a los cambios en las proporciones de las clases, mientras que \textit{Misclassification Error} solo se fija en cuál es la clase mayoritaria, lo que lo hace inadecuado como métrica de entrenamiento.
+        \subsection*{Ejercicio 11}
+            \noindent Si se agregan o se elimina un pequeño porcentaje de las muestras, la estructura del árbol puede cambiar completamente, porque el mismo se construye de forma \textit{greedy}: cada nodo elige el mejor split posible en ese momento. Por eso se dice que el modelo tiene una alta variabilidad y sensibilidad ante un cambio sutil en los datos.
+        \subsection*{Ejercicio 12}
+            \noindent Si llega \(X = 75\), esta observación caerá lo más a la derecha posible del árbol. Incluso, tendrá el mismo tratamiento que aquellas observaciones muy cercanas a \(X = 50\). Esto pasa porque el árbol fue entrenado con valores de $X$ entre 0 y 50, por lo que todas las reglas de partición van a tener \textit{thresholds} dentro de ese rango. Es una limitación importante de los árboles de decisión.
+        \subsection*{Ejercicio 13}
+            \noindent Explicarle un modelo de regresión logística puede parecer abstracto para alguien que no esté metido en el tema. Por otro lado, un árbol de decisión de baja profundidad modela perfectamente la toma de decisiones que tenemos los humanos, por lo que es más transparente y más fácil de explicar.
+    \section*{Ensambles}
+        \subsection*{Ejercicio 14}
+            \noindent Puede haber dos casos en el cual Majority Voting arroje un resultado: dos modelos aciertan o tres modelos aciertan. Esto se puede representar como:
+            \[P(\text{dos aciertan}) = 0,8 \cdot 0,8 \cdot (1-0,8) = 0,512\]
+            \[P(\text{tres aciertan}) = 0,8 \cdot 0,8 \cdot 0,8 = 0,384\]
+            \noindent Son dos casos disjuntos en los que el ensamble puede acertar, por lo que:
+            \[P(\text{ensamble acierta}) = 0,512 + 0,384 = 0,896\]
+            \noindent O sea, \textit{Accuracy} subió de 0,8 a 0,896.
+        \subsection*{Ejercicio 15}
+            \noindent \textit{Rank Correlation} se usa en lugar de Pearson porque los árboles de decisión trabajan con \textit{rankings} y \textit{thresholds}, no con relaciones lineales. \\
+
+            \noindent \textbf{Pearson} mide la relación lineal entre dos variables. Si dos variables tienen una relación monótona pero no lineal, Pearson puede dar un valor bajo aunque en la práctica contengan información muy similar para un árbol. \\
+
+            \noindent En cambio, \textbf{Rank Correlation} mide la relación monótona: solo le importa si cuando una variable sube, la otra también sube (o baja), sin importar si la relación es lineal o no. Y esto es exactamente lo que le importa a un árbol de decisión, porque al hacer \textit{splits} del tipo $X \leq \textit{threshold}$, lo único que importa es el orden de los valores, no su magnitud. Si dos variables tienen el mismo \textit{ranking} (el mismo orden de las observaciones), van a producir exactamente los mismos \textit{splits} y, por lo tanto, son redundantes para el modelo.
+        \subsection*{Ejercicio 16}
+            \begin{itemize}
+                \item \textbf{Paralelizables.} Son aquellos en los cuales cada árbol se entrena de forma independiente sobre su propio subconjunto de datos. Ejemplos: \textbf{Bagging} y \textbf{Random Forest}.
+                \item \textbf{No paralelizables.} Son aquellos en los cuales cada árbol nuevo se entrena para corregir los errores del anterior. Se necesita el resultado del árbol $i$ para poder entrenar el árbol $i+1$. Ejemplos: \textbf{AdaBoost}, \textbf{XGBoost}, y cualquier otro método de \textit{boosting}.
+            \end{itemize}
+        \subsection*{Ejercicio 17}
+            \noindent Hay dos métodos de interpretabilidad para medir la importancia de los atributos:
+            \begin{enumerate}
+                \item \textbf{Feature Importance.} Se calcula promediando las reducciones de \textit{Gini} que produce cada atributo en todos los \textit{splits} de todos los árboles del bosque. Los atributos que generan mayores reducciones son las más importantes.
+                \item \textbf{Permutation Importance.} En lugar de mirar las reducciones de \textit{Gini}, mide cuánto empeora la \textit{performance} del modelo al desordenar aleatoriamente los valores de cada atributo en el conjunto de test.
+            \end{enumerate}
 \end{document}
