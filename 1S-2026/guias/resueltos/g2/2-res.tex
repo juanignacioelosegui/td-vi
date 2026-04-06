@@ -71,9 +71,9 @@
             \noindent En un \textbf{árbol de decisión}, este divide el espacio de atributos en rectángulos tras hacer cortes de manera sucesiva de a un atributo por vez. Las fronteras son paralelas a los ejes.
         \subsection*{Ejercicio 8}
             \begin{itemize}
-                \item \textbf{Para datos faltantes.} El árbol puede usar \textbf{surrogate splits}, que funcionan como \emph{divisiones sustitutas}. Cuando el árbol encuentra que para una observación falta el valor de la variable por la que quiere partir, busca otra variable que produzca una partición \emph{similar} y usa esa en su lugar.
-                \item \textbf{Para variables categóricas.} En lugar de necesitar \textit{One-Hot Encoding}, el árbol puede partir directamente evaluando \emph{subconjuntos} de categorías. \\
-                    Por ejemplo, si tenemos una variable \texttt{Color} con valores \{\texttt{Rojo}, \texttt{Azul}, \texttt{Verde}\}, el árbol puede \emph{evaluar particiones} como \{\texttt{Rojo}, \texttt{Azul}\} vs \{\texttt{Verde}\}, probando distintas agrupaciones de categorías y \emph{eligiendo la que mejor separe las clases}.
+                \item \textbf{Para datos faltantes.} El árbol puede usar \textbf{surrogate splits}, que funcionan como \emph{divisiones sustitutas}. Cuando el árbol encuentra que para una observación falta el valor del atributo por la que quiere partir, busca otro atributo que produzca una partición \emph{similar} y usa esa en su lugar.
+                \item \textbf{Para atributos categóricos.} En lugar de necesitar \textit{One-Hot Encoding}, el árbol puede partir directamente evaluando \emph{subconjuntos} de categorías. \\
+                    Por ejemplo, si tenemos un atributo \texttt{Color} con valores \{\texttt{Rojo}, \texttt{Azul}, \texttt{Verde}\}, el árbol puede \emph{evaluar particiones} como \{\texttt{Rojo}, \texttt{Azul}\} vs \{\texttt{Verde}\}, probando distintas agrupaciones de categorías y \emph{eligiendo la que mejor separe las clases}.
             \end{itemize}
         \subsection*{Ejercicio 9}
             \noindent Un índice de \textit{Gini} igual a cero implica que la pureza de ese nodo es \emph{total}, es decir, todas las observaciones dentro del nodo son de la misma clase. \\
@@ -135,9 +135,9 @@
         \subsection*{Ejercicio 15}
             \noindent \textit{Rank Correlation} se usa en lugar de Pearson porque los árboles de decisión trabajan con \textit{rankings} y \textit{thresholds}, no con relaciones lineales. \\
 
-            \noindent \textbf{Pearson} mide la relación lineal entre dos variables. Si dos variables tienen una relación monótona pero no lineal, Pearson puede dar un valor bajo aunque en la práctica contengan información muy similar para un árbol. \\
+            \noindent \textbf{Pearson} mide la relación lineal entre dos atributos. Si dos atributos tienen una relación monótona pero no lineal, Pearson puede dar un valor bajo aunque en la práctica contengan información muy similar para un árbol. \\
 
-            \noindent En cambio, \textbf{Rank Correlation} mide la relación monótona: solo le importa si cuando una variable sube, la otra también sube (o baja), sin importar si la relación es lineal o no. Y esto es exactamente lo que le importa a un árbol de decisión, porque al hacer \textit{splits} del tipo $X \leq \textit{threshold}$, lo único que importa es el orden de los valores, no su magnitud. Si dos variables tienen el mismo \textit{ranking} (el mismo orden de las observaciones), van a producir exactamente los mismos \textit{splits} y, por lo tanto, son redundantes para el modelo.
+            \noindent En cambio, \textbf{Rank Correlation} mide la relación monótona: solo le importa si cuando un atributo sube, el otro también sube (o baja), sin importar si la relación es lineal o no. Y esto es exactamente lo que le importa a un árbol de decisión, porque al hacer \textit{splits} del tipo $X \leq \textit{threshold}$, lo único que importa es el orden de los valores, no su magnitud. Si dos atributos tienen el mismo \textit{ranking} (el mismo orden de las observaciones), van a producir exactamente los mismos \textit{splits} y, por lo tanto, son redundantes para el modelo.
         \subsection*{Ejercicio 16}
             \begin{itemize}
                 \item \textbf{Paralelizables.} Son aquellos en los cuales cada árbol se entrena de forma independiente sobre su propio subconjunto de datos. Ejemplos: \textbf{Bagging} y \textbf{Random Forest}.
@@ -149,4 +149,82 @@
                 \item \textbf{Feature Importance.} Se calcula promediando las reducciones de \textit{Gini} que produce cada atributo en todos los \textit{splits} de todos los árboles del bosque. Los atributos que generan mayores reducciones son las más importantes.
                 \item \textbf{Permutation Importance.} En lugar de mirar las reducciones de \textit{Gini}, mide cuánto empeora la \textit{performance} del modelo al desordenar aleatoriamente los valores de cada atributo en el conjunto de test.
             \end{enumerate}
+        \subsection*{Ejercicio 18}
+            \noindent En \textbf{Random Forest}, cada árbol se entrena de forma independiente sobre un subconjunto aleatorio de datos y atributos. Agregar más árboles es como agregar más ``opiniones independientes'': el promedio se estabiliza y la varianza baja, pero nunca se va a llegar al \textit{overfitting} por agregar demasiados. En el peor caso, el rendimiento se estanca pero no empeora. \\
+
+            \noindent En \textbf{Boosting} (XGBoost, etc.), cada árbol nuevo se entrena específicamente para corregir los errores de los anteriores. Si se agregan demasiados árboles, el modelo empieza a corregir errores que en realidad son ruido normal del \textit{training set}, y termina aprendiendo ese ruido en lugar de aprender patrones generales. Cada árbol adicional le da más capacidad al modelo de ajustarse a los datos, por lo que la cantidad de árboles controla directamente la complejidad del modelo y es un parámetro de \textit{overfitting}.
+        \subsection*{Ejercicio 19}
+            \noindent Existen porque cada una aporta optimizaciones diferentes para mejorar velocidad, manejo de datos o rendimiento:
+            \begin{itemize}
+                \item \textbf{XGBoost} fue la primera implementación optimizada. Introduce regularización en la función de costo (L1 y L2) para controlar el \textit{overfitting}, manejo de datos faltantes integrado, y paralelización en la construcción de cada árbol individual.
+                \item \textbf{LightGBM} prioriza la velocidad y eficiencia en datasets grandes. Crece los árboles ``\textit{leaf-wise}'' (expande la hoja que más reduce el error), lo cual converge más rápido.
+                \item \textbf{CatBoost} se especializa en el manejo nativo de atributos categóricos, sin necesidad de hacer OHE ni \textit{label encoding} previo. Además usa una técnica que reduce el sesgo en la estimación de los gradientes y lo hace más robusto al \textit{overfitting}.
+            \end{itemize}
+        \subsection*{Ejercicio 20}
+            \noindent Se podrían utilizar ensambles de árboles en datos no tabulares como imágenes, audio o texto, pero en la práctica no se hace porque estos datos requieren que el modelo aprenda representaciones a partir de los datos crudos. 
+
+            Una imagen es una matriz de píxeles, y las relaciones espaciales entre esos píxeles son las que contienen la información relevante. Los árboles tratan cada atributo de forma independiente, así que no pueden capturar esas estructuras espaciales, temporales o secuenciales. \\
+            \\
+            \noindent Las redes neuronales sí están diseñadas para capturar estas estructuras: aprenden filtros, patrones locales y dependencias secuenciales de forma jerárquica. Por eso dominan en datos no tabulares.
+    \section*{Casos integrales}
+        \subsection*{Ejercicio 21}
+           \noindent Qué es lo que haría:
+           \begin{enumerate}
+               \item \textbf{Problema de clasificación.} Si un cliente cancela es \textit{Churn} = 1, caso contrario es \textit{Churn} = 0. Hay que definir bien a qué se considera \textit{churn}, si cancela antes del vencimiento o no renueva su suscripción, por ejemplo.
+                \item \textbf{Preprocesamiento de atributos.} El dataset tiene atributos numéricos y categóricos, así que el preprocesamiento depende del modelo elegido. 
+
+                    Para modelos lineales, se necesita escalar los atributos numéricos y codificar los atributos categóricos con OHE. 
+
+                    Para modelos basados en árboles como XGBoost o LightGBM, se pueden usar con menos preprocesamiento ya que manejan atributos categóricos nativamente. 
+
+                    Los datos faltantes se pueden imputar con la media, mediana o moda.
+
+                    Opcionalmente, se puede hacer ingeniería de atributos si se quisiera.
+                \item \textbf{Desbalance.} Como hay muchos más clientes que no cancelan, el modelo podría tender a predecir siempre \textit{Churn} = 0 y tener un \textit{Accuracy} alto pero inútil. Para manejar esto se puede usar \textit{oversampling} de la clase minoritaria con SMOTE, \textit{undersampling} de la mayoritaria o usar métricas que no sean \textit{Accuracy}.
+                \item \textbf{Modelos a utilizar.} Se podría arrancar con un modelo simple como Regresión Logística y luego probar modelos más potentes como Random Forest o XGBoost.
+
+                    Lo ideal es comparar varios y elegir el mejor mediante \textit{cross-validation}.
+                \item \textbf{Métricas de evaluación.} Dado el desbalance, \textit{Accuracy} no es una buena métrica. Conviene usar \textit{Precision}, \textit{Recall}, F1-Score y AUC-ROC.
+
+                    La elección entre priorizar \textit{Precision} o \textit{Recall} depende del negocio: si el costo de perder un cliente es alto, conviene priorizar \textit{Recall} (detectar la mayor cantidad de \textit{churn} posible, aunque haya algunos falsos positivos). Si las acciones de retención son costosas, conviene priorizar \textit{Precision}.
+                \item \textbf{Consideraciones.} Hay que definir cada cuánto se reentrena el modelo, ya que los patrones de \textit{churn} pueden cambiar con el tiempo.
+
+                    También hay que monitorear las métricas del modelo en producción y definir un \textit{threshold} de probabilidad adecuado para clasificar. 
+
+                    Además, es importante la interpretabilidad para entender qué factores generan \textit{churn} y poder diseñar estrategias de retención específicas. (Este punto fue prompteado fuertemente)
+            \end{enumerate}
+        \subsection*{Ejercicio 22}
+            \noindent Los problemas que identifiqué son:
+            \begin{enumerate}
+                \item \textbf{Desbalance y métrica inadecuada.} De 100.000 préstamos, solo 3.500 son \textit{default}. Un modelo que prediga siempre ``no default'' tendría un 96,5\% de \textit{Accuracy}, que es lo que reportan. Seguro que el modelo no está aprendiendo nada y solamente prediga la clase mayoritaria. 
+
+                    La solución es usar otras métricas adecuadas (como en el ejercicio anterior), y aplicar técnicas para manejar el desbalance.
+                \item \textbf{Modelo muy complejo.} Una Red Neuronal Profunda con 5 capas ocultas es demasiado como para un problema tabular con probablemente pocos atributos. 
+
+                    Con 100.000 observaciones y datos tabulares, otros modelos (como XGBoost, LightGBM o incluso Regresión Logística) pueden funcionar mejor y entrenarse más rápido.
+                \item \textbf{Interpretabilidad.} El área legal recibe denuncias de usuarios que quieren saber por qué fueron rechazados, y el equipo no puede explicarlo.
+                \item \textbf{Atributos extraños.} Cuesta entender por qué consideraron al atributo ``modelo del celular'' como uno relevante. Se deberían usar atributos más directamente relacionadas con la capacidad de pago.
+                \item \textbf{Métrica de optimización.} Usaron \textit{Binary Cross-Entropy} como función de pérdida,pero no ajustaron el \textit{threshold} de decisión ni manejaron el desbalance, así que el modelo optimizó la función sin aprender a detectar \textit{defaults}.
+                \item \textbf{Consideraciones.} ¿Habrán hecho alguna validación del modelo? ¿Cuál es el \textit{threshold} para predecir si un cliente va a entrar en \textit{default}?
+            \end{enumerate}
+        \subsection*{Ejercicio 23}
+            \noindent Respondiendo a las preguntas guía:
+            \begin{itemize}
+                \item \textbf{Categoría de ML.} Es aprendizaje supervisado, ya que se tienen reportes históricos de problemas y roturas que actúan como etiquetas. 
+                \item \textbf{Preprocesamiento de atributos y otros datasets.} Los datos de sensores (vibraciones, sonidos, temperatura, energía) son datos temporales, así que hay que transformarlos en atributos tabulares.
+
+                    Los datos de fabricación son atributos estáticos que se pueden incorporar directamente. También se pueden crear atributos como horas de uso acumuladas, días desde el último mantenimiento, etc.
+
+                    Se podrían sumar datos de las órdenes de trabajo de mantenimiento, condiciones ambientales (temperatura, humedad del ambiente de la planta), turnos de operación, datos del operario, etc.
+                \item \textbf{Balance.} Es muy probable que las fallas sean eventos raros comparados con la operación normal, generando un desbalance importante. No es necesario explicar otra vez cómo solucionar esos desbalances.
+                \item \textbf{Modelos a utilizar.} Estaría bueno empezar con un modelo simple como Regresión Logística, y luego probar modelos de ensamble como Random Forest, XGBoost o LightGBM.
+                \item \textbf{Métricas de interés.} Un falso negativo (no detectar una falla) puede causar una rotura mayor con costos enormes: parada de producción, daños a la máquina, riesgo de seguridad. 
+
+                    Un falso positivo (mantenimiento innecesario) tiene un costo menor. 
+
+                    Por eso conviene priorizar \textit{Recall} (detectar la mayor cantidad de fallas posible), aceptando algunos falsos positivos. Las métricas clave serían \textit{Recall}, \textit{Precision}, F1-Score y AUC-ROC.
+                \item \textbf{Interpretabilidad.} Saber qué sensor o atributo dispara la alerta ayuda al equipo de mantenimiento a saber qué revisar en la máquina. \textit{Feature Importance} es una herramienta útil para esto.
+                \item \textbf{Consideraciones.} El modelo necesita recibir datos de sensores en tiempo real para generar alertas oportunas.
+                    Hay que definir cada cuánto se ejecuta la predicción. Se debe monitorear la \textit{performance} del modelo continuamente, ya que las máquinas se degradan con el tiempo y los patrones pueden cambiar.
+            \end{itemize}
 \end{document}
