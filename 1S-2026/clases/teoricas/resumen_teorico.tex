@@ -65,15 +65,15 @@
 \begin{document}
 
 \begin{titlepage}
-  \centering
-  \vspace*{2cm}
-  {\Huge\bfseries\color{azul} Resumen Teórico\\[0.4em]
-   Taller de Datos VI\par}
-  \vspace{0.5cm}
-  {\large 1er Semestre 2026\par}
-  \vspace{3cm}
-  {\large\itshape Materias cubiertas: Introducción, Camino ML, Modelos Lineales,
-   Árboles de Decisión, Ensambles I–III, Reducción de la Dimensionalidad\par}
+	\centering
+	\vspace*{2cm}
+	{\Huge\bfseries\color{azul} Resumen \\[0.4em]
+		Tecnología Digital VI\par}
+	\vspace{0.5cm}
+	{\large 1er Semestre 2026\par}
+	\vspace{3cm}
+	{\large\itshape Materias cubiertas: Introducción, Camino ML, Modelos Lineales,
+		Árboles de Decisión, Ensambles I–III, Reducción de la Dimensionalidad\par}
 \end{titlepage}
 
 \tableofcontents
@@ -88,76 +88,76 @@
 \subsubsection{Valores Faltantes}
 Existen tres mecanismos de ausencia:
 \begin{itemize}
-  \item \textbf{MCAR} (Missing Completely at Random): la ausencia no depende de ningún valor.
-  \item \textbf{MAR} (Missing at Random): la ausencia depende de otras variables observadas.
-  \item \textbf{MNAR} (Missing Not at Random): la ausencia depende del propio valor faltante.
+	\item \textbf{MCAR} (Missing Completely at Random): la ausencia no depende de ningún valor.
+	\item \textbf{MAR} (Missing at Random): la ausencia depende de otras variables observadas.
+	\item \textbf{MNAR} (Missing Not at Random): la ausencia depende del propio valor faltante.
 \end{itemize}
 
 \subsubsection{Outliers}
 \begin{itemize}
-  \item \textbf{Z-score}: $z_i = \dfrac{x_i - \mu}{\sigma}$; se considera outlier si $|z_i| > 3$.
-  \item \textbf{Método IQR}: outlier si $x < Q_1 - 1.5\,\text{IQR}$ o $x > Q_3 + 1.5\,\text{IQR}$.
+	\item \textbf{Z-score}: $z_i = \dfrac{x_i - \mu}{\sigma}$; se considera outlier si $|z_i| > 3$.
+	\item \textbf{Método IQR}: outlier si $x < Q_1 - 1.5\,\text{IQR}$ o $x > Q_3 + 1.5\,\text{IQR}$.
 \end{itemize}
 
 \subsubsection{Desbalance de Clases}
 \begin{itemize}
-  \item \textbf{Oversampling}: duplicar muestras de la clase minoritaria.
-  \item \textbf{Undersampling}: eliminar muestras de la clase mayoritaria.
-  \item \textbf{SMOTE}: generar muestras sintéticas interpolando vecinos de la clase minoritaria.
-  \item \textbf{Class weights}: penalizar más la clasificación errónea de la clase minoritaria.
+	\item \textbf{Oversampling}: duplicar muestras de la clase minoritaria.
+	\item \textbf{Undersampling}: eliminar muestras de la clase mayoritaria.
+	\item \textbf{SMOTE}: generar muestras sintéticas interpolando vecinos de la clase minoritaria.
+	\item \textbf{Class weights}: penalizar más la clasificación errónea de la clase minoritaria.
 \end{itemize}
 
 \subsubsection{Data Leakage}
 \begin{notebox}
-  El \textbf{data leakage} ocurre cuando información del conjunto de test (o del futuro)
-  se filtra al entrenamiento. Consecuencia: métricas optimistas que no se reproducen en
-  producción. Prevención: ajustar transformadores \emph{solo} con datos de entrenamiento.
+	El \textbf{data leakage} ocurre cuando información del conjunto de test (o del futuro)
+	se filtra al entrenamiento. Consecuencia: métricas optimistas que no se reproducen en
+	producción. Prevención: ajustar transformadores \emph{solo} con datos de entrenamiento.
 \end{notebox}
 
 \subsection{Escalado de Features}
 \[
-  \text{MinMax: } x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}, \qquad
-  \text{Estándar: } x' = \frac{x - \mu}{\sigma}, \qquad
-  \text{Robusto: } x' = \frac{x - \tilde{x}}{\text{IQR}}
+	\text{MinMax: } x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}, \qquad
+	\text{Estándar: } x' = \frac{x - \mu}{\sigma}, \qquad
+	\text{Robusto: } x' = \frac{x - \tilde{x}}{\text{IQR}}
 \]
 
 \subsection{Selección de Features}
 \begin{center}
-\begin{tabular}{lll}
-\toprule
-\textbf{Tipo} & \textbf{Método} & \textbf{Característica} \\
-\midrule
-Filter & Correlación, $\chi^2$, información mutua & Independiente del modelo \\
-Wrapper & Forward/Backward selection & Evalúa subconjuntos con modelo \\
-Embedded & L1 (Lasso), importancia en árboles & Integrado al entrenamiento \\
-\bottomrule
-\end{tabular}
+	\begin{tabular}{lll}
+		\toprule
+		\textbf{Tipo} & \textbf{Método}                          & \textbf{Característica}        \\
+		\midrule
+		Filter        & Correlación, $\chi^2$, información mutua & Independiente del modelo       \\
+		Wrapper       & Forward/Backward selection               & Evalúa subconjuntos con modelo \\
+		Embedded      & L1 (Lasso), importancia en árboles       & Integrado al entrenamiento     \\
+		\bottomrule
+	\end{tabular}
 \end{center}
 
 \subsection{K-Fold Cross-Validation}
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}[scale=0.8]
-  \foreach \fold in {1,...,5} {
-    \foreach \part in {1,...,5} {
-      \ifnum\fold=\part
-        \fill[rojo!60] ({(\part-1)*2}, {-((\fold-1)*0.7)}) rectangle ({(\part)*2}, {-((\fold-1)*0.7)+0.55});
-      \else
-        \fill[azul!30] ({(\part-1)*2}, {-((\fold-1)*0.7)}) rectangle ({(\part)*2}, {-((\fold-1)*0.7)+0.55});
-      \fi
-      \draw[gray!50] ({(\part-1)*2}, {-((\fold-1)*0.7)}) rectangle ({(\part)*2}, {-((\fold-1)*0.7)+0.55});
-    }
-    \node[right, font=\small] at (10.2, {-((\fold-1)*0.7)+0.28}) {Fold \fold};
-  }
-  \node[azul!70, font=\small\bfseries] at (5, 0.9) {Entrenamiento};
-  \node[rojo!70, font=\small\bfseries] at (5, -3.6) {Validación (rojo)};
-\end{tikzpicture}
-\caption{5-Fold Cross-Validation: en cada iteración un fold actúa como validación.}
+	\centering
+	\begin{tikzpicture}[scale=0.8]
+		\foreach \fold in {1,...,5} {
+				\foreach \part in {1,...,5} {
+						\ifnum\fold=\part
+							\fill[rojo!60] ({(\part-1)*2}, {-((\fold-1)*0.7)}) rectangle ({(\part)*2}, {-((\fold-1)*0.7)+0.55});
+						\else
+							\fill[azul!30] ({(\part-1)*2}, {-((\fold-1)*0.7)}) rectangle ({(\part)*2}, {-((\fold-1)*0.7)+0.55});
+						\fi
+						\draw[gray!50] ({(\part-1)*2}, {-((\fold-1)*0.7)}) rectangle ({(\part)*2}, {-((\fold-1)*0.7)+0.55});
+					}
+				\node[right, font=\small] at (10.2, {-((\fold-1)*0.7)+0.28}) {Fold \fold};
+			}
+		\node[azul!70, font=\small\bfseries] at (5, 0.9) {Entrenamiento};
+		\node[rojo!70, font=\small\bfseries] at (5, -3.6) {Validación (rojo)};
+	\end{tikzpicture}
+	\caption{5-Fold Cross-Validation: en cada iteración un fold actúa como validación.}
 \end{figure}
 
 \[
-  \hat{R}_{CV} = \frac{1}{k}\sum_{j=1}^{k} \text{score}_j
+	\hat{R}_{CV} = \frac{1}{k}\sum_{j=1}^{k} \text{score}_j
 \]
 
 % =============================================================
@@ -167,14 +167,14 @@ Embedded & L1 (Lasso), importancia en árboles & Integrado al entrenamiento \\
 \subsection{Regresión}
 
 \begin{defbox}{Métricas de Regresión}
-\begin{align}
-  \text{MSE}  &= \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2 \\[4pt]
-  \text{RMSE} &= \sqrt{\text{MSE}} \\[4pt]
-  \text{MAE}  &= \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i| \\[4pt]
-  \text{MAPE} &= \frac{100}{n}\sum_{i=1}^{n}\frac{|y_i - \hat{y}_i|}{y_i} \\[4pt]
-  \text{RMSLE}&= \sqrt{\frac{1}{n}\sum_{i=1}^{n}\bigl(\log(y_i+1)-\log(\hat{y}_i+1)\bigr)^2} \\[4pt]
-  R^2         &= 1 - \frac{\sum(y_i-\hat{y}_i)^2}{\sum(y_i-\bar{y})^2}
-\end{align}
+	\begin{align}
+		\text{MSE}   & = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2                                \\[4pt]
+		\text{RMSE}  & = \sqrt{\text{MSE}}                                                           \\[4pt]
+		\text{MAE}   & = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|                                  \\[4pt]
+		\text{MAPE}  & = \frac{100}{n}\sum_{i=1}^{n}\frac{|y_i - \hat{y}_i|}{y_i}                    \\[4pt]
+		\text{RMSLE} & = \sqrt{\frac{1}{n}\sum_{i=1}^{n}\bigl(\log(y_i+1)-\log(\hat{y}_i+1)\bigr)^2} \\[4pt]
+		R^2          & = 1 - \frac{\sum(y_i-\hat{y}_i)^2}{\sum(y_i-\bar{y})^2}
+	\end{align}
 \end{defbox}
 
 \subsection{Clasificación}
@@ -182,52 +182,52 @@ Embedded & L1 (Lasso), importancia en árboles & Integrado al entrenamiento \\
 \subsubsection{Matriz de Confusión}
 
 \begin{center}
-\begin{tabular}{lcc}
-\toprule
- & \textbf{Pred. Positivo} & \textbf{Pred. Negativo} \\
-\midrule
-\textbf{Real Positivo} & \textcolor{verde}{TP} & \textcolor{rojo}{FN} \\
-\textbf{Real Negativo} & \textcolor{rojo}{FP} & \textcolor{verde}{TN} \\
-\bottomrule
-\end{tabular}
+	\begin{tabular}{lcc}
+		\toprule
+		                       & \textbf{Pred. Positivo} & \textbf{Pred. Negativo} \\
+		\midrule
+		\textbf{Real Positivo} & \textcolor{verde}{TP}   & \textcolor{rojo}{FN}    \\
+		\textbf{Real Negativo} & \textcolor{rojo}{FP}    & \textcolor{verde}{TN}   \\
+		\bottomrule
+	\end{tabular}
 \end{center}
 
 \begin{defbox}{Métricas de Clasificación}
-\[
-  \text{Accuracy} = \frac{TP+TN}{TP+TN+FP+FN}, \quad
-  \text{Precision} = \frac{TP}{TP+FP}, \quad
-  \text{Recall} = \frac{TP}{TP+FN}
-\]
-\[
-  F_1 = \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision}+\text{Recall}}, \quad
-  \text{TPR} = \frac{TP}{TP+FN}, \quad
-  \text{FPR} = \frac{FP}{FP+TN}
-\]
+	\[
+		\text{Accuracy} = \frac{TP+TN}{TP+TN+FP+FN}, \quad
+		\text{Precision} = \frac{TP}{TP+FP}, \quad
+		\text{Recall} = \frac{TP}{TP+FN}
+	\]
+	\[
+		F_1 = \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision}+\text{Recall}}, \quad
+		\text{TPR} = \frac{TP}{TP+FN}, \quad
+		\text{FPR} = \frac{FP}{FP+TN}
+	\]
 \end{defbox}
 
 \subsubsection{Curva ROC y AUC}
 La curva ROC grafica TPR vs.\ FPR para distintos umbrales de clasificación.
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-  width=7cm, height=6cm,
-  xlabel={FPR}, ylabel={TPR},
-  xmin=0, xmax=1, ymin=0, ymax=1,
-  xtick={0,0.2,...,1}, ytick={0,0.2,...,1},
-  grid=both, grid style={gray!20},
-  title={Curva ROC}
-]
-  \addplot[azul, thick, smooth] coordinates {
-    (0,0)(0.05,0.45)(0.1,0.6)(0.2,0.75)(0.3,0.85)(0.5,0.93)(0.7,0.97)(1,1)
-  };
-  \addplot[dashed, gray] coordinates {(0,0)(1,1)};
-  \addlegendentry{Modelo}
-  \addlegendentry{Azar}
-\end{axis}
-\end{tikzpicture}
-\caption{AUC-ROC: área bajo la curva. AUC = 0.5 equivale a azar; AUC = 1 es perfecto.}
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				width=7cm, height=6cm,
+				xlabel={FPR}, ylabel={TPR},
+				xmin=0, xmax=1, ymin=0, ymax=1,
+				xtick={0,0.2,...,1}, ytick={0,0.2,...,1},
+				grid=both, grid style={gray!20},
+				title={Curva ROC}
+			]
+			\addplot[azul, thick, smooth] coordinates {
+					(0,0)(0.05,0.45)(0.1,0.6)(0.2,0.75)(0.3,0.85)(0.5,0.93)(0.7,0.97)(1,1)
+				};
+			\addplot[dashed, gray] coordinates {(0,0)(1,1)};
+			\addlegendentry{Modelo}
+			\addlegendentry{Azar}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{AUC-ROC: área bajo la curva. AUC = 0.5 equivale a azar; AUC = 1 es perfecto.}
 \end{figure}
 
 \subsubsection{Curva Precision-Recall}
@@ -241,61 +241,61 @@ clase positiva.
 \subsection{Regresión Lineal}
 
 \begin{defbox}{Modelo}
-\[
-  y_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip} + \varepsilon_i
-  \quad\Longleftrightarrow\quad \mathbf{y} = \mathbf{X}\bm{\beta} + \bm{\varepsilon}
-\]
-donde $\varepsilon_i \overset{iid}{\sim} \mathcal{N}(0,\sigma^2)$.
+	\[
+		y_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip} + \varepsilon_i
+		\quad\Longleftrightarrow\quad \mathbf{y} = \mathbf{X}\bm{\beta} + \bm{\varepsilon}
+	\]
+	donde $\varepsilon_i \overset{iid}{\sim} \mathcal{N}(0,\sigma^2)$.
 \end{defbox}
 
 \subsubsection{Función de Pérdida y Solución Analítica}
 \[
-  J(\bm{\beta}) = \|\mathbf{y} - \mathbf{X}\bm{\beta}\|^2
-  = \sum_{i=1}^{n}(y_i - \hat{y}_i)^2
+	J(\bm{\beta}) = \|\mathbf{y} - \mathbf{X}\bm{\beta}\|^2
+	= \sum_{i=1}^{n}(y_i - \hat{y}_i)^2
 \]
 \textbf{Ecuaciones normales}:
 \[
-  \boxed{\hat{\bm{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}}
+	\boxed{\hat{\bm{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}}
 \]
 
 \subsection{Regresión Logística}
 
 \subsubsection{De probabilidades a log-odds}
 \[
-  \text{odds} = \frac{p}{1-p}, \qquad
-  \text{logit}(p) = \ln\!\left(\frac{p}{1-p}\right)
+	\text{odds} = \frac{p}{1-p}, \qquad
+	\text{logit}(p) = \ln\!\left(\frac{p}{1-p}\right)
 \]
 
 \subsubsection{Función Sigmoide}
 \[
-  \sigma(z) = \frac{1}{1+e^{-z}} \in (0,1)
+	\sigma(z) = \frac{1}{1+e^{-z}} \in (0,1)
 \]
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-  width=8cm, height=5cm,
-  xlabel={$z$}, ylabel={$\sigma(z)$},
-  xmin=-6, xmax=6, ymin=-0.05, ymax=1.05,
-  ytick={0,0.5,1}, grid=both, grid style={gray!20},
-  title={Función Sigmoide}
-]
-  \addplot[azul, thick, domain=-6:6, samples=100] {1/(1+exp(-x))};
-  \addplot[dashed, gray] coordinates {(-6,0.5)(6,0.5)};
-\end{axis}
-\end{tikzpicture}
-\caption{La sigmoide mapea cualquier valor real a $(0,1)$, interpretable como probabilidad.}
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				width=8cm, height=5cm,
+				xlabel={$z$}, ylabel={$\sigma(z)$},
+				xmin=-6, xmax=6, ymin=-0.05, ymax=1.05,
+				ytick={0,0.5,1}, grid=both, grid style={gray!20},
+				title={Función Sigmoide}
+			]
+			\addplot[azul, thick, domain=-6:6, samples=100] {1/(1+exp(-x))};
+			\addplot[dashed, gray] coordinates {(-6,0.5)(6,0.5)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{La sigmoide mapea cualquier valor real a $(0,1)$, interpretable como probabilidad.}
 \end{figure}
 
 \subsubsection{Modelo y Pérdida}
 \[
-  P(Y=1\mid\mathbf{x}) = \sigma(\bm{\beta}^\top\mathbf{x})
+	P(Y=1\mid\mathbf{x}) = \sigma(\bm{\beta}^\top\mathbf{x})
 \]
 \textbf{Log-loss (cross-entropía binaria)}:
 \[
-  J(\bm{\beta}) = -\frac{1}{n}\sum_{i=1}^{n}
-  \bigl[y_i\log\hat{y}_i + (1-y_i)\log(1-\hat{y}_i)\bigr]
+	J(\bm{\beta}) = -\frac{1}{n}\sum_{i=1}^{n}
+	\bigl[y_i\log\hat{y}_i + (1-y_i)\log(1-\hat{y}_i)\bigr]
 \]
 
 \subsection{Regularización}
@@ -304,48 +304,48 @@ La regularización agrega un término de penalización a la función de pérdida
 controlar la complejidad del modelo y evitar el sobreajuste.
 
 \begin{defbox}{Formas de Regularización}
-\begin{align}
-  \text{Lasso (L1):} \quad   &J_{\text{Lasso}}(\mathbf{w}) = J(\mathbf{w}) + \lambda\sum_j |w_j| \\[4pt]
-  \text{Ridge (L2):} \quad   &J_{\text{Ridge}}(\mathbf{w}) = J(\mathbf{w}) + \lambda\sum_j w_j^2 \\[4pt]
-  \text{Elastic Net:} \quad  &J_{\text{EN}}(\mathbf{w}) = J(\mathbf{w})
-    + \lambda_1\sum_j|w_j| + \lambda_2\sum_j w_j^2
-\end{align}
+	\begin{align}
+		\text{Lasso (L1):} \quad  & J_{\text{Lasso}}(\mathbf{w}) = J(\mathbf{w}) + \lambda\sum_j |w_j| \\[4pt]
+		\text{Ridge (L2):} \quad  & J_{\text{Ridge}}(\mathbf{w}) = J(\mathbf{w}) + \lambda\sum_j w_j^2 \\[4pt]
+		\text{Elastic Net:} \quad & J_{\text{EN}}(\mathbf{w}) = J(\mathbf{w})
+		+ \lambda_1\sum_j|w_j| + \lambda_2\sum_j w_j^2
+	\end{align}
 \end{defbox}
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}[scale=1.1]
-  % L1 diamond
-  \begin{scope}[xshift=-3.5cm]
-    \draw[fill=azul!15, draw=azul, thick] (0,1)--(1,0)--(0,-1)--(-1,0)--cycle;
-    \draw[azul!40, thick] (0.6,0.6) ellipse (1.2cm and 0.8cm);
-    \fill[rojo] (-1,0) circle (2pt);
-    \node[below, font=\small] at (0,-1.4) {L1: solución esparsa};
-  \end{scope}
-  % L2 circle
-  \begin{scope}[xshift=3.5cm]
-    \draw[fill=verde!15, draw=verde, thick] (0,0) circle (1cm);
-    \draw[verde!40, thick] (0.7,0.7) ellipse (1.2cm and 0.8cm);
-    \fill[rojo] ({cos(45)},{sin(45)}) circle (2pt);
-    \node[below, font=\small] at (0,-1.4) {L2: coeficientes pequeños};
-  \end{scope}
-  \node at (0,0) {\large vs.};
-\end{tikzpicture}
-\caption{L1 tiende a producir coeficientes exactamente cero (selección de features);
-         L2 encoge todos los coeficientes pero raramente a cero.}
+	\centering
+	\begin{tikzpicture}[scale=1.1]
+		% L1 diamond
+		\begin{scope}[xshift=-3.5cm]
+			\draw[fill=azul!15, draw=azul, thick] (0,1)--(1,0)--(0,-1)--(-1,0)--cycle;
+			\draw[azul!40, thick] (0.6,0.6) ellipse (1.2cm and 0.8cm);
+			\fill[rojo] (-1,0) circle (2pt);
+			\node[below, font=\small] at (0,-1.4) {L1: solución esparsa};
+		\end{scope}
+		% L2 circle
+		\begin{scope}[xshift=3.5cm]
+			\draw[fill=verde!15, draw=verde, thick] (0,0) circle (1cm);
+			\draw[verde!40, thick] (0.7,0.7) ellipse (1.2cm and 0.8cm);
+			\fill[rojo] ({cos(45)},{sin(45)}) circle (2pt);
+			\node[below, font=\small] at (0,-1.4) {L2: coeficientes pequeños};
+		\end{scope}
+		\node at (0,0) {\large vs.};
+	\end{tikzpicture}
+	\caption{L1 tiende a producir coeficientes exactamente cero (selección de features);
+		L2 encoge todos los coeficientes pero raramente a cero.}
 \end{figure}
 
 \begin{center}
-\begin{tabular}{lll}
-\toprule
-\textbf{Propiedad} & \textbf{L1 (Lasso)} & \textbf{L2 (Ridge)} \\
-\midrule
-Coeficientes & Exactamente 0 (esparsidad) & Pequeños, $\neq 0$ \\
-Selección de features & Sí & No \\
-Multicolinealidad & Selecciona una & Distribuye el peso \\
-Solución & No analítica & Analítica \\
-\bottomrule
-\end{tabular}
+	\begin{tabular}{lll}
+		\toprule
+		\textbf{Propiedad}    & \textbf{L1 (Lasso)}        & \textbf{L2 (Ridge)} \\
+		\midrule
+		Coeficientes          & Exactamente 0 (esparsidad) & Pequeños, $\neq 0$  \\
+		Selección de features & Sí                         & No                  \\
+		Multicolinealidad     & Selecciona una             & Distribuye el peso  \\
+		Solución              & No analítica               & Analítica           \\
+		\bottomrule
+	\end{tabular}
 \end{center}
 
 % =============================================================
@@ -358,109 +358,109 @@ Un árbol de decisión particiona el espacio de features en regiones rectangular
 (hiperplanos perpendiculares a los ejes). Dentro de cada hoja, la predicción es constante.
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}[scale=0.9]
-  % Partición 2D
-  \begin{scope}[xshift=-5cm]
-    \draw[->] (0,0) -- (4.2,0) node[right]{\small $x_1$};
-    \draw[->] (0,0) -- (0,4.2) node[above]{\small $x_2$};
-    \draw[azul, thick] (2.5,0) -- (2.5,4);
-    \draw[verde, thick] (0,2) -- (2.5,2);
-    \draw[rojo, thick] (0,3.2) -- (2.5,3.2);
-    \node at (1.2,1)  {\small $R_1$};
-    \node at (1.2,2.6){\small $R_2$};
-    \node at (1.2,3.6){\small $R_3$};
-    \node at (3.3,2)  {\small $R_4$};
-    \node[below, font=\footnotesize] at (2,-.4) {Partición del espacio};
-  \end{scope}
-  % Árbol correspondiente
-  \begin{scope}[xshift=1cm]
-    \tikzset{nodo/.style={rectangle,rounded corners,draw=azul,fill=azul!10,
-                          minimum width=2cm, minimum height=0.7cm, font=\footnotesize}}
-    \tikzset{hoja/.style={rectangle,draw=verde,fill=verde!10,
-                          minimum width=1.4cm, minimum height=0.7cm, font=\footnotesize}}
-    \node[nodo] (r) at (1.5,3.5) {$x_1 \leq 2.5$?};
-    \node[nodo] (l) at (0,2)     {$x_2 \leq 2$?};
-    \node[hoja] (r4) at (3,2)    {$R_4$};
-    \node[nodo] (ll) at (-0.8,0.5){$x_2\leq 3.2$?};
-    \node[hoja] (r1) at (0.8,0.5) {$R_1$};
-    \node[hoja] (r2) at (-1.6,-1) {$R_2$};
-    \node[hoja] (r3) at (0,-1)    {$R_3$};
-    \draw[-Stealth] (r) -- node[left,font=\tiny]{sí} (l);
-    \draw[-Stealth] (r) -- node[right,font=\tiny]{no} (r4);
-    \draw[-Stealth] (l) -- node[left,font=\tiny]{sí} (ll);
-    \draw[-Stealth] (l) -- node[right,font=\tiny]{no} (r1);
-    \draw[-Stealth] (ll) -- node[left,font=\tiny]{sí}  (r2);
-    \draw[-Stealth] (ll) -- node[right,font=\tiny]{no} (r3);
-  \end{scope}
-\end{tikzpicture}
-\caption{Un árbol divide recursivamente el espacio de features; cada hoja corresponde
-         a una región rectangular con predicción constante.}
+	\centering
+	\begin{tikzpicture}[scale=0.9]
+		% Partición 2D
+		\begin{scope}[xshift=-5cm]
+			\draw[->] (0,0) -- (4.2,0) node[right]{\small $x_1$};
+			\draw[->] (0,0) -- (0,4.2) node[above]{\small $x_2$};
+			\draw[azul, thick] (2.5,0) -- (2.5,4);
+			\draw[verde, thick] (0,2) -- (2.5,2);
+			\draw[rojo, thick] (0,3.2) -- (2.5,3.2);
+			\node at (1.2,1)  {\small $R_1$};
+			\node at (1.2,2.6){\small $R_2$};
+			\node at (1.2,3.6){\small $R_3$};
+			\node at (3.3,2)  {\small $R_4$};
+			\node[below, font=\footnotesize] at (2,-.4) {Partición del espacio};
+		\end{scope}
+		% Árbol correspondiente
+		\begin{scope}[xshift=1cm]
+			\tikzset{nodo/.style={rectangle,rounded corners,draw=azul,fill=azul!10,
+						minimum width=2cm, minimum height=0.7cm, font=\footnotesize}}
+			\tikzset{hoja/.style={rectangle,draw=verde,fill=verde!10,
+						minimum width=1.4cm, minimum height=0.7cm, font=\footnotesize}}
+			\node[nodo] (r) at (1.5,3.5) {$x_1 \leq 2.5$?};
+			\node[nodo] (l) at (0,2)     {$x_2 \leq 2$?};
+			\node[hoja] (r4) at (3,2)    {$R_4$};
+			\node[nodo] (ll) at (-0.8,0.5){$x_2\leq 3.2$?};
+			\node[hoja] (r1) at (0.8,0.5) {$R_1$};
+			\node[hoja] (r2) at (-1.6,-1) {$R_2$};
+			\node[hoja] (r3) at (0,-1)    {$R_3$};
+			\draw[-Stealth] (r) -- node[left,font=\tiny]{sí} (l);
+			\draw[-Stealth] (r) -- node[right,font=\tiny]{no} (r4);
+			\draw[-Stealth] (l) -- node[left,font=\tiny]{sí} (ll);
+			\draw[-Stealth] (l) -- node[right,font=\tiny]{no} (r1);
+			\draw[-Stealth] (ll) -- node[left,font=\tiny]{sí}  (r2);
+			\draw[-Stealth] (ll) -- node[right,font=\tiny]{no} (r3);
+		\end{scope}
+	\end{tikzpicture}
+	\caption{Un árbol divide recursivamente el espacio de features; cada hoja corresponde
+		a una región rectangular con predicción constante.}
 \end{figure}
 
 \subsection{Funciones de Impureza}
 
 Para \textbf{regresión}, se minimiza el MSE ponderado del nodo:
 \[
-  \text{MSE}_m = \frac{1}{N_m}\sum_{i \in m}(y_i - \bar{y}_m)^2
+	\text{MSE}_m = \frac{1}{N_m}\sum_{i \in m}(y_i - \bar{y}_m)^2
 \]
 
 Para \textbf{clasificación} se emplean:
 \begin{defbox}{Gini e Entropía}
-\[
-  \text{Gini}_m = 1 - \sum_{k=1}^{K} p_{mk}^2, \qquad
-  H_m = -\sum_{k=1}^{K} p_{mk}\log_2(p_{mk})
-\]
-donde $p_{mk}$ es la proporción de clase $k$ en el nodo $m$.
-Ambas valen 0 para nodos puros y alcanzan su máximo para distribuciones uniformes.
+	\[
+		\text{Gini}_m = 1 - \sum_{k=1}^{K} p_{mk}^2, \qquad
+		H_m = -\sum_{k=1}^{K} p_{mk}\log_2(p_{mk})
+	\]
+	donde $p_{mk}$ es la proporción de clase $k$ en el nodo $m$.
+	Ambas valen 0 para nodos puros y alcanzan su máximo para distribuciones uniformes.
 \end{defbox}
 
 \subsection{Criterio de División}
 
 Se elige el feature $j$ y umbral $t$ que minimizan la impureza ponderada de los hijos:
 \[
-  J(j, t) = \frac{N_{\text{izq}}}{N_m}\,I_{\text{izq}} + \frac{N_{\text{der}}}{N_m}\,I_{\text{der}}
+	J(j, t) = \frac{N_{\text{izq}}}{N_m}\,I_{\text{izq}} + \frac{N_{\text{der}}}{N_m}\,I_{\text{der}}
 \]
 
 \begin{algbox}{Algoritmo CART (greedy)}
-\begin{algorithmic}[1]
-  \For{cada feature $j$ y cada umbral $t$}
-    \State Calcular $J(j,t)$
-  \EndFor
-  \State Dividir con $(j^*, t^*) = \arg\min_{j,t} J(j,t)$
-  \State Repetir recursivamente en cada hijo hasta criterio de parada
-\end{algorithmic}
+	\begin{algorithmic}[1]
+		\For{cada feature $j$ y cada umbral $t$}
+		\State Calcular $J(j,t)$
+		\EndFor
+		\State Dividir con $(j^*, t^*) = \arg\min_{j,t} J(j,t)$
+		\State Repetir recursivamente en cada hijo hasta criterio de parada
+	\end{algorithmic}
 \end{algbox}
 
 \subsection{Regularización del Árbol}
 
 \begin{center}
-\begin{tabular}{lll}
-\toprule
-\textbf{Hiperparámetro} & \textbf{Efecto} & \textbf{Rango típico} \\
-\midrule
-\texttt{max\_depth} & Profundidad máxima & 3–10 \\
-\texttt{min\_samples\_split} & Mín. muestras para dividir & 2–20 \\
-\texttt{min\_samples\_leaf} & Mín. muestras por hoja & 1–10 \\
-\texttt{max\_features} & Features consideradas por split & $\sqrt{p}$, $\log_2 p$ \\
-\bottomrule
-\end{tabular}
+	\begin{tabular}{lll}
+		\toprule
+		\textbf{Hiperparámetro}      & \textbf{Efecto}                 & \textbf{Rango típico}  \\
+		\midrule
+		\texttt{max\_depth}          & Profundidad máxima              & 3–10                   \\
+		\texttt{min\_samples\_split} & Mín. muestras para dividir      & 2–20                   \\
+		\texttt{min\_samples\_leaf}  & Mín. muestras por hoja          & 1–10                   \\
+		\texttt{max\_features}       & Features consideradas por split & $\sqrt{p}$, $\log_2 p$ \\
+		\bottomrule
+	\end{tabular}
 \end{center}
 
 \subsection{Importancia de Features}
 
 \[
-  \text{Imp}(j) \propto \sum_{\text{splits en }j}
-  \frac{N_m}{N}\bigl(I_m - \tfrac{N_{\text{izq}}}{N_m}I_{\text{izq}}
-  - \tfrac{N_{\text{der}}}{N_m}I_{\text{der}}\bigr)
+	\text{Imp}(j) \propto \sum_{\text{splits en }j}
+	\frac{N_m}{N}\bigl(I_m - \tfrac{N_{\text{izq}}}{N_m}I_{\text{izq}}
+	- \tfrac{N_{\text{der}}}{N_m}I_{\text{der}}\bigr)
 \]
 Se pondera por la proporción de muestras que pasan por cada split y se normaliza para que
 sumen 1.
 
 \begin{notebox}
-  \textbf{Sesgo de importancia}: los árboles tienden a sobreestimar la importancia de
-  features con muchas categorías o alta cardinalidad. Para corregir esto se puede usar
-  importancia por permutación.
+	\textbf{Sesgo de importancia}: los árboles tienden a sobreestimar la importancia de
+	features con muchas categorías o alta cardinalidad. Para corregir esto se puede usar
+	importancia por permutación.
 \end{notebox}
 
 % =============================================================
@@ -470,8 +470,8 @@ sumen 1.
 \subsection{¿Qué es un Ensamble?}
 
 \begin{defbox}{Ensamble}
-  Combinar múltiples \textbf{modelos base} (learners) para producir una predicción
-  más robusta que cualquier modelo individual.
+	Combinar múltiples \textbf{modelos base} (learners) para producir una predicción
+	más robusta que cualquier modelo individual.
 \end{defbox}
 
 \subsection{Votación (Voting)}
@@ -483,63 +483,63 @@ sumen 1.
 Si $n$ clasificadores son independientes con exactitud $p > 0.5$ cada uno, la probabilidad
 de que la mayoría se equivoque decrece exponencialmente con $n$:
 \[
-  P(\text{error del ensamble}) = \sum_{k=\lceil n/2\rceil}^{n}\binom{n}{k}(1-p)^k p^{n-k}
+	P(\text{error del ensamble}) = \sum_{k=\lceil n/2\rceil}^{n}\binom{n}{k}(1-p)^k p^{n-k}
 \]
 
 \subsection{Varianza, Sesgo y Diversidad}
 
 Para modelos \emph{no correlacionados} con varianza $\sigma^2$:
 \[
-  \Var\!\left(\frac{1}{B}\sum_{b=1}^{B}\hat{f}_b\right)
-  = \frac{\sigma^2}{B} \xrightarrow{B\to\infty} 0
+	\Var\!\left(\frac{1}{B}\sum_{b=1}^{B}\hat{f}_b\right)
+	= \frac{\sigma^2}{B} \xrightarrow{B\to\infty} 0
 \]
 En la práctica los modelos están correlacionados ($\rho$):
 \[
-  \Var(\bar{f}) = \rho\,\sigma^2 + \frac{1-\rho}{B}\,\sigma^2
+	\Var(\bar{f}) = \rho\,\sigma^2 + \frac{1-\rho}{B}\,\sigma^2
 \]
 La clave es \textbf{reducir $\rho$}: modelos más diversos bajan más la varianza.
 
 \subsection{Bootstrap y Bagging}
 
 \begin{defbox}{Bootstrap}
-  Dado un conjunto de $n$ muestras, seleccionar \emph{con reemplazo} $n$ muestras
-  aleatoriamente. En promedio, el $\approx 63.2\%$ de las muestras originales aparece
-  al menos una vez; el $\approx 36.8\%$ queda fuera (\emph{Out-of-Bag}, OOB).
+	Dado un conjunto de $n$ muestras, seleccionar \emph{con reemplazo} $n$ muestras
+	aleatoriamente. En promedio, el $\approx 63.2\%$ de las muestras originales aparece
+	al menos una vez; el $\approx 36.8\%$ queda fuera (\emph{Out-of-Bag}, OOB).
 \end{defbox}
 
 \begin{algbox}{Bagging (Bootstrap Aggregating)}
-\begin{algorithmic}[1]
-  \For{$b = 1$ to $B$}
-    \State Generar muestra bootstrap $\mathcal{D}_b$ a partir de $\mathcal{D}$
-    \State Entrenar modelo $\hat{f}_b$ en $\mathcal{D}_b$
-  \EndFor
-  \State \Return $\hat{f}(x) = \frac{1}{B}\sum_b\hat{f}_b(x)$ (o voto mayoritario)
-\end{algorithmic}
+	\begin{algorithmic}[1]
+		\For{$b = 1$ to $B$}
+		\State Generar muestra bootstrap $\mathcal{D}_b$ a partir de $\mathcal{D}$
+		\State Entrenar modelo $\hat{f}_b$ en $\mathcal{D}_b$
+		\EndFor
+		\State \Return $\hat{f}(x) = \frac{1}{B}\sum_b\hat{f}_b(x)$ (o voto mayoritario)
+	\end{algorithmic}
 \end{algbox}
 
 \paragraph{Validación OOB:} cada muestra es OOB para $\approx 37\%$ de los modelos;
 se puede calcular un error de validación sin usar un conjunto separado.
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}[scale=0.75]
-  \tikzset{ds/.style={rectangle, rounded corners, draw=azul, fill=azul!10,
-                       text width=2cm, align=center, minimum height=0.9cm, font=\footnotesize}}
-  \tikzset{model/.style={rectangle, rounded corners, draw=verde, fill=verde!10,
-                          text width=1.6cm, align=center, minimum height=0.9cm, font=\footnotesize}}
-  \node[ds] (D) at (0,3) {Dataset $\mathcal{D}$};
-  \foreach \b/\x in {1/-4, 2/-1.3, 3/1.4, 4/4.1} {
-    \node[ds] (b\b) at (\x, 1.5) {Bootstrap $\mathcal{D}_\b$};
-    \node[model] (m\b) at (\x, 0) {Modelo $\hat{f}_\b$};
-    \draw[-Stealth, azul!50] (D) -- (b\b);
-    \draw[-Stealth, verde!50] (b\b) -- (m\b);
-  }
-  \node[rectangle, rounded corners, draw=rojo, fill=rojo!10,
-        text width=3cm, align=center, minimum height=0.9cm, font=\footnotesize\bfseries]
-       (agg) at (0,-1.5) {Agregación};
-  \foreach \b in {1,...,4} \draw[-Stealth, rojo!50] (m\b) -- (agg);
-\end{tikzpicture}
-\caption{Esquema de Bagging: $B$ modelos entrenados en paralelo sobre muestras bootstrap.}
+	\centering
+	\begin{tikzpicture}[scale=0.75]
+		\tikzset{ds/.style={rectangle, rounded corners, draw=azul, fill=azul!10,
+					text width=2cm, align=center, minimum height=0.9cm, font=\footnotesize}}
+		\tikzset{model/.style={rectangle, rounded corners, draw=verde, fill=verde!10,
+					text width=1.6cm, align=center, minimum height=0.9cm, font=\footnotesize}}
+		\node[ds] (D) at (0,3) {Dataset $\mathcal{D}$};
+		\foreach \b/\x in {1/-4, 2/-1.3, 3/1.4, 4/4.1} {
+				\node[ds] (b\b) at (\x, 1.5) {Bootstrap $\mathcal{D}_\b$};
+				\node[model] (m\b) at (\x, 0) {Modelo $\hat{f}_\b$};
+				\draw[-Stealth, azul!50] (D) -- (b\b);
+				\draw[-Stealth, verde!50] (b\b) -- (m\b);
+			}
+		\node[rectangle, rounded corners, draw=rojo, fill=rojo!10,
+			text width=3cm, align=center, minimum height=0.9cm, font=\footnotesize\bfseries]
+		(agg) at (0,-1.5) {Agregación};
+		\foreach \b in {1,...,4} \draw[-Stealth, rojo!50] (m\b) -- (agg);
+	\end{tikzpicture}
+	\caption{Esquema de Bagging: $B$ modelos entrenados en paralelo sobre muestras bootstrap.}
 \end{figure}
 
 % =============================================================
@@ -549,40 +549,40 @@ se puede calcular un error de validación sin usar un conjunto separado.
 \subsection{Random Forest}
 
 \begin{defbox}{Random Forest}
-  Bagging aplicado a árboles de decisión con una fuente adicional de aleatoriedad:
-  en cada split solo se evalúan $m$ features seleccionados al azar
-  (típicamente $m = \sqrt{p}$ para clasificación, $m = p/3$ para regresión).
+	Bagging aplicado a árboles de decisión con una fuente adicional de aleatoriedad:
+	en cada split solo se evalúan $m$ features seleccionados al azar
+	(típicamente $m = \sqrt{p}$ para clasificación, $m = p/3$ para regresión).
 \end{defbox}
 
 \paragraph{Efecto:} reduce la correlación entre los árboles $\Rightarrow$ mayor reducción
 de varianza del ensamble.
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-  width=9cm, height=5.5cm,
-  xlabel={Número de árboles $B$},
-  ylabel={Error OOB},
-  xmin=1, xmax=200, ymin=0, ymax=0.35,
-  grid=both, grid style={gray!15},
-  title={Error OOB vs Número de Árboles}
-]
-  \addplot[azul, thick, smooth] table[row sep=\\] {
-    x y\\
-    1 0.32\\ 5 0.22\\ 10 0.17\\ 20 0.14\\ 30 0.125\\
-    50 0.11\\ 80 0.102\\ 120 0.098\\ 180 0.095\\ 200 0.094\\
-  };
-  \addplot[rojo, dashed, thick, smooth] table[row sep=\\] {
-    x y\\
-    1 0.28\\ 5 0.18\\ 10 0.14\\ 20 0.11\\ 30 0.1\\
-    50 0.09\\ 80 0.085\\ 120 0.082\\ 180 0.08\\ 200 0.079\\
-  };
-  \addlegendentry{Árbol simple (bagging)}
-  \addlegendentry{Random Forest}
-\end{axis}
-\end{tikzpicture}
-\caption{El error estabiliza después de cierto número de árboles (retornos decrecientes).}
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				width=9cm, height=5.5cm,
+				xlabel={Número de árboles $B$},
+				ylabel={Error OOB},
+				xmin=1, xmax=200, ymin=0, ymax=0.35,
+				grid=both, grid style={gray!15},
+				title={Error OOB vs Número de Árboles}
+			]
+			\addplot[azul, thick, smooth] table[row sep=\\] {
+					x y\\
+					1 0.32\\ 5 0.22\\ 10 0.17\\ 20 0.14\\ 30 0.125\\
+					50 0.11\\ 80 0.102\\ 120 0.098\\ 180 0.095\\ 200 0.094\\
+				};
+			\addplot[rojo, dashed, thick, smooth] table[row sep=\\] {
+					x y\\
+					1 0.28\\ 5 0.18\\ 10 0.14\\ 20 0.11\\ 30 0.1\\
+					50 0.09\\ 80 0.085\\ 120 0.082\\ 180 0.08\\ 200 0.079\\
+				};
+			\addlegendentry{Árbol simple (bagging)}
+			\addlegendentry{Random Forest}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{El error estabiliza después de cierto número de árboles (retornos decrecientes).}
 \end{figure}
 
 \subsection{Dependencia Parcial (PDP)}
@@ -590,7 +590,7 @@ de varianza del ensamble.
 La \textbf{función de dependencia parcial} mide el efecto marginal promedio del feature
 $x_s$ sobre la predicción, promediando sobre todos los demás features:
 \[
-  \hat{f}_s(x_s) = \frac{1}{n}\sum_{i=1}^{n}\hat{f}(x_s,\, \mathbf{x}_{-s}^{(i)})
+	\hat{f}_s(x_s) = \frac{1}{n}\sum_{i=1}^{n}\hat{f}(x_s,\, \mathbf{x}_{-s}^{(i)})
 \]
 
 \subsection{Individual Conditional Expectation (ICE)}
@@ -599,25 +599,25 @@ Similar al PDP pero se grafica una curva por muestra (sin promediar).
 La media de todas las curvas ICE coincide con el PDP.
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-  width=9cm, height=5cm,
-  xlabel={Valor de feature $x_s$},
-  ylabel={Predicción},
-  grid=both, grid style={gray!15},
-  title={ICE (gris) y PDP (azul grueso)}
-]
-  % Curvas ICE (simuladas)
-  \foreach \offset in {-0.3,-0.15,0,0.15,0.3}{
-    \addplot[gray!50, thin] expression[domain=0:5, samples=30]
-      {0.5*x + \offset*sin(deg(x*3)) + \offset + 1};
-  }
-  % PDP
-  \addplot[azul, very thick] expression[domain=0:5, samples=50] {0.5*x + 1};
-\end{axis}
-\end{tikzpicture}
-\caption{Las curvas ICE revelan heterogeneidad en el efecto del feature.}
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				width=9cm, height=5cm,
+				xlabel={Valor de feature $x_s$},
+				ylabel={Predicción},
+				grid=both, grid style={gray!15},
+				title={ICE (gris) y PDP (azul grueso)}
+			]
+			% Curvas ICE (simuladas)
+			\foreach \offset in {-0.3,-0.15,0,0.15,0.3}{
+					\addplot[gray!50, thin] expression[domain=0:5, samples=30]
+						{0.5*x + \offset*sin(deg(x*3)) + \offset + 1};
+				}
+			% PDP
+			\addplot[azul, very thick] expression[domain=0:5, samples=50] {0.5*x + 1};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Las curvas ICE revelan heterogeneidad en el efecto del feature.}
 \end{figure}
 
 % =============================================================
@@ -627,49 +627,49 @@ La media de todas las curvas ICE coincide con el PDP.
 \subsection{Filosofía del Boosting}
 
 \begin{defbox}{Boosting}
-  Construir un modelo fuerte a partir de \textbf{learners débiles} entrenados
-  \emph{secuencialmente}: cada modelo nuevo se concentra en los errores cometidos
-  por el ensamble anterior.
+	Construir un modelo fuerte a partir de \textbf{learners débiles} entrenados
+	\emph{secuencialmente}: cada modelo nuevo se concentra en los errores cometidos
+	por el ensamble anterior.
 \end{defbox}
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}[scale=0.8]
-  \tikzset{m/.style={circle, draw=azul, fill=azul!15, minimum size=1cm, font=\small}}
-  \tikzset{plus/.style={circle, draw=verde, fill=verde!15, minimum size=0.5cm, font=\small\bfseries}}
-  \node[m] (m1) at (0,0) {$h_1$};
-  \node[m] (m2) at (2.5,0) {$h_2$};
-  \node[m] (m3) at (5,0) {$h_3$};
-  \node at (7,0) {$\cdots$};
-  \node[m] (mM) at (9,0) {$h_M$};
-  \node[rectangle, draw=rojo, fill=rojo!10, minimum width=2.5cm, font=\small,
-        align=center] (F) at (4.5,-2) {$F(x) = \sum_m \alpha_m h_m(x)$};
-  \foreach \m in {m1,m2,m3,mM} \draw[-Stealth,rojo!60] (\m) -- (F);
-  \draw[-Stealth, dashed, naranja] (m1) -- node[above,font=\tiny]{residuos} (m2);
-  \draw[-Stealth, dashed, naranja] (m2) -- node[above,font=\tiny]{residuos} (m3);
-  \draw[-Stealth, dashed, naranja] (m3) -- node[above,font=\tiny]{} (7,0);
-  \draw[-Stealth, dashed, naranja] (7,0) -- node[above,font=\tiny]{residuos} (mM);
-\end{tikzpicture}
-\caption{Esquema de Boosting: cada learner débil aprende de los errores del anterior.}
+	\centering
+	\begin{tikzpicture}[scale=0.8]
+		\tikzset{m/.style={circle, draw=azul, fill=azul!15, minimum size=1cm, font=\small}}
+		\tikzset{plus/.style={circle, draw=verde, fill=verde!15, minimum size=0.5cm, font=\small\bfseries}}
+		\node[m] (m1) at (0,0) {$h_1$};
+		\node[m] (m2) at (2.5,0) {$h_2$};
+		\node[m] (m3) at (5,0) {$h_3$};
+		\node at (7,0) {$\cdots$};
+		\node[m] (mM) at (9,0) {$h_M$};
+		\node[rectangle, draw=rojo, fill=rojo!10, minimum width=2.5cm, font=\small,
+			align=center] (F) at (4.5,-2) {$F(x) = \sum_m \alpha_m h_m(x)$};
+		\foreach \m in {m1,m2,m3,mM} \draw[-Stealth,rojo!60] (\m) -- (F);
+		\draw[-Stealth, dashed, naranja] (m1) -- node[above,font=\tiny]{residuos} (m2);
+		\draw[-Stealth, dashed, naranja] (m2) -- node[above,font=\tiny]{residuos} (m3);
+		\draw[-Stealth, dashed, naranja] (m3) -- node[above,font=\tiny]{} (7,0);
+		\draw[-Stealth, dashed, naranja] (7,0) -- node[above,font=\tiny]{residuos} (mM);
+	\end{tikzpicture}
+	\caption{Esquema de Boosting: cada learner débil aprende de los errores del anterior.}
 \end{figure}
 
 \subsection{AdaBoost}
 
 \begin{algbox}{AdaBoost (clasificación binaria)}
-\begin{algorithmic}[1]
-  \State Inicializar pesos: $w_i = 1/n$, $\forall i$
-  \For{$m = 1$ to $M$}
-    \State Entrenar clasificador $h_m$ con pesos $\{w_i\}$
-    \State Calcular error ponderado: $\varepsilon_m = \sum_{h_m(x_i)\neq y_i} w_i$
-    \State Calcular peso del modelo: $\alpha_m = \frac{1}{2}\ln\!\dfrac{1-\varepsilon_m}{\varepsilon_m}$
-    \State Actualizar pesos:
-    \[
-      w_i \leftarrow w_i \cdot \exp\!\bigl(-\alpha_m\, y_i\, h_m(x_i)\bigr)
-    \]
-    \State Renormalizar: $w_i \leftarrow w_i / \sum_j w_j$
-  \EndFor
-  \State \Return $H(x) = \sign\!\left(\sum_m \alpha_m h_m(x)\right)$
-\end{algorithmic}
+	\begin{algorithmic}[1]
+		\State Inicializar pesos: $w_i = 1/n$, $\forall i$
+		\For{$m = 1$ to $M$}
+		\State Entrenar clasificador $h_m$ con pesos $\{w_i\}$
+		\State Calcular error ponderado: $\varepsilon_m = \sum_{h_m(x_i)\neq y_i} w_i$
+		\State Calcular peso del modelo: $\alpha_m = \frac{1}{2}\ln\!\dfrac{1-\varepsilon_m}{\varepsilon_m}$
+		\State Actualizar pesos:
+		\[
+			w_i \leftarrow w_i \cdot \exp\!\bigl(-\alpha_m\, y_i\, h_m(x_i)\bigr)
+		\]
+		\State Renormalizar: $w_i \leftarrow w_i / \sum_j w_j$
+		\EndFor
+		\State \Return $H(x) = \sign\!\left(\sum_m \alpha_m h_m(x)\right)$
+	\end{algorithmic}
 \end{algbox}
 
 \paragraph{Intuición:} si $\varepsilon_m < 0.5$ entonces $\alpha_m > 0$; muestras mal
@@ -680,20 +680,20 @@ clasificadas reciben mayor peso en la siguiente iteración.
 \subsubsection{Algoritmo General}
 
 \begin{algbox}{Gradient Boosting (Friedman, 1999)}
-\begin{algorithmic}[1]
-  \State Inicializar: $F_0(x) = \arg\min_c \sum_i L(y_i, c)$
-  \For{$m = 1$ to $M$}
-    \State Calcular pseudo-residuos (gradiente negativo):
-    \[
-      r_{im} = -\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}\bigg|_{F=F_{m-1}}
-    \]
-    \State Entrenar árbol de regresión $h_m$ sobre $\{(x_i, r_{im})\}$
-    \State Determinar paso óptimo:
-    $\gamma_m = \arg\min_\gamma \sum_i L\bigl(y_i, F_{m-1}(x_i) + \gamma\, h_m(x_i)\bigr)$
-    \State Actualizar: $F_m(x) = F_{m-1}(x) + \eta\,\gamma_m\, h_m(x)$
-  \EndFor
-  \State \Return $F_M(x)$
-\end{algorithmic}
+	\begin{algorithmic}[1]
+		\State Inicializar: $F_0(x) = \arg\min_c \sum_i L(y_i, c)$
+		\For{$m = 1$ to $M$}
+		\State Calcular pseudo-residuos (gradiente negativo):
+		\[
+			r_{im} = -\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}\bigg|_{F=F_{m-1}}
+		\]
+		\State Entrenar árbol de regresión $h_m$ sobre $\{(x_i, r_{im})\}$
+		\State Determinar paso óptimo:
+		$\gamma_m = \arg\min_\gamma \sum_i L\bigl(y_i, F_{m-1}(x_i) + \gamma\, h_m(x_i)\bigr)$
+		\State Actualizar: $F_m(x) = F_{m-1}(x) + \eta\,\gamma_m\, h_m(x)$
+		\EndFor
+		\State \Return $F_M(x)$
+	\end{algorithmic}
 \end{algbox}
 
 donde $\eta \in (0,1]$ es la \textbf{tasa de aprendizaje} (shrinkage).
@@ -704,48 +704,48 @@ El gradient boosting es equivalente al \emph{descenso de gradiente en el espacio
 cada árbol aproxima el gradiente negativo de la pérdida respecto de la predicción actual.
 
 \begin{center}
-\begin{tabular}{ll}
-\toprule
-\textbf{Función de pérdida} $L(y, F)$ & \textbf{Pseudo-residuo} $r$ \\
-\midrule
-$\tfrac{1}{2}(y-F)^2$ (regresión) & $y - F$ \\
-$\log(1+e^{-2yF})$ (clasificación) & $\dfrac{2y}{1+e^{2yF}}$ \\
-$|y-F|$ (MAE) & $\sign(y-F)$ \\
-\bottomrule
-\end{tabular}
+	\begin{tabular}{ll}
+		\toprule
+		\textbf{Función de pérdida} $L(y, F)$ & \textbf{Pseudo-residuo} $r$ \\
+		\midrule
+		$\tfrac{1}{2}(y-F)^2$ (regresión)     & $y - F$                     \\
+		$\log(1+e^{-2yF})$ (clasificación)    & $\dfrac{2y}{1+e^{2yF}}$     \\
+		$|y-F|$ (MAE)                         & $\sign(y-F)$                \\
+		\bottomrule
+	\end{tabular}
 \end{center}
 
 \subsubsection{Parámetros Clave}
 
 \begin{center}
-\begin{tabular}{lll}
-\toprule
-\textbf{Parámetro} & \textbf{Efecto} & \textbf{Rango típico} \\
-\midrule
-$M$ (n\_estimators) & Número de árboles & 100–3000 \\
-$\eta$ (learning\_rate) & Tamaño del paso; menor = más robusto & 0.01–0.3 \\
-\texttt{max\_depth} & Complejidad de cada árbol & 3–8 \\
-\texttt{subsample} & Fracción de filas por árbol & 0.5–1.0 \\
-\texttt{colsample\_bytree} & Fracción de columnas por árbol & 0.5–1.0 \\
-\bottomrule
-\end{tabular}
+	\begin{tabular}{lll}
+		\toprule
+		\textbf{Parámetro}         & \textbf{Efecto}                      & \textbf{Rango típico} \\
+		\midrule
+		$M$ (n\_estimators)        & Número de árboles                    & 100–3000              \\
+		$\eta$ (learning\_rate)    & Tamaño del paso; menor = más robusto & 0.01–0.3              \\
+		\texttt{max\_depth}        & Complejidad de cada árbol            & 3–8                   \\
+		\texttt{subsample}         & Fracción de filas por árbol          & 0.5–1.0               \\
+		\texttt{colsample\_bytree} & Fracción de columnas por árbol       & 0.5–1.0               \\
+		\bottomrule
+	\end{tabular}
 \end{center}
 
 \begin{notebox}
-  \textbf{Trade-off}: $\eta$ pequeño requiere $M$ grande; combinados producen mayor
-  regularización implícita y mejor generalización, a costa de tiempo de entrenamiento.
+	\textbf{Trade-off}: $\eta$ pequeño requiere $M$ grande; combinados producen mayor
+	regularización implícita y mejor generalización, a costa de tiempo de entrenamiento.
 \end{notebox}
 
 \subsection{XGBoost: Objetivo Regularizado}
 
 XGBoost extiende gradient boosting con una función objetivo regularizada explícita:
 \[
-  \mathcal{L} = \underbrace{\sum_{i=1}^n L(y_i, \hat{y}_i)}_{\text{pérdida}} +
-  \underbrace{\sum_{k=1}^K \Omega(f_k)}_{\text{regularización}}
+	\mathcal{L} = \underbrace{\sum_{i=1}^n L(y_i, \hat{y}_i)}_{\text{pérdida}} +
+	\underbrace{\sum_{k=1}^K \Omega(f_k)}_{\text{regularización}}
 \]
 donde:
 \[
-  \Omega(f_k) = \gamma\, T_k + \frac{\lambda}{2}\sum_{j=1}^{T_k} w_j^2
+	\Omega(f_k) = \gamma\, T_k + \frac{\lambda}{2}\sum_{j=1}^{T_k} w_j^2
 \]
 $T_k$ = número de hojas, $w_j$ = valor en la hoja $j$, $\gamma$ y $\lambda$ son
 hiperparámetros de regularización.
@@ -753,65 +753,65 @@ hiperparámetros de regularización.
 \subsubsection{Expansión de Taylor de Segundo Orden}
 Para optimizar eficientemente el objetivo:
 \[
-  \mathcal{L}^{(m)} \approx \sum_i \left[
-    g_i f_m(x_i) + \frac{1}{2} h_i f_m(x_i)^2
-  \right] + \Omega(f_m)
+	\mathcal{L}^{(m)} \approx \sum_i \left[
+		g_i f_m(x_i) + \frac{1}{2} h_i f_m(x_i)^2
+		\right] + \Omega(f_m)
 \]
 donde $g_i = \partial_{\hat{y}} L(y_i, \hat{y})$ y $h_i = \partial^2_{\hat{y}} L(y_i, \hat{y})$.
 
 El valor óptimo en cada hoja $j$ es:
 \[
-  w_j^* = -\frac{\sum_{i\in j} g_i}{\sum_{i\in j} h_i + \lambda}
+	w_j^* = -\frac{\sum_{i\in j} g_i}{\sum_{i\in j} h_i + \lambda}
 \]
 
 \subsection{LightGBM y CatBoost}
 
 \begin{center}
-\begin{tabular}{llll}
-\toprule
-& \textbf{XGBoost} & \textbf{LightGBM} & \textbf{CatBoost} \\
-\midrule
-Crecimiento árbol & Por nivel & Por hoja & Simétrico \\
-Velocidad & Moderada & Alta & Alta \\
-Memoria & Moderada & Baja & Moderada \\
-Features categóricas & Requiere encoding & Nativo & Nativo \\
-Regularización & Explícita & Implícita + explícita & Implícita \\
-\bottomrule
-\end{tabular}
+	\begin{tabular}{llll}
+		\toprule
+		                     & \textbf{XGBoost}  & \textbf{LightGBM}     & \textbf{CatBoost} \\
+		\midrule
+		Crecimiento árbol    & Por nivel         & Por hoja              & Simétrico         \\
+		Velocidad            & Moderada          & Alta                  & Alta              \\
+		Memoria              & Moderada          & Baja                  & Moderada          \\
+		Features categóricas & Requiere encoding & Nativo                & Nativo            \\
+		Regularización       & Explícita         & Implícita + explícita & Implícita         \\
+		\bottomrule
+	\end{tabular}
 \end{center}
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}[scale=0.9,
-  node/.style={circle, draw=azul!60, fill=azul!10, minimum size=0.7cm, font=\tiny},
-  leaf/.style={rectangle, draw=verde!60, fill=verde!10, minimum width=0.7cm,
-               minimum height=0.5cm, font=\tiny}
-]
-  % Crecimiento por nivel (XGBoost)
-  \begin{scope}[xshift=-4.5cm]
-    \node[node] (r) at (0,2.5) {};
-    \node[node] (l1) at (-1,1.5) {}; \node[node] (r1) at (1,1.5) {};
-    \node[leaf] (l2) at (-1.5,0.5) {}; \node[leaf] (r2) at (-0.5,0.5) {};
-    \node[leaf] (l3) at (0.5,0.5)  {}; \node[leaf] (r3) at (1.5,0.5)  {};
-    \draw[-Stealth,azul!40] (r)--(l1); \draw[-Stealth,azul!40] (r)--(r1);
-    \draw[-Stealth,azul!40] (l1)--(l2); \draw[-Stealth,azul!40] (l1)--(r2);
-    \draw[-Stealth,azul!40] (r1)--(l3); \draw[-Stealth,azul!40] (r1)--(r3);
-    \node[font=\footnotesize, below] at (0,-0.1) {Por nivel};
-  \end{scope}
-  % Crecimiento por hoja (LightGBM)
-  \begin{scope}[xshift=3cm]
-    \node[node] (r) at (0,2.5) {};
-    \node[node] (l1) at (-1,1.5) {}; \node[leaf] (r1) at (1,1.5) {};
-    \node[node] (l2) at (-1.5,0.5) {}; \node[leaf] (r2) at (-0.5,0.5) {};
-    \node[leaf] (l3) at (-2,-0.5) {}; \node[leaf] (r3) at (-1,-0.5) {};
-    \draw[-Stealth,verde!60] (r)--(l1); \draw[-Stealth,verde!60] (r)--(r1);
-    \draw[-Stealth,verde!60] (l1)--(l2); \draw[-Stealth,verde!60] (l1)--(r2);
-    \draw[-Stealth,verde!60] (l2)--(l3); \draw[-Stealth,verde!60] (l2)--(r3);
-    \node[font=\footnotesize, below] at (-0.5,-0.9) {Por hoja (leaf-wise)};
-  \end{scope}
-\end{tikzpicture}
-\caption{XGBoost expande el árbol nivel por nivel; LightGBM expande la hoja con mayor
-         reducción de pérdida (más eficiente pero potencialmente más overfit).}
+	\centering
+	\begin{tikzpicture}[scale=0.9,
+			node/.style={circle, draw=azul!60, fill=azul!10, minimum size=0.7cm, font=\tiny},
+			leaf/.style={rectangle, draw=verde!60, fill=verde!10, minimum width=0.7cm,
+					minimum height=0.5cm, font=\tiny}
+		]
+		% Crecimiento por nivel (XGBoost)
+		\begin{scope}[xshift=-4.5cm]
+			\node[node] (r) at (0,2.5) {};
+			\node[node] (l1) at (-1,1.5) {}; \node[node] (r1) at (1,1.5) {};
+			\node[leaf] (l2) at (-1.5,0.5) {}; \node[leaf] (r2) at (-0.5,0.5) {};
+			\node[leaf] (l3) at (0.5,0.5)  {}; \node[leaf] (r3) at (1.5,0.5)  {};
+			\draw[-Stealth,azul!40] (r)--(l1); \draw[-Stealth,azul!40] (r)--(r1);
+			\draw[-Stealth,azul!40] (l1)--(l2); \draw[-Stealth,azul!40] (l1)--(r2);
+			\draw[-Stealth,azul!40] (r1)--(l3); \draw[-Stealth,azul!40] (r1)--(r3);
+			\node[font=\footnotesize, below] at (0,-0.1) {Por nivel};
+		\end{scope}
+		% Crecimiento por hoja (LightGBM)
+		\begin{scope}[xshift=3cm]
+			\node[node] (r) at (0,2.5) {};
+			\node[node] (l1) at (-1,1.5) {}; \node[leaf] (r1) at (1,1.5) {};
+			\node[node] (l2) at (-1.5,0.5) {}; \node[leaf] (r2) at (-0.5,0.5) {};
+			\node[leaf] (l3) at (-2,-0.5) {}; \node[leaf] (r3) at (-1,-0.5) {};
+			\draw[-Stealth,verde!60] (r)--(l1); \draw[-Stealth,verde!60] (r)--(r1);
+			\draw[-Stealth,verde!60] (l1)--(l2); \draw[-Stealth,verde!60] (l1)--(r2);
+			\draw[-Stealth,verde!60] (l2)--(l3); \draw[-Stealth,verde!60] (l2)--(r3);
+			\node[font=\footnotesize, below] at (-0.5,-0.9) {Por hoja (leaf-wise)};
+		\end{scope}
+	\end{tikzpicture}
+	\caption{XGBoost expande el árbol nivel por nivel; LightGBM expande la hoja con mayor
+		reducción de pérdida (más eficiente pero potencialmente más overfit).}
 \end{figure}
 
 % =============================================================
@@ -821,10 +821,10 @@ Regularización & Explícita & Implícita + explícita & Implícita \\
 \subsection{Motivación: La Maldición de la Dimensionalidad}
 
 \begin{notebox}
-  En espacios de alta dimensión el volumen crece exponencialmente: los puntos se vuelven
-  \emph{equidistantes} y los algoritmos basados en distancia (kNN, SVM radial, etc.)
-  pierden efectividad. Además, visualizar y comprender datos con miles de features es
-  prácticamente imposible.
+	En espacios de alta dimensión el volumen crece exponencialmente: los puntos se vuelven
+	\emph{equidistantes} y los algoritmos basados en distancia (kNN, SVM radial, etc.)
+	pierden efectividad. Además, visualizar y comprender datos con miles de features es
+	prácticamente imposible.
 \end{notebox}
 
 \subsection{Análisis de Componentes Principales (PCA)}
@@ -838,18 +838,18 @@ con columnas de $\mathbf{W}$ ortonormales.
 
 \paragraph{Varianza} de la variable $j$:
 \[
-  \sigma_j^2 = \frac{1}{n-1}\sum_{i=1}^n (x_{ij} - \mu_j)^2
+	\sigma_j^2 = \frac{1}{n-1}\sum_{i=1}^n (x_{ij} - \mu_j)^2
 \]
 
 \paragraph{Covarianza} entre variables $j$ y $k$:
 \[
-  \sigma_{jk} = \frac{1}{n-1}\sum_{i=1}^n (x_{ij}-\mu_j)(x_{ik}-\mu_k)
+	\sigma_{jk} = \frac{1}{n-1}\sum_{i=1}^n (x_{ij}-\mu_j)(x_{ik}-\mu_k)
 \]
 
 \paragraph{Matriz de covarianza}:
 \[
-  \mathbf{M}_x = \frac{1}{n-1}\mathbf{X}^\top\mathbf{X}
-  \quad\in\R^{p\times p} \quad (\mathbf{X} \text{ centrada})
+	\mathbf{M}_x = \frac{1}{n-1}\mathbf{X}^\top\mathbf{X}
+	\quad\in\R^{p\times p} \quad (\mathbf{X} \text{ centrada})
 \]
 $\mathbf{M}_x$ es simétrica semi-definida positiva; su diagonal contiene las varianzas
 y sus fuera de la diagonal las covarianzas.
@@ -858,91 +858,91 @@ y sus fuera de la diagonal las covarianzas.
 
 La descomposición espectral de $\mathbf{M}_x$:
 \[
-  \mathbf{M}_x = \mathbf{P}\mathbf{D}\mathbf{P}^\top
+	\mathbf{M}_x = \mathbf{P}\mathbf{D}\mathbf{P}^\top
 \]
 donde $\mathbf{P}$ es ortogonal (autovectores en columnas) y
 $\mathbf{D} = \text{diag}(\lambda_1, \ldots, \lambda_p)$ con $\lambda_1 \geq \cdots \geq \lambda_p \geq 0$.
 
 \begin{defbox}{Interpretación geométrica}
-  \begin{itemize}
-    \item Cada autovector $\mathbf{v}_j$ es una \textbf{dirección} en el espacio de features.
-    \item El autovalor $\lambda_j$ es la \textbf{varianza} explicada en esa dirección.
-    \item La primera CP ($\mathbf{v}_1$) apunta hacia la dirección de máxima varianza;
-          la segunda es perpendicular a la primera y tiene la segunda mayor varianza; etc.
-  \end{itemize}
+	\begin{itemize}
+		\item Cada autovector $\mathbf{v}_j$ es una \textbf{dirección} en el espacio de features.
+		\item El autovalor $\lambda_j$ es la \textbf{varianza} explicada en esa dirección.
+		\item La primera CP ($\mathbf{v}_1$) apunta hacia la dirección de máxima varianza;
+		      la segunda es perpendicular a la primera y tiene la segunda mayor varianza; etc.
+	\end{itemize}
 \end{defbox}
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}
-  % Nube de puntos elíptica
-  \draw[->] (-3,0) -- (3,0) node[right]{$x_1$};
-  \draw[->] (0,-2) -- (0,2) node[above]{$x_2$};
-  % Puntos
-  \foreach \x/\y in {
-    -2.0/-0.2, -1.8/0.1, -1.5/-0.3, -1.2/0.2,
-    -0.8/-0.1, -0.3/0.3, 0/0, 0.4/-0.2,
-    0.8/0.2, 1.2/0.1, 1.6/-0.1, 2.0/0.2}
-    \fill[azul!60] ({0.7*\x-0.3*\y},{0.3*\x+0.7*\y}) circle (1.5pt);
-  % PC1
-  \draw[-Stealth, rojo, very thick] (0,0) --
-    node[above right, font=\footnotesize]{PC1} (2.0,0.86);
-  % PC2
-  \draw[-Stealth, verde, very thick] (0,0) --
-    node[above left, font=\footnotesize]{PC2} (-0.43,1.0);
-\end{tikzpicture}
-\caption{Las componentes principales son los ejes de la elipse de la nube de puntos.
-         PC1 apunta a la dirección de mayor dispersión.}
+	\centering
+	\begin{tikzpicture}
+		% Nube de puntos elíptica
+		\draw[->] (-3,0) -- (3,0) node[right]{$x_1$};
+		\draw[->] (0,-2) -- (0,2) node[above]{$x_2$};
+		% Puntos
+		\foreach \x/\y in {
+				-2.0/-0.2, -1.8/0.1, -1.5/-0.3, -1.2/0.2,
+				-0.8/-0.1, -0.3/0.3, 0/0, 0.4/-0.2,
+				0.8/0.2, 1.2/0.1, 1.6/-0.1, 2.0/0.2}
+		\fill[azul!60] ({0.7*\x-0.3*\y},{0.3*\x+0.7*\y}) circle (1.5pt);
+		% PC1
+		\draw[-Stealth, rojo, very thick] (0,0) --
+		node[above right, font=\footnotesize]{PC1} (2.0,0.86);
+		% PC2
+		\draw[-Stealth, verde, very thick] (0,0) --
+		node[above left, font=\footnotesize]{PC2} (-0.43,1.0);
+	\end{tikzpicture}
+	\caption{Las componentes principales son los ejes de la elipse de la nube de puntos.
+		PC1 apunta a la dirección de mayor dispersión.}
 \end{figure}
 
 \subsubsection{Algoritmo PCA}
 
 \begin{algbox}{PCA Paso a Paso}
-\begin{algorithmic}[1]
-  \State Estandarizar cada feature: $x_{ij} \leftarrow (x_{ij} - \mu_j)/\sigma_j$
-  \State Calcular $\mathbf{M}_x = \frac{1}{n-1}\mathbf{X}^\top\mathbf{X}$
-  \State Descomponer: $\mathbf{M}_x \mathbf{v}_j = \lambda_j \mathbf{v}_j$
-  \State Ordenar autovectores por autovalor descendente
-  \State Seleccionar los primeros $k$ autovectores: $\mathbf{P}_k \in \R^{p\times k}$
-  \State Proyectar datos: $\mathbf{Z} = \mathbf{X}\,\mathbf{P}_k \in \R^{n\times k}$
-\end{algorithmic}
+	\begin{algorithmic}[1]
+		\State Estandarizar cada feature: $x_{ij} \leftarrow (x_{ij} - \mu_j)/\sigma_j$
+		\State Calcular $\mathbf{M}_x = \frac{1}{n-1}\mathbf{X}^\top\mathbf{X}$
+		\State Descomponer: $\mathbf{M}_x \mathbf{v}_j = \lambda_j \mathbf{v}_j$
+		\State Ordenar autovectores por autovalor descendente
+		\State Seleccionar los primeros $k$ autovectores: $\mathbf{P}_k \in \R^{p\times k}$
+		\State Proyectar datos: $\mathbf{Z} = \mathbf{X}\,\mathbf{P}_k \in \R^{n\times k}$
+	\end{algorithmic}
 \end{algbox}
 
 \subsubsection{Varianza Explicada}
 
 \[
-  \text{Varianza explicada por CP}_j = \frac{\lambda_j}{\sum_{l=1}^p \lambda_l}
+	\text{Varianza explicada por CP}_j = \frac{\lambda_j}{\sum_{l=1}^p \lambda_l}
 \]
 \[
-  \text{Varianza acumulada por primeras } k \text{ CPs} = \frac{\sum_{j=1}^k \lambda_j}{\sum_{l=1}^p \lambda_l}
+	\text{Varianza acumulada por primeras } k \text{ CPs} = \frac{\sum_{j=1}^k \lambda_j}{\sum_{l=1}^p \lambda_l}
 \]
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-  width=9cm, height=5cm,
-  xlabel={Componente Principal},
-  ylabel={\%},
-  ymin=0, ymax=105,
-  xtick={1,...,8},
-  bar width=0.5cm,
-  ymajorgrids, grid style={gray!20},
-  title={Varianza Explicada (Scree Plot)},
-  legend pos=outer north east
-]
-  \addplot[ybar, fill=azul!50, draw=azul] coordinates {
-    (1,40)(2,25)(3,15)(4,9)(5,5)(6,3)(7,2)(8,1)
-  };
-  \addplot[rojo, thick, mark=*] coordinates {
-    (1,40)(2,65)(3,80)(4,89)(5,94)(6,97)(7,99)(8,100)
-  };
-  \addlegendentry{Var. exp. individual}
-  \addlegendentry{Var. acumulada}
-\end{axis}
-\end{tikzpicture}
-\caption{Scree plot: se elige $k$ donde la curva acumulada supera el umbral deseado
-         (usualmente 85–95\%).}
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				width=9cm, height=5cm,
+				xlabel={Componente Principal},
+				ylabel={\%},
+				ymin=0, ymax=105,
+				xtick={1,...,8},
+				bar width=0.5cm,
+				ymajorgrids, grid style={gray!20},
+				title={Varianza Explicada (Scree Plot)},
+				legend pos=outer north east
+			]
+			\addplot[ybar, fill=azul!50, draw=azul] coordinates {
+					(1,40)(2,25)(3,15)(4,9)(5,5)(6,3)(7,2)(8,1)
+				};
+			\addplot[rojo, thick, mark=*] coordinates {
+					(1,40)(2,65)(3,80)(4,89)(5,94)(6,97)(7,99)(8,100)
+				};
+			\addlegendentry{Var. exp. individual}
+			\addlegendentry{Var. acumulada}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Scree plot: se elige $k$ donde la curva acumulada supera el umbral deseado
+		(usualmente 85–95\%).}
 \end{figure}
 
 \subsection{Métodos No Lineales de Reducción de Dimensionalidad}
@@ -951,48 +951,48 @@ PCA asume relaciones \textbf{lineales}; cuando los datos yacen en una variedad
 no lineal, se necesitan métodos más flexibles.
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}
-  \tikzset{box/.style={rectangle, rounded corners, draw=azul!60, fill=azul!8,
-           text width=3cm, align=center, minimum height=1.2cm, font=\footnotesize}}
-  \node[box] (pca) at (0,0)    {PCA\\{\tiny lineal, rápido, interpretable}};
-  \node[box] (tsne) at (4.5,0) {t-SNE\\{\tiny no lineal, local, lento, sin proyección nueva}};
-  \node[box] (umap) at (9,0)   {UMAP\\{\tiny no lineal, local+global, rápido, proyecta nuevas muestras}};
-  \draw[Stealth-, gray!60, thick] (pca.east) -- (tsne.west)
-    node[midway, above, font=\tiny]{complejidad};
-  \draw[Stealth-, gray!60, thick] (tsne.east) -- (umap.west);
-\end{tikzpicture}
+	\centering
+	\begin{tikzpicture}
+		\tikzset{box/.style={rectangle, rounded corners, draw=azul!60, fill=azul!8,
+					text width=3cm, align=center, minimum height=1.2cm, font=\footnotesize}}
+		\node[box] (pca) at (0,0)    {PCA\\{\tiny lineal, rápido, interpretable}};
+		\node[box] (tsne) at (4.5,0) {t-SNE\\{\tiny no lineal, local, lento, sin proyección nueva}};
+		\node[box] (umap) at (9,0)   {UMAP\\{\tiny no lineal, local+global, rápido, proyecta nuevas muestras}};
+		\draw[Stealth-, gray!60, thick] (pca.east) -- (tsne.west)
+		node[midway, above, font=\tiny]{complejidad};
+		\draw[Stealth-, gray!60, thick] (tsne.east) -- (umap.west);
+	\end{tikzpicture}
 \end{figure}
 
 \subsubsection{t-SNE}
 \begin{itemize}
-  \item Convierte distancias euclídeas en probabilidades de similitud (distribución Gaussiana en alta dimensión, t-Student en baja).
-  \item Minimiza la divergencia KL entre distribuciones de alta y baja dimensión.
-  \item Preserva la estructura local (vecinos cercanos); puede distorsionar la global.
-  \item \textbf{No} es apto para proyectar nuevas muestras; sólo para visualización exploratoria.
+	\item Convierte distancias euclídeas en probabilidades de similitud (distribución Gaussiana en alta dimensión, t-Student en baja).
+	\item Minimiza la divergencia KL entre distribuciones de alta y baja dimensión.
+	\item Preserva la estructura local (vecinos cercanos); puede distorsionar la global.
+	\item \textbf{No} es apto para proyectar nuevas muestras; sólo para visualización exploratoria.
 \end{itemize}
 
 \subsubsection{UMAP}
 \begin{itemize}
-  \item Basado en teoría de topología algebraica (variedades Riemannianas).
-  \item Preserva estructura local \textbf{y} global mejor que t-SNE.
-  \item Mucho más rápido que t-SNE; puede proyectar nuevas muestras.
-  \item Útil tanto para visualización como preprocesamiento para ML.
+	\item Basado en teoría de topología algebraica (variedades Riemannianas).
+	\item Preserva estructura local \textbf{y} global mejor que t-SNE.
+	\item Mucho más rápido que t-SNE; puede proyectar nuevas muestras.
+	\item Útil tanto para visualización como preprocesamiento para ML.
 \end{itemize}
 
 \begin{center}
-\begin{tabular}{lcccc}
-\toprule
-& \textbf{PCA} & \textbf{t-SNE} & \textbf{UMAP} & \textbf{PaCMAP} \\
-\midrule
-Relaciones & Lineal & No lineal & No lineal & No lineal \\
-Estructura local & Media & Alta & Alta & Alta \\
-Estructura global & Alta & Baja & Media & Media-Alta \\
-Velocidad & Muy rápida & Lenta & Rápida & Rápida \\
-Proyecta nuevas muestras & Sí & No & Sí & No \\
-Interpretabilidad & Alta & Baja & Baja & Baja \\
-\bottomrule
-\end{tabular}
+	\begin{tabular}{lcccc}
+		\toprule
+		                         & \textbf{PCA} & \textbf{t-SNE} & \textbf{UMAP} & \textbf{PaCMAP} \\
+		\midrule
+		Relaciones               & Lineal       & No lineal      & No lineal     & No lineal       \\
+		Estructura local         & Media        & Alta           & Alta          & Alta            \\
+		Estructura global        & Alta         & Baja           & Media         & Media-Alta      \\
+		Velocidad                & Muy rápida   & Lenta          & Rápida        & Rápida          \\
+		Proyecta nuevas muestras & Sí           & No             & Sí            & No              \\
+		Interpretabilidad        & Alta         & Baja           & Baja          & Baja            \\
+		\bottomrule
+	\end{tabular}
 \end{center}
 
 % =============================================================
@@ -1000,9 +1000,9 @@ Interpretabilidad & Alta & Baja & Baja & Baja \\
 % =============================================================
 
 \begin{defbox}{Clustering}
-  Dado un conjunto de muestras \emph{sin etiquetas}, encontrar grupos (\emph{clusters})
-  tales que muestras dentro del mismo grupo sean similares entre sí y diferentes
-  de muestras de otros grupos.
+	Dado un conjunto de muestras \emph{sin etiquetas}, encontrar grupos (\emph{clusters})
+	tales que muestras dentro del mismo grupo sean similares entre sí y diferentes
+	de muestras de otros grupos.
 \end{defbox}
 
 La reducción de dimensionalidad es frecuentemente un paso previo al clustering:
@@ -1013,79 +1013,79 @@ se proyecta a 2D/3D con PCA/UMAP y se visualizan agrupamientos emergentes.
 % =============================================================
 
 \begin{center}
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Modelo} & \textbf{Sesgo} & \textbf{Varianza} & \textbf{Interpretable} & \textbf{No lineal} \\
-\midrule
-Regresión Lineal/Logística  & Alto & Bajo  & Muy alta & No \\
-Árbol de decisión (profundo)& Bajo & Alto  & Media & Sí \\
-Árbol de decisión (podado)  & Medio& Medio & Alta & Sí \\
-Bagging / RF                & Bajo & Bajo  & Baja & Sí \\
-Gradient Boosting           & Muy bajo & Bajo & Baja & Sí \\
-\bottomrule
-\end{tabular}
+	\begin{tabular}{lcccc}
+		\toprule
+		\textbf{Modelo}              & \textbf{Sesgo} & \textbf{Varianza} & \textbf{Interpretable} & \textbf{No lineal} \\
+		\midrule
+		Regresión Lineal/Logística   & Alto           & Bajo              & Muy alta               & No                 \\
+		Árbol de decisión (profundo) & Bajo           & Alto              & Media                  & Sí                 \\
+		Árbol de decisión (podado)   & Medio          & Medio             & Alta                   & Sí                 \\
+		Bagging / RF                 & Bajo           & Bajo              & Baja                   & Sí                 \\
+		Gradient Boosting            & Muy bajo       & Bajo              & Baja                   & Sí                 \\
+		\bottomrule
+	\end{tabular}
 \end{center}
 
 \subsection{Bias-Variance Trade-off}
 
 \[
-  \E\!\left[(y - \hat{f}(x))^2\right]
-  = \underbrace{\left(\E[\hat{f}(x)] - f(x)\right)^2}_{\text{Sesgo}^2}
-  + \underbrace{\E\!\left[\left(\hat{f}(x) - \E[\hat{f}(x)]\right)^2\right]}_{\text{Varianza}}
-  + \underbrace{\sigma^2_\varepsilon}_{\text{Ruido irreducible}}
+	\E\!\left[(y - \hat{f}(x))^2\right]
+	= \underbrace{\left(\E[\hat{f}(x)] - f(x)\right)^2}_{\text{Sesgo}^2}
+	+ \underbrace{\E\!\left[\left(\hat{f}(x) - \E[\hat{f}(x)]\right)^2\right]}_{\text{Varianza}}
+	+ \underbrace{\sigma^2_\varepsilon}_{\text{Ruido irreducible}}
 \]
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-  width=9cm, height=5.5cm,
-  xlabel={Complejidad del modelo},
-  ylabel={Error},
-  xmin=0, xmax=10, ymin=0, ymax=2,
-  grid=both, grid style={gray!15},
-  title={Bias-Variance Trade-off},
-  legend pos=north east
-]
-  \addplot[rojo, thick, domain=0.5:10, samples=80]
-    {3.5/(x+0.5) + 0.1};
-  \addlegendentry{Sesgo²}
-  \addplot[azul, thick, domain=0.5:10, samples=80]
-    {0.005*x^2.2 + 0.05};
-  \addlegendentry{Varianza}
-  \addplot[verde, very thick, domain=0.5:10, samples=80]
-    {3.5/(x+0.5) + 0.005*x^2.2 + 0.15};
-  \addlegendentry{Error total}
-  \draw[dashed, naranja, thick] (axis cs:5.5,0) -- (axis cs:5.5,2);
-  \node[naranja, font=\tiny] at (axis cs:7,1.8) {Complejidad óptima};
-\end{axis}
-\end{tikzpicture}
-\caption{El error total tiene un mínimo en la complejidad óptima del modelo.}
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				width=9cm, height=5.5cm,
+				xlabel={Complejidad del modelo},
+				ylabel={Error},
+				xmin=0, xmax=10, ymin=0, ymax=2,
+				grid=both, grid style={gray!15},
+				title={Bias-Variance Trade-off},
+				legend pos=north east
+			]
+			\addplot[rojo, thick, domain=0.5:10, samples=80]
+			{3.5/(x+0.5) + 0.1};
+			\addlegendentry{Sesgo²}
+			\addplot[azul, thick, domain=0.5:10, samples=80]
+			{0.005*x^2.2 + 0.05};
+			\addlegendentry{Varianza}
+			\addplot[verde, very thick, domain=0.5:10, samples=80]
+			{3.5/(x+0.5) + 0.005*x^2.2 + 0.15};
+			\addlegendentry{Error total}
+			\draw[dashed, naranja, thick] (axis cs:5.5,0) -- (axis cs:5.5,2);
+			\node[naranja, font=\tiny] at (axis cs:7,1.8) {Complejidad óptima};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{El error total tiene un mínimo en la complejidad óptima del modelo.}
 \end{figure}
 
 \subsection{Cuándo Usar Cada Modelo}
 
 \begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\toprule
-\textbf{Modelo} & \textbf{Cuándo usarlo} \\
-\midrule
-Reg. Lineal / Logística &
-  Cuando se requiere interpretabilidad, las relaciones son lineales
-  o los datos son escasos. \\
-Árbol de decisión &
-  Para exploración rápida, cuando la interpretabilidad es crítica, o
-  como base para ensambles. \\
-Random Forest &
-  Buen punto de partida robusto; menos sensible a hiperparámetros que GB. \\
-Gradient Boosting &
-  Cuando la performance predictiva es prioritaria; tabulares estructurados. \\
-PCA &
-  Preprocesamiento, visualización, eliminar correlaciones, ruido. \\
-UMAP / t-SNE &
-  Visualización exploratoria de datos de alta dimensión. \\
-\bottomrule
-\end{tabular}
+	\begin{tabular}{p{3.5cm}p{9cm}}
+		\toprule
+		\textbf{Modelo}         & \textbf{Cuándo usarlo}                          \\
+		\midrule
+		Reg. Lineal / Logística &
+		Cuando se requiere interpretabilidad, las relaciones son lineales
+		o los datos son escasos.                                                  \\
+		Árbol de decisión       &
+		Para exploración rápida, cuando la interpretabilidad es crítica, o
+		como base para ensambles.                                                 \\
+		Random Forest           &
+		Buen punto de partida robusto; menos sensible a hiperparámetros que GB.   \\
+		Gradient Boosting       &
+		Cuando la performance predictiva es prioritaria; tabulares estructurados. \\
+		PCA                     &
+		Preprocesamiento, visualización, eliminar correlaciones, ruido.           \\
+		UMAP / t-SNE            &
+		Visualización exploratoria de datos de alta dimensión.                    \\
+		\bottomrule
+	\end{tabular}
 \end{center}
 
 % =============================================================
@@ -1094,63 +1094,63 @@ UMAP / t-SNE &
 % =============================================================
 
 \begin{multicols}{2}
-\subsection*{Regresión Lineal}
-\[
-  \hat{\bm{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}
-\]
+	\subsection*{Regresión Lineal}
+	\[
+		\hat{\bm{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}
+	\]
 
-\subsection*{Logistic}
-\[
-  \hat{p} = \sigma(\bm{\beta}^\top\mathbf{x}) = \frac{1}{1+e^{-\bm{\beta}^\top\mathbf{x}}}
-\]
+	\subsection*{Logistic}
+	\[
+		\hat{p} = \sigma(\bm{\beta}^\top\mathbf{x}) = \frac{1}{1+e^{-\bm{\beta}^\top\mathbf{x}}}
+	\]
 
-\subsection*{Lasso}
-\[
-  \min_{\mathbf{w}}\; J(\mathbf{w}) + \lambda\|\mathbf{w}\|_1
-\]
+	\subsection*{Lasso}
+	\[
+		\min_{\mathbf{w}}\; J(\mathbf{w}) + \lambda\|\mathbf{w}\|_1
+	\]
 
-\subsection*{Ridge}
-\[
-  \min_{\mathbf{w}}\; J(\mathbf{w}) + \lambda\|\mathbf{w}\|_2^2
-\]
+	\subsection*{Ridge}
+	\[
+		\min_{\mathbf{w}}\; J(\mathbf{w}) + \lambda\|\mathbf{w}\|_2^2
+	\]
 
-\subsection*{Gini}
-\[
-  \text{Gini}_m = 1 - \sum_k p_{mk}^2
-\]
+	\subsection*{Gini}
+	\[
+		\text{Gini}_m = 1 - \sum_k p_{mk}^2
+	\]
 
-\subsection*{Entropía}
-\[
-  H_m = -\sum_k p_{mk}\log_2 p_{mk}
-\]
+	\subsection*{Entropía}
+	\[
+		H_m = -\sum_k p_{mk}\log_2 p_{mk}
+	\]
 
-\subsection*{AdaBoost peso modelo}
-\[
-  \alpha_m = \frac{1}{2}\ln\frac{1-\varepsilon_m}{\varepsilon_m}
-\]
+	\subsection*{AdaBoost peso modelo}
+	\[
+		\alpha_m = \frac{1}{2}\ln\frac{1-\varepsilon_m}{\varepsilon_m}
+	\]
 
-\subsection*{Gradient Boosting}
-\[
-  r_{im} = -\frac{\partial L(y_i, F_{m-1}(x_i))}{\partial F_{m-1}(x_i)}
-\]
+	\subsection*{Gradient Boosting}
+	\[
+		r_{im} = -\frac{\partial L(y_i, F_{m-1}(x_i))}{\partial F_{m-1}(x_i)}
+	\]
 
-\subsection*{PCA proyección}
-\[
-  \mathbf{Z} = \mathbf{X}\,\mathbf{P}_k
-\]
+	\subsection*{PCA proyección}
+	\[
+		\mathbf{Z} = \mathbf{X}\,\mathbf{P}_k
+	\]
 
-\subsection*{Varianza PCA}
-\[
-  \text{VE}_j = \frac{\lambda_j}{\sum_l \lambda_l}
-\]
+	\subsection*{Varianza PCA}
+	\[
+		\text{VE}_j = \frac{\lambda_j}{\sum_l \lambda_l}
+	\]
 
-\subsection*{Bias-Variance}
-\[
-  \E[(y-\hat{f})^2] = \text{Sesgo}^2 + \text{Var} + \sigma^2
-\]
+	\subsection*{Bias-Variance}
+	\[
+		\E[(y-\hat{f})^2] = \text{Sesgo}^2 + \text{Var} + \sigma^2
+	\]
 
-\subsection*{OOB estimate}
-Cada muestra es OOB para $\approx e^{-1} \approx 36.8\%$ de árboles.
+	\subsection*{OOB estimate}
+	Cada muestra es OOB para $\approx e^{-1} \approx 36.8\%$ de árboles.
 \end{multicols}
 
 \end{document}
