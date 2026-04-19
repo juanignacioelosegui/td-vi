@@ -1,0 +1,74 @@
+\documentclass[a4paper,12pt]{article} 
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{geometry, amsmath, amssymb}
+\geometry{margin=2.5cm}
+
+\usepackage{hyperref}
+\usepackage{microtype} 
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Guía de Ejercicios 3}
+\rhead{Tecnología Digital VI}
+\cfoot{\thepage}
+
+\title{\vspace{-2cm}\textbf{Guía de Ejercicios 3}\\[0.2cm]
+\large Tecnología Digital VI}
+\author{Juan Ignacio Elosegui}
+\date{Universidad Torcuato Di Tella \\ Abril 2026}
+
+\begin{document}
+\maketitle
+\section*{Reducción de la dimensionalidad}
+\subsection*{Ejercicio 1}
+\begin{itemize}
+	\item En supervisado se tiene $ (X,y) $, donde $X$ es el dataset con atributos e $y$ es el valor objetivo. En no supervisado se tiene únicamente $ (X) $, no hay variable objetivo.
+	\item En supervisado se busca aprender una función que cumpla $ f(X) \eqsim y $ para poder hacer predicciones, mientras que en no supervisado se busca aprender estructuras en los datos únicamente mirando $X$.
+	\item En supervisado se tienen varias métricas a mirar dado que se puede comparar con la variable objetivo. Esto es imposible en no supervisado: no hay ``ground truth'' para medir el error y las estructuras encontradas pueden ser buenas o malas dependiendo del dominio del problema, por eso se dice que es subjetiva.
+\end{itemize}
+\subsection*{Ejercicio 2}
+\noindent PCA tiene dos objetivos:
+\begin{enumerate}
+	\item \textbf{Maximizar la varianza explicada.} Cada componente principal es la dirección en el espacio de features que maximiza la varianza de los datos proyectados. La primera componente captura la mayor varianza posible, la segunda la mayor varianza restante, y así sucesivamente \dots
+	\item \textbf{Ortogonalidad entre sus componentes.} Las componentes principales son ortogonales entre sí, lo que implica que están descorrelacionadas. Esto es importante porque (1) elimina la redundancia entre sus variables originales, (2) cada nueva componente aporta información "nueva" respecto a las anteriores, y (3) permite que diagonalizar la matriz de covarianzas tenga sentido.
+\end{enumerate}
+\subsection*{Ejercicio 3}
+\noindent Los pasos a seguir son:
+\begin{enumerate}
+	\item \textbf{Centrar los datos.} Restar a cada variable su media, para que cada una tenga media cero.
+	\item \textbf{Calcular la matriz de covarianzas.} $\Sigma = \frac{1}{n-1} X^T X \in \mathbb{R}^{m \times m}$. En la diagonal están las varianzas de cada variable --- fuera de la diagonal, las covarianzas entre pares de variables.
+	\item \textbf{Diagonalizar la descomposición espectral.} $\Sigma = V \Lambda V^T$, donde $\Lambda = \mathrm{diag}(\lambda_1, \dots, \lambda_m)$ contiene los autovalores y las columnas de $V$ son los autovectores.
+	\item \textbf{Ordenar autovalores y autovectores de mayor a menor.} Cada autovector es una componente principal. El autovalor asociado representa la varianza que los datos tienen a lo largo de esa dirección.
+	\item \textbf{Elegir las primeras $k$ componentes.} Se elige $k \leq m$ según algún criterio: porcentaje de varianza acumulada $\frac{\sum_{i=1}^{k}\lambda_i}{\sum_{i=1}^{m}\lambda_i}$ (ej. 80\%), método del codo en el scree plot, o $k$ fijo por requerimientos del problema.
+	\item \textbf{Proyectar los datos al nuevo espacio.} $Z = X V_k \in \mathbb{R}^{n \times k}$, donde $V_k$ contiene las primeras $k$ columnas de $V$.
+\end{enumerate}
+\subsection*{Ejercicio 4}
+\noindent Las nuevas variables que PCA busca son precisamente aquellas que hacen que la matriz de covarianzas sea diagonal en la nueva base. Diagonalizar no es una técnica que ``se usa para'' hacer PCA --- es hacer PCA.
+\subsection*{Ejercicio 5}
+\noindent KNN se basa en calcular distancias entre el punto a predecir y los puntos del training set. Aplicar PCA antes tiene varias ventajas, todas relacionadas con la predicción: (1) velocidad de predicción, (2) mitigación de la ``maldición de la dimensionalidad'', (3) reducción de ruido, y (4) menor uso de memoria. \\
+\\
+\noindent PCA con Random Forest puede empeorar la métrica: (1) Random  Forest no sufre la maldición de la dimensionalidad de la misma manera, (2) PCA destruye la alineación con los ejes originales, porque las nuevas variables son combinaciones lineales de las originales; (3) PCA maximiza varianza, no poder de inferencia; y (4) se pierde la interpretabilidad que nos ofrecía Random Forest.
+\subsection*{Ejercicio 6}
+\noindent La limitación matemática fundamental de PCA es que es un método lineal: sólo puede encontrar combinaciones lineales de las variables originales. Si la estructura subyacente en los datos es no lineal, PCA no puede capturarla correctamente, ya que proyecta los datos sobre un subespacio lineal. \\
+\\
+\noindent Dos métodos alternativos diseñados para superar esta limitación son:
+\begin{enumerate}
+	\item \textbf{Kernel PCA.}
+	\item \textbf{t-SNE / UMAP.}
+\end{enumerate}
+\subsection*{Ejercicio 7}
+\noindent Cada nueva variable producida por PCA es una combinación lineal de todas las variables originales --- no corresponde a ninguna variable original individual sino a una dirección abstracta en el espacio de features. Esto impacta directamente en los métodos de interpretabilidad:
+\begin{itemize}
+	\item \textbf{Importancia de features (Random Forest, Linear Models).} Pierde su significado original: la importancia de una componente principal no se puede atribuir a ninguna variable concreta, ya que cada componente mezcla a todas.
+	\item \textbf{Coeficientes en modelos lineales.} Los coeficientes quedan en el espacio de componentes. Para interpretarlos en el espacio original habría que retrotransformar con $V_k$, lo que añade una capa de indirección que dificulta la lectura directa.
+	\item \textbf{SHAP values.} Se pueden calcular sobre las componentes, pero los valores resultantes explican contribuciones de combinaciones lineales, no de variables reales, perdiendo la interpretabilidad semántica.
+	\item \textbf{Árboles de decisión.} Los splits se hacen sobre componentes principales, que son direcciones abstractas en el espacio original. El árbol sigue siendo válido como modelo, pero cada nodo ya no dice ``si el ingreso es mayor a X'' sino ``si la combinación lineal de todas las variables es mayor a X''.
+\end{itemize}
+\noindent En general, PCA cede interpretabilidad a cambio de reducción de dimensionalidad. Es una decisión de diseño: si la interpretabilidad es crítica, conviene evitarlo o aplicarlo sólo como paso intermedio sin exponer las componentes al usuario final.
+\end{document}

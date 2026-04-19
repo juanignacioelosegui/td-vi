@@ -1,0 +1,364 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{top=2cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Tecnolog\'ia Digital VI --- 1er Semestre 2026}
+\lhead{Parcial --- Modelo 3}
+\rfoot{P\'agina \thepage}
+
+\definecolor{tdblue}{RGB}{0,74,135}
+\definecolor{lightgray}{RGB}{245,245,245}
+
+\newmdenv[linecolor=tdblue, linewidth=1.5pt, roundcorner=4pt, backgroundcolor=lightgray, innertopmargin=6pt, innerbottommargin=6pt]{infobox}
+
+\newcommand{\puntaje}[1]{\textbf{[#1 pts]}}
+
+\begin{document}
+
+%--- Encabezado ---
+\begin{center}
+  {\Large\bfseries Universidad Torcuato Di Tella}\\[4pt]
+  {\large Tecnolog\'ia Digital VI --- Parcial Modelo 3}\\[2pt]
+  {\normalsize 1er Semestre 2026}\\[8pt]
+\end{center}
+
+\begin{infobox}
+\textbf{Instrucciones:} El parcial tiene una duraci\'on de \textbf{90 minutos}. Est\'a prohibido el uso de computadoras o c\'odigo. S\'i se permite el uso de una hoja de f\'ormulas. Cada secci\'on indica el puntaje. Puntaje total: \textbf{100 puntos}.
+\end{infobox}
+
+\vspace{0.5cm}
+
+Nombre y apellido: \underline{\hspace{8cm}} \hfill Legajo: \underline{\hspace{3cm}}
+
+\vspace{0.8cm}
+
+%=============================================================
+\section*{Secci\'on 1: Verdadero o Falso \puntaje{24}}
+%=============================================================
+
+\noindent Indique \textbf{V} (Verdadero) o \textbf{F} (Falso) para cada afirmaci\'on. Si la afirmaci\'on es falsa, \textbf{justifique brevemente} por qu\'e (sin justificaci\'on no se otorga puntaje en los falsos).
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=18pt]
+
+\item \underline{\hspace{1cm}} SMOTE (\textit{Synthetic Minority Over-sampling Technique}) genera nuevas muestras de la clase minoritaria copiando exactamente observaciones existentes.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} En K-Means, la elecci\'on aleatoria de los centroides iniciales puede llevar a diferentes resultados en distintas ejecuciones del algoritmo con los mismos datos.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} La importancia de features basada en impureza en \'arboles tiende a sobreestimar la importancia de variables con muchas categor\'ias o alta cardinalidad, por lo que una alternativa m\'as confiable es la importancia por permutaci\'on.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} t-SNE preserva tanto la estructura local (vecinos cercanos) como la global (distancias entre grupos lejanos) de los datos, lo que lo hace ideal para visualizaci\'on e inferencia general.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} El RMSE (Root Mean Squared Error) penaliza m\'as los errores grandes que el MAE (Mean Absolute Error), ya que eleva al cuadrado las diferencias antes de promediarlas.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} Un modelo de Regresi\'on Log\'istica con combinaci\'on lineal $\beta^\top x = 0$ asigna una probabilidad de 0.5 a la muestra, coloc\'andola exactamente sobre el \textit{decision boundary}.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} En clustering jer\'arquico aglomerativo con \textit{Single Linkage}, la distancia entre dos grupos se define como la distancia \textbf{m\'axima} entre cualquier par de puntos pertenecientes a grupos distintos.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} Gradient Boosting puede interpretarse como un descenso de gradiente en el espacio funcional, donde cada \'arbol nuevo aproxima el gradiente negativo de la funci\'on de p\'erdida respecto a la predicci\'on actual.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\end{enumerate}
+
+\vspace{0.5cm}
+
+%=============================================================
+\section*{Secci\'on 2: M\'ultiple Choice \puntaje{24}}
+%=============================================================
+
+\noindent Marque con un c\'irculo la \textbf{\'unica} opci\'on correcta en cada pregunta.
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=20pt]
+
+\item ¿Cu\'al de las siguientes afirmaciones sobre el algoritmo K-Means es \textbf{incorrecta}?
+
+\begin{enumerate}[label=\alph*)]
+  \item K-Means requiere que el n\'umero de clusters $K$ sea especificado de antemano.
+  \item K-Means puede encontrar clusters de forma arbitraria (c\'irculos, espirales) porque no asume ninguna forma geom\'etrica particular.
+  \item K-Means es sensible a los valores at\'ipicos (\textit{outliers}) ya que los centroides son promedios.
+  \item En cada iteraci\'on, K-Means reasigna cada punto al centroide m\'as cercano y luego recalcula los centroides.
+\end{enumerate}
+
+\item ¿En qu\'e situaci\'on la m\'etrica RMSLE es m\'as apropiada que el RMSE?
+
+\begin{enumerate}[label=\alph*)]
+  \item Cuando la variable objetivo es binaria (0 o 1).
+  \item Cuando la variable objetivo abarca varios \'ordenes de magnitud y los errores relativos importan m\'as que los absolutos (por ejemplo, predecir ventas de productos muy baratos y muy caros en el mismo modelo).
+  \item Cuando el dataset tiene clases muy desbalanceadas.
+  \item Cuando se quiere penalizar m\'as los errores grandes que los peque\~nos.
+\end{enumerate}
+
+\item Un cliente de un banco fue rechazado para un cr\'edito. Cuando pide explicaci\'on, el banco responde ``el modelo lo rechaz\'o''. ¿Qu\'e principio de ML aplicado fue ignorado en este sistema?
+
+\begin{enumerate}[label=\alph*)]
+  \item El principio de regularizaci\'on, ya que el modelo deber\'ia haber sido penalizado con Lasso.
+  \item El principio de interpretabilidad y explicabilidad, fundamental en contextos de impacto en personas donde se debe poder justificar las decisiones autom\'aticas.
+  \item El principio de validaci\'on cruzada, ya que un simple holdout no es suficiente.
+  \item El principio de escalado, ya que los datos deber\'ian haberse normalizado antes del entrenamiento.
+\end{enumerate}
+
+\item ¿Cu\'al es la principal ventaja de DBSCAN frente a K-Means?
+
+\begin{enumerate}[label=\alph*)]
+  \item DBSCAN es siempre m\'as r\'apido que K-Means en datasets grandes.
+  \item DBSCAN puede encontrar clusters de forma arbitraria (no esf\'erica) y detectar autom\'aticamente puntos de ruido, sin necesidad de especificar el n\'umero de clusters de antemano.
+  \item DBSCAN requiere que se especifique el n\'umero de clusters $K$ como par\'ametro de entrada.
+  \item DBSCAN siempre produce mejores resultados que K-Means en problemas con clases balanceadas.
+\end{enumerate}
+
+\item ¿Qu\'e representa la \textbf{altura de las uniones} en un dendrograma de clustering jer\'arquico aglomerativo?
+
+\begin{enumerate}[label=\alph*)]
+  \item El n\'umero de muestras contenidas en cada cluster al momento de la uni\'on.
+  \item La distancia (o disimilitud) entre los dos grupos que se fusionan en ese paso; cuanto m\'as alta la uni\'on, m\'as diferentes eran los grupos al unirse.
+  \item El valor del \'indice de Gini del nodo padre al momento de la fusi\'on.
+  \item El n\'umero de iteraciones que le tom\'o al algoritmo converger hasta ese punto.
+\end{enumerate}
+
+\item En el contexto de Gradient Boosting, ¿qu\'e representa un valor de \textit{learning rate} ($\eta$) muy peque\~no (por ejemplo, $\eta = 0.01$)?
+
+\begin{enumerate}[label=\alph*)]
+  \item Que el modelo converge r\'apidamente con pocos \'arboles, sin riesgo de overfitting.
+  \item Que cada \'arbol nuevo contribuye muy poco a la predicci\'on final, requiriendo m\'as \'arboles para converger, pero generando mayor regularizaci\'on impl\'icita y mejor generalizaci\'on.
+  \item Que el modelo usa solo el 1\% de las muestras en cada iteraci\'on.
+  \item Que la tasa de aprendizaje y el n\'umero de \'arboles son independientes entre s\'i.
+\end{enumerate}
+
+\end{enumerate}
+
+\vspace{0.5cm}
+
+%=============================================================
+\section*{Secci\'on 3: Interpretaci\'on de Gr\'aficos \puntaje{20}}
+%=============================================================
+
+\subsection*{Ejercicio A: Curva ROC \puntaje{10}}
+
+Se entrenaron tres modelos para un problema de clasificaci\'on binaria (detecci\'on de enfermedad). El siguiente gr\'afico muestra sus curvas ROC.
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=9cm, height=8cm,
+  xlabel={FPR (Tasa de Falsos Positivos)},
+  ylabel={TPR (Tasa de Verdaderos Positivos)},
+  xmin=0, xmax=1,
+  ymin=0, ymax=1,
+  legend pos=south east,
+  grid=major,
+  grid style={line width=0.3pt, draw=gray!30},
+]
+% Diagonal (azar)
+\addplot[black, dashed, thin] coordinates {(0,0)(1,1)};
+\addlegendentry{Azar (AUC=0.5)}
+% Modelo A - muy bueno
+\addplot[blue, thick] coordinates {
+  (0,0)(0.02,0.55)(0.05,0.78)(0.10,0.88)(0.20,0.94)(0.40,0.97)(0.70,0.99)(1,1)
+};
+\addlegendentry{Modelo A (AUC=0.95)}
+% Modelo B - moderado
+\addplot[red, thick] coordinates {
+  (0,0)(0.05,0.30)(0.15,0.55)(0.30,0.70)(0.50,0.80)(0.75,0.88)(1,1)
+};
+\addlegendentry{Modelo B (AUC=0.74)}
+% Modelo C - malo
+\addplot[green!60!black, thick] coordinates {
+  (0,0)(0.10,0.12)(0.30,0.30)(0.50,0.51)(0.80,0.78)(1,1)
+};
+\addlegendentry{Modelo C (AUC=0.52)}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item ¿Cu\'al de los tres modelos elegiria y por qu\'e? ¿Qu\'e indica el AUC en t\'erminos pr\'acticos?
+
+  \vspace{2.5cm}
+
+  \item El Modelo C tiene AUC = 0.52. ¿Qu\'e nos dice esto sobre su rendimiento? ¿Podr\'ia ser \'util de alguna forma o es siempre descartable?
+
+  \vspace{2.5cm}
+
+  \item En el contexto de detecci\'on de enfermedades, si se quiere \textbf{maximizar la sensibilidad} (no dejar pasar casos positivos), ¿qu\'e zona de la curva ROC del Modelo A ser\'ia de mayor inter\'es y qu\'e consecuencia tiene esto sobre los falsos positivos?
+
+  \vspace{2.5cm}
+\end{enumerate}
+
+\subsection*{Ejercicio B: Bias-Variance Trade-off \puntaje{10}}
+
+El siguiente gr\'afico muestra las curvas de sesgo$^2$, varianza y error total en funci\'on de la complejidad del modelo.
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=10cm, height=6cm,
+  xlabel={Complejidad del modelo},
+  ylabel={Error},
+  xmin=0, xmax=10,
+  ymin=0, ymax=2.2,
+  legend pos=north east,
+  grid=major,
+  grid style={line width=0.3pt, draw=gray!30},
+  xtick={0,2,4,5,6,8,10},
+  xticklabels={,Baja,,\'Optima,,Alta,},
+]
+\addplot[blue, thick] coordinates {
+  (0,2.0)(1,1.6)(2,1.2)(3,0.8)(4,0.5)(5,0.3)(6,0.2)(7,0.15)(8,0.12)(9,0.08)(10,0.05)
+};
+\addlegendentry{Sesgo$^2$}
+\addplot[red, thick] coordinates {
+  (0,0.05)(1,0.08)(2,0.12)(3,0.2)(4,0.32)(5,0.45)(6,0.62)(7,0.82)(8,1.05)(9,1.3)(10,1.6)
+};
+\addlegendentry{Varianza}
+\addplot[green!60!black, thick, dashed] coordinates {
+  (0,2.05)(1,1.68)(2,1.32)(3,1.00)(4,0.82)(5,0.75)(6,0.82)(7,0.97)(8,1.17)(9,1.38)(10,1.65)
+};
+\addlegendentry{Error total}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item ¿En qu\'e zona del gr\'afico (baja, \'optima o alta complejidad) se encuentran los fen\'omenos de \textit{underfitting} y \textit{overfitting} respectivamente? Descr\'ibalos.
+
+  \vspace{2.5cm}
+
+  \item ¿Por qu\'e el error total tiene un m\'inimo en la complejidad \'optima? ¿Qu\'e sucede con el sesgo y la varianza en ese punto?
+
+  \vspace{2.5cm}
+
+  \item Un equipo decide siempre usar el modelo m\'as complejo disponible, argumentando que ``m\'as par\'ametros siempre dan mejores resultados''. ¿C\'omo refutar\'ia este argumento usando el gr\'afico?
+
+  \vspace{2.5cm}
+\end{enumerate}
+
+\vspace{0.3cm}
+
+%=============================================================
+\section*{Secci\'on 4: Desarrollo \puntaje{32}}
+%=============================================================
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=10pt]
+
+\item \puntaje{10} \textbf{Clustering y Aprendizaje No Supervisado}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item Explique la diferencia fundamental entre el aprendizaje supervisado y el no supervisado. ¿Por qu\'e es m\'as dif\'icil evaluar el \'exito de un m\'etodo no supervisado?
+  \vspace{3.5cm}
+  \item Describa el algoritmo K-Means paso a paso. ¿Cu\'al es su criterio de convergencia? ¿C\'omo afecta la elecci\'on de los centroides iniciales al resultado final y qu\'e estrategia existe para mitigarlo?
+  \vspace{4cm}
+  \item ¿C\'omo ayuda el ``M\'etodo del Codo'' a elegir el valor de $K$ en K-Means? ¿Cu\'al es la limitaci\'on de este m\'etodo en la pr\'actica?
+  \vspace{3cm}
+\end{enumerate}
+
+\item \puntaje{10} \textbf{Comparaci\'on de M\'etricas y Selecci\'on de Modelos}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item Se tiene un problema de predicci\'on de precios de propiedades (regresi\'on). El equipo debate entre usar RMSE y MAE. Explique las diferencias entre ambas m\'etricas y en qu\'e situaciones preferir\'ia una sobre la otra.
+  \vspace{3.5cm}
+  \item Un modelo de detecci\'on de tumores malignos tiene Precision = 0.95 y Recall = 0.40. ¿Qu\'e le preocupar\'ia de este resultado? ¿Qu\'e ajuste har\'ia al modelo y c\'omo afectar\'ia el tradeoff entre Precision y Recall?
+  \vspace{3.5cm}
+  \item Explique la diferencia entre los m\'etodos de selecci\'on de features \textbf{Filter}, \textbf{Wrapper} y \textbf{Embedded}, dando un ejemplo de cada uno. ¿Cu\'al es computacionalmente m\'as costoso y por qu\'e?
+  \vspace{3.5cm}
+\end{enumerate}
+
+\item \puntaje{12} \textbf{Caso integral: Segmentaci\'on de clientes}
+
+Una empresa de e-commerce quiere segmentar a sus clientes para dise\~nar campa\~nas de marketing personalizadas. Tiene un dataset con:
+\begin{itemize}
+  \item 200.000 clientes con las siguientes variables: monto total comprado (\'ultimos 12 meses), frecuencia de compra mensual, categor\'ias de productos preferidas (10 categor\'ias, variable categ\'orica), edad, y 50 features adicionales derivadas del comportamiento en la app.
+  \item No existe una variable objetivo (etiqueta) que diga a qu\'e segmento pertenece cada cliente.
+\end{itemize}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item ¿En qu\'e rama del Machine Learning cae este problema? ¿Es un problema de regresi\'on o clasificaci\'on? Justifique.
+  \vspace{3cm}
+  \item El dataset tiene 60 features en total. Antes de aplicar un algoritmo de clustering, ¿qu\'e pasos de preprocesamiento realizar\'ia y por qu\'e? Mencione al menos \textbf{tres} pasos concretos y justifique cada uno.
+  \vspace{4cm}
+  \item ¿Qu\'e algoritmo(s) de clustering utilizar\'ia? Compare al menos dos opciones considerando las caracter\'isticas del dataset. ¿C\'omo validar\'ia que los clusters encontrados son \textbf{\'utiles} para el negocio, dado que no hay etiquetas verdaderas?
+  \vspace{4cm}
+\end{enumerate}
+
+\end{enumerate}
+
+\vspace{1cm}
+\begin{center}
+\textit{--- Fin del Parcial Modelo 3 ---}
+\end{center}
+
+\end{document}

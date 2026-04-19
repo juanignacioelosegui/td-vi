@@ -1,0 +1,348 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{top=2cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Tecnolog\'ia Digital VI --- 1er Semestre 2026}
+\lhead{Parcial --- Modelo 1}
+\rfoot{P\'agina \thepage}
+
+\definecolor{tdblue}{RGB}{0,74,135}
+\definecolor{lightgray}{RGB}{245,245,245}
+
+\newmdenv[linecolor=tdblue, linewidth=1.5pt, roundcorner=4pt, backgroundcolor=lightgray, innertopmargin=6pt, innerbottommargin=6pt]{infobox}
+
+\newcommand{\puntaje}[1]{\textbf{[#1 pts]}}
+
+\begin{document}
+
+%--- Encabezado ---
+\begin{center}
+  {\Large\bfseries Universidad Torcuato Di Tella}\\[4pt]
+  {\large Tecnolog\'ia Digital VI --- Parcial Modelo 1}\\[2pt]
+  {\normalsize 1er Semestre 2026}\\[8pt]
+\end{center}
+
+\begin{infobox}
+\textbf{Instrucciones:} El parcial tiene una duraci\'on de \textbf{90 minutos}. Est\'a prohibido el uso de computadoras o c\'odigo. S\'i se permite el uso de una hoja de f\'ormulas. Cada secci\'on indica el puntaje. Puntaje total: \textbf{100 puntos}.
+\end{infobox}
+
+\vspace{0.5cm}
+
+Nombre y apellido: \underline{\hspace{8cm}} \hfill Legajo: \underline{\hspace{3cm}}
+
+\vspace{0.8cm}
+
+%=============================================================
+\section*{Secci\'on 1: Verdadero o Falso \puntaje{24}}
+%=============================================================
+
+\noindent Indique \textbf{V} (Verdadero) o \textbf{F} (Falso) para cada afirmaci\'on. Si la afirmaci\'on es falsa, \textbf{justifique brevemente} por qu\'e (sin justificaci\'on no se otorga puntaje en los falsos).
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=18pt]
+
+\item \underline{\hspace{1cm}} En un mecanismo MCAR (\textit{Missing Completely at Random}), la ausencia de un valor depende del valor faltante en s\'i mismo, lo que lo hace el tipo de dato faltante m\'as problem\'atico.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} Aplicar un \textit{StandardScaler} ajustado sobre el conjunto de \textit{test} antes de dividir los datos en train/test constituye un caso de \textit{data leakage}.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} En K-Fold Cross-Validation con $k=5$, cada muestra del dataset es usada exactamente una vez como muestra de validaci\'on a lo largo de las 5 iteraciones.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} La Regresi\'on Log\'istica es un modelo no lineal porque utiliza la funci\'on sigmoide para transformar su salida.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} La regularizaci\'on L1 (Lasso) tiende a producir coeficientes exactamente iguales a cero, lo que la convierte en un m\'etodo impl\'icito de selecci\'on de variables.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} Un \'arbol de decisi\'on muy profundo (sin regularizaci\'on) suele tener bajo sesgo y baja varianza, lo que lo convierte en un modelo ideal sin necesidad de ajuste.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} Un AUC-ROC de 0.5 indica que el modelo tiene un rendimiento equivalente al de clasificar al azar.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} El \'indice Gini y la Entrop\'ia, como funciones de impureza en \'arboles de decisi\'on, alcanzan su valor m\'aximo cuando todas las muestras de un nodo pertenecen a la misma clase.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\end{enumerate}
+
+\vspace{0.5cm}
+
+%=============================================================
+\section*{Secci\'on 2: M\'ultiple Choice \puntaje{24}}
+%=============================================================
+
+\noindent Marque con un c\'irculo la \textbf{\'unica} opci\'on correcta en cada pregunta.
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=20pt]
+
+\item Un dataset de detecci\'on de fraude tiene 98\% de transacciones legales y 2\% de transacciones fraudulentas. Un modelo que siempre predice ``legal'' obtiene un \textit{Accuracy} del 98\%. ¿Cu\'al de las siguientes afirmaciones describe mejor la situaci\'on?
+
+\begin{enumerate}[label=\alph*)]
+  \item El modelo es excelente; un 98\% de accuracy es muy alto para cualquier problema.
+  \item El accuracy es enga\~noso en este caso; m\'etricas como F1-Score o Precision-Recall son m\'as adecuadas para evaluar el rendimiento real.
+  \item El problema se resolver\'ia aumentando el umbral de decisi\'on del modelo a 0.99.
+  \item La soluci\'on correcta es aplicar un StandardScaler antes de entrenar.
+\end{enumerate}
+
+\item ¿Cu\'al es el efecto principal de aumentar el par\'ametro \texttt{max\_depth} en un \'arbol de decisi\'on?
+
+\begin{enumerate}[label=\alph*)]
+  \item Reduce el tiempo de entrenamiento y aumenta el sesgo del modelo.
+  \item Aumenta la complejidad del modelo, reduciendo el sesgo pero potencialmente aumentando la varianza (overfitting).
+  \item Reduce tanto el sesgo como la varianza, mejorando siempre el desempe\~no.
+  \item No tiene efecto sobre el overfitting; solo afecta la velocidad de predicci\'on.
+\end{enumerate}
+
+\item Un equipo aplica \textit{Label Encoding} a la variable ``Pa\'is'' con valores \{Argentina=0, Brasil=1, Chile=2\} y luego entrena una regresi\'on log\'istica. ¿Cu\'al es el problema principal de este enfoque?
+
+\begin{enumerate}[label=\alph*)]
+  \item El modelo no puede manejar m\'as de dos categor\'ias en una variable.
+  \item El encoding impone un orden num\'erico artificial (Argentina < Brasil < Chile) que el modelo interpretar\'a como una relaci\'on ordinal inexistente.
+  \item El Label Encoding solo funciona con \'arboles de decisi\'on, no con modelos lineales.
+  \item No hay ning\'un problema; Label Encoding es siempre equivalente a One-Hot Encoding.
+\end{enumerate}
+
+\item La curva Precision-Recall es preferida sobre la curva ROC cuando:
+
+\begin{enumerate}[label=\alph*)]
+  \item El dataset est\'a perfectamente balanceado entre clases.
+  \item Se trabaja con un problema de regresi\'on, no de clasificaci\'on.
+  \item Las clases est\'an muy desbalanceadas y la clase positiva es la de inter\'es, ya que la curva ROC puede resultar optimista al verse influida por la gran cantidad de verdaderos negativos.
+  \item El modelo utilizado es un \'arbol de decisi\'on en lugar de una regresi\'on log\'istica.
+\end{enumerate}
+
+\item ¿Qu\'e representa el error \textit{Out-of-Bag} (OOB) en Random Forest?
+
+\begin{enumerate}[label=\alph*)]
+  \item El error cometido sobre el conjunto de test reservado al final del proceso.
+  \item Una estimaci\'on del error de generalizaci\'on calculada usando, para cada muestra, solo los \'arboles que \textbf{no} la incluyeron en su muestra de bootstrap.
+  \item El error promedio de entrenamiento de todos los \'arboles individuales.
+  \item El error producido por usar demasiados \'arboles, causando overfitting en el ensamble.
+\end{enumerate}
+
+\item ¿Cu\'al de las siguientes opciones describe correctamente la diferencia entre \textit{Bagging} y \textit{Boosting}?
+
+\begin{enumerate}[label=\alph*)]
+  \item Bagging entrena modelos secuencialmente ponderando los errores; Boosting los entrena en paralelo sobre distintas muestras bootstrap.
+  \item Bagging entrena modelos en paralelo sobre muestras bootstrap independientes para reducir la varianza; Boosting entrena modelos secuencialmente, donde cada modelo se focaliza en los errores del anterior, reduciendo el sesgo.
+  \item Bagging y Boosting son t\'ecnicamente id\'enticos, solo difieren en el lenguaje de programaci\'on utilizado.
+  \item Bagging solo funciona con modelos lineales; Boosting solo funciona con \'arboles.
+\end{enumerate}
+
+\end{enumerate}
+
+\vspace{0.5cm}
+
+%=============================================================
+\section*{Secci\'on 3: Interpretaci\'on de Gr\'aficos \puntaje{20}}
+%=============================================================
+
+\subsection*{Ejercicio A: Curvas de aprendizaje \puntaje{10}}
+
+El siguiente gr\'afico muestra las curvas de error de entrenamiento y validaci\'on de un modelo en funci\'on de la profundidad m\'axima del \'arbol (\texttt{max\_depth}).
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=10cm, height=6cm,
+  xlabel={Profundidad m\'axima (\texttt{max\_depth})},
+  ylabel={Error},
+  xmin=1, xmax=10,
+  ymin=0, ymax=1,
+  xtick={1,2,3,4,5,6,7,8,9,10},
+  legend pos=north east,
+  grid=major,
+  grid style={line width=0.3pt, draw=gray!30}
+]
+\addplot[blue, thick, mark=o] coordinates {
+  (1,0.80)(2,0.65)(3,0.50)(4,0.38)(5,0.28)(6,0.20)(7,0.14)(8,0.10)(9,0.07)(10,0.05)
+};
+\addlegendentry{Error de Entrenamiento}
+\addplot[red, thick, mark=square] coordinates {
+  (1,0.82)(2,0.66)(3,0.52)(4,0.42)(5,0.38)(6,0.40)(7,0.45)(8,0.52)(9,0.58)(10,0.65)
+};
+\addlegendentry{Error de Validaci\'on}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item ¿En qu\'e valor de \texttt{max\_depth} el modelo comienza a presentar \textit{overfitting}? Justifique observando el comportamiento de ambas curvas.
+
+  \vspace{2.5cm}
+
+  \item ¿Qu\'e ocurre con el modelo cuando \texttt{max\_depth} = 1 o 2? ¿C\'omo se llama este fen\'omeno?
+
+  \vspace{2.5cm}
+
+  \item Si deber\'ia elegir un valor de \texttt{max\_depth} para producir el mejor modelo, ¿cu\'al elegiria y por qu\'e?
+
+  \vspace{2.5cm}
+\end{enumerate}
+
+\subsection*{Ejercicio B: Matriz de confusi\'on \puntaje{10}}
+
+Un modelo de clasificaci\'on binaria para detectar correos spam (positivo = spam) produjo la siguiente matriz de confusi\'on sobre el conjunto de test:
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tabular}{cc|cc}
+  & & \multicolumn{2}{c}{\textbf{Predicci\'on}} \\
+  & & Spam & No Spam \\
+  \hline
+  \multirow{2}{*}{\textbf{Real}} & Spam    & 80  & 20  \\
+                                  & No Spam & 30  & 870 \\
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item Calcule el \textbf{Recall} (sensibilidad) para la clase Spam y explique con palabras qu\'e nos indica este valor en el contexto del problema.
+
+  \vspace{2.5cm}
+
+  \item Calcule la \textbf{Precision} para la clase Spam e interprete el resultado.
+
+  \vspace{2.5cm}
+
+  \item En este contexto (filtro de spam), ¿es m\'as grave tener un Recall bajo o una Precision baja? Justifique considerando las consecuencias pr\'acticas de cada tipo de error.
+
+  \vspace{2.5cm}
+\end{enumerate}
+
+\vspace{0.3cm}
+
+%=============================================================
+\section*{Secci\'on 4: Desarrollo \puntaje{32}}
+%=============================================================
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=10pt]
+
+\item \puntaje{10} \textbf{Preprocesamiento y Data Leakage}
+
+Un equipo de Data Science tiene un pipeline para predecir el precio de propiedades. El pipeline que implementaron es el siguiente:
+
+\begin{enumerate}[label=\Roman*.]
+  \item Cargar el dataset completo (10.000 propiedades).
+  \item Imputar valores faltantes con la \textit{media} de cada columna, calculada sobre todo el dataset.
+  \item Escalar todas las variables num\'ericas con MinMaxScaler ajustado sobre todo el dataset.
+  \item Dividir en 80\% train y 20\% test aleatoriamente.
+  \item Entrenar un modelo de Regresi\'on Lineal sobre el conjunto de train.
+  \item Evaluar con RMSE sobre el conjunto de test.
+\end{enumerate}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item Identifique \textbf{todos} los errores conceptuales presentes en el pipeline. Explique por qu\'e cada uno es un problema.
+  \vspace{4cm}
+  \item Describa el pipeline corregido, paso a paso, que elimina los errores identificados.
+  \vspace{4cm}
+\end{enumerate}
+
+\item \puntaje{10} \textbf{\'Arboles de Decisi\'on y Regularizaci\'on}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item Explique intuitivamente por qu\'e los \'arboles de decisi\'on son modelos con \textbf{alta varianza}. ¿Qu\'e propiedad del algoritmo de construcci\'on los hace tan sensibles a cambios peque\~nos en los datos?
+  \vspace{3.5cm}
+  \item Mencione \textbf{tres} hiperpar\'ametros que se pueden ajustar para regularizar un \'arbol de decisi\'on (reducir overfitting) y explique brevemente el efecto de cada uno.
+  \vspace{3.5cm}
+  \item Un \'arbol de regresi\'on fue entrenado con valores de temperatura entre 10\textdegree C y 40\textdegree C. Hoy en producci\'on recibe una observaci\'on con temperatura = 55\textdegree C. ¿Qu\'e valor predecir\'a el modelo? ¿Es esto un problema? ¿Por qu\'e?
+  \vspace{3cm}
+\end{enumerate}
+
+\item \puntaje{12} \textbf{Caso integral: Sistema de recomendaci\'on de cr\'editos}
+
+Un banco quiere construir un sistema para predecir si un cliente pagar\'a o no un cr\'edito (variable objetivo: \texttt{default} = 1 si no paga, 0 si paga). El dataset tiene:
+\begin{itemize}
+  \item 500.000 clientes hist\'oricos, de los cuales solo 12.000 no pagaron.
+  \item Variables num\'ericas: ingreso mensual, edad, monto del cr\'edito, historial de pagos.
+  \item Variables categ\'oricas: tipo de empleo, zona geogr\'afica, nivel de educaci\'on.
+  \item Un 8\% de valores nulos en ``ingreso mensual'' y un 3\% en ``historial de pagos''.
+\end{itemize}
+
+El equipo propone entrenar directamente un \'arbol de decisi\'on con par\'ametros por defecto y reportar el Accuracy al directorio.
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item ¿Qu\'e problemas tiene el dataset que deben resolverse antes de entrenar? Mencione al menos \textbf{tres} y proponga una estrategia para cada uno.
+  \vspace{4cm}
+  \item ¿Por qu\'e reportar el Accuracy al directorio es enga\~noso en este caso? ¿Qu\'e m\'etrica(s) recomendar\'ia y por qu\'e?
+  \vspace{3.5cm}
+  \item El equipo propone un \'arbol de decisi\'on. ¿Qu\'e argumentos dar\'ia para considerar tambi\'en un \textbf{Random Forest} o \textbf{Gradient Boosting}? ¿Existe alguna raz\'on para mantener el \'arbol simple?
+  \vspace{3.5cm}
+\end{enumerate}
+
+\end{enumerate}
+
+\vspace{1cm}
+\begin{center}
+\textit{--- Fin del Parcial Modelo 1 ---}
+\end{center}
+
+\end{document}

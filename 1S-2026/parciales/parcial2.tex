@@ -1,0 +1,358 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{top=2cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Tecnolog\'ia Digital VI --- 1er Semestre 2026}
+\lhead{Parcial --- Modelo 2}
+\rfoot{P\'agina \thepage}
+
+\definecolor{tdblue}{RGB}{0,74,135}
+\definecolor{lightgray}{RGB}{245,245,245}
+
+\newmdenv[linecolor=tdblue, linewidth=1.5pt, roundcorner=4pt, backgroundcolor=lightgray, innertopmargin=6pt, innerbottommargin=6pt]{infobox}
+
+\newcommand{\puntaje}[1]{\textbf{[#1 pts]}}
+
+\begin{document}
+
+%--- Encabezado ---
+\begin{center}
+  {\Large\bfseries Universidad Torcuato Di Tella}\\[4pt]
+  {\large Tecnolog\'ia Digital VI --- Parcial Modelo 2}\\[2pt]
+  {\normalsize 1er Semestre 2026}\\[8pt]
+\end{center}
+
+\begin{infobox}
+\textbf{Instrucciones:} El parcial tiene una duraci\'on de \textbf{90 minutos}. Est\'a prohibido el uso de computadoras o c\'odigo. S\'i se permite el uso de una hoja de f\'ormulas. Cada secci\'on indica el puntaje. Puntaje total: \textbf{100 puntos}.
+\end{infobox}
+
+\vspace{0.5cm}
+
+Nombre y apellido: \underline{\hspace{8cm}} \hfill Legajo: \underline{\hspace{3cm}}
+
+\vspace{0.8cm}
+
+%=============================================================
+\section*{Secci\'on 1: Verdadero o Falso \puntaje{24}}
+%=============================================================
+
+\noindent Indique \textbf{V} (Verdadero) o \textbf{F} (Falso) para cada afirmaci\'on. Si la afirmaci\'on es falsa, \textbf{justifique brevemente} por qu\'e (sin justificaci\'on no se otorga puntaje en los falsos).
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=18pt]
+
+\item \underline{\hspace{1cm}} En Random Forest, cada \'arbol se entrena con todas las features disponibles en cada split, lo cual garantiza la diversidad del ensamble.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} En Gradient Boosting, aumentar el n\'umero de \'arboles ($M$) puede llevar a overfitting, a diferencia de Random Forest donde agregar m\'as \'arboles siempre es seguro.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} Una de las ventajas de la regularizaci\'on L2 (Ridge) frente a L1 (Lasso) es que en presencia de variables correlacionadas, Ridge distribuye el peso entre ellas en lugar de seleccionar una sola.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} El \textit{Partial Dependence Plot} (PDP) muestra el efecto marginal de un feature sobre la predicci\'on del modelo, promediado sobre todos los valores de los dem\'as features.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} El bootstrap consiste en muestrear \textbf{sin} reemplazo del dataset original, garantizando que cada muestra aparezca en exactamente un subconjunto de entrenamiento.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} PCA (An\'alisis de Componentes Principales) es un m\'etodo adecuado para capturar estructuras no lineales en los datos, como cl\'usteres en forma de espiral o c\'ırculo.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} En AdaBoost, los clasificadores d\'ebiles que tienen un error ponderado mayor reciben un peso $\alpha_m$ m\'as grande en la predicci\'on final del ensamble.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\item \underline{\hspace{1cm}} El \textit{bias-variance tradeoff} establece que al aumentar la complejidad del modelo, el sesgo tiende a disminuir y la varianza tiende a aumentar, por lo que existe un punto \'optimo de complejidad que minimiza el error total.
+
+\vspace{0.5cm}
+\noindent\textit{Justificaci\'on (si es F):} \underline{\hspace{12cm}}
+
+\vspace{0.2cm}
+\underline{\hspace{14cm}}
+
+\end{enumerate}
+
+\vspace{0.5cm}
+
+%=============================================================
+\section*{Secci\'on 2: M\'ultiple Choice \puntaje{24}}
+%=============================================================
+
+\noindent Marque con un c\'irculo la \textbf{\'unica} opci\'on correcta en cada pregunta.
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=20pt]
+
+\item ¿Cu\'al de las siguientes afirmaciones sobre XGBoost, LightGBM y CatBoost es \textbf{correcta}?
+
+\begin{enumerate}[label=\alph*)]
+  \item Los tres algoritmos son id\'enticos en su estrategia de crecimiento de \'arboles; solo difieren en el lenguaje de implementaci\'on.
+  \item XGBoost crece el \'arbol nivel por nivel (\textit{level-wise}); LightGBM crece por hoja (\textit{leaf-wise}), siendo m\'as eficiente en memoria; CatBoost maneja variables categ\'oricas de forma nativa sin necesidad de encoding previo.
+  \item LightGBM no puede manejar variables categ\'oricas y siempre requiere One-Hot Encoding.
+  \item CatBoost utiliza expansi\'on de Taylor de segundo orden para optimizar su funci\'on objetivo, lo que lo hace m\'as preciso que XGBoost.
+\end{enumerate}
+
+\item ¿Qu\'e significa que dos componentes principales obtenidas por PCA sean ortogonales entre s\'i?
+
+\begin{enumerate}[label=\alph*)]
+  \item Que explican la misma cantidad de varianza en los datos.
+  \item Que la correlaci\'on lineal entre ellas es cero; cada componente captura informaci\'on independiente de las dem\'as.
+  \item Que sus autovalores asociados son iguales.
+  \item Que no pueden ser usadas simult\'aneamente como predictores en un modelo supervisado.
+\end{enumerate}
+
+\item En el contexto del \textit{Bias-Variance Tradeoff}, ¿cu\'al de los siguientes modelos presenta \textbf{m\'as sesgo y menos varianza}?
+
+\begin{enumerate}[label=\alph*)]
+  \item Un \'arbol de decisi\'on con \texttt{max\_depth=20} y sin poda.
+  \item Un Random Forest con 500 \'arboles.
+  \item Una regresi\'on lineal aplicada a datos con relaciones no lineales complejas.
+  \item Un modelo de Gradient Boosting con tasa de aprendizaje muy baja y muchos \'arboles.
+\end{enumerate}
+
+\item ¿Cu\'al es la raz\'on principal por la que Bagging reduce la varianza del modelo?
+
+\begin{enumerate}[label=\alph*)]
+  \item Porque penaliza los coeficientes del modelo con un t\'ermino de regularizaci\'on L2.
+  \item Porque entrena los modelos secuencialmente, permitiendo que cada uno corrija los errores del anterior.
+  \item Porque promedia las predicciones de m\'ultiples modelos entrenados sobre distintas muestras bootstrap, reduciendo la variabilidad que tendr\'ia cualquier modelo individual.
+  \item Porque utiliza siempre el 100\% de los datos disponibles en cada modelo del ensamble.
+\end{enumerate}
+
+\item ¿Qu\'e ocurre con el error OOB (\textit{Out-of-Bag}) de un Random Forest a medida que se agregan m\'as \'arboles al ensamble?
+
+\begin{enumerate}[label=\alph*)]
+  \item Aumenta indefinidamente, indicando sobreajuste progresivo.
+  \item Disminuye y se estabiliza, ya que agregar m\'as \'arboles a partir de cierto punto produce retornos decrecientes.
+  \item Permanece constante independientemente de la cantidad de \'arboles.
+  \item Primero disminuye y luego aumenta, al igual que la curva de validaci\'on en modelos de boosting.
+\end{enumerate}
+
+\item ¿Cu\'al de los siguientes m\'etodos de selecci\'on de features es un m\'etodo \textbf{Embedded}?
+
+\begin{enumerate}[label=\alph*)]
+  \item Correlaci\'on de Pearson entre cada feature y la variable objetivo.
+  \item Forward Selection con validaci\'on cruzada.
+  \item La importancia de features calculada por un \'arbol de decisi\'on o Random Forest durante el entrenamiento.
+  \item Eliminar columnas con varianza menor a un umbral definido.
+\end{enumerate}
+
+\end{enumerate}
+
+\vspace{0.5cm}
+
+%=============================================================
+\section*{Secci\'on 3: Interpretaci\'on de Gr\'aficos \puntaje{20}}
+%=============================================================
+
+\subsection*{Ejercicio A: Scree Plot de PCA \puntaje{10}}
+
+El siguiente gr\'afico muestra el \textit{scree plot} de un PCA aplicado a un dataset con 8 features originales. Las barras representan la varianza explicada por cada componente principal (individual) y la l\'inea roja la varianza acumulada.
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=10cm, height=6cm,
+  xlabel={Componente Principal},
+  ylabel={\% Varianza explicada},
+  ymin=0, ymax=110,
+  xmin=0.5, xmax=8.5,
+  xtick={1,2,3,4,5,6,7,8},
+  ytick={0,20,40,60,80,100},
+  ybar,
+  bar width=0.5cm,
+  legend pos=north east,
+  grid=major,
+  grid style={line width=0.3pt, draw=gray!30},
+  axis y line*=left,
+]
+\addplot[fill=tdblue!70, draw=tdblue] coordinates {
+  (1,42)(2,24)(3,14)(4,8)(5,5)(6,4)(7,2)(8,1)
+};
+\addlegendentry{Varianza individual}
+\end{axis}
+\begin{axis}[
+  width=10cm, height=6cm,
+  ymin=0, ymax=110,
+  xmin=0.5, xmax=8.5,
+  xtick={1,2,3,4,5,6,7,8},
+  axis y line*=right,
+  axis x line=none,
+  ylabel={\% Varianza acumulada},
+]
+\addplot[red, thick, mark=*, mark size=2pt] coordinates {
+  (1,42)(2,66)(3,80)(4,88)(5,93)(6,97)(7,99)(8,100)
+};
+\addlegendentry{Var. acumulada}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item Si se quisiera retener al menos el \textbf{85\%} de la varianza original, ¿cu\'antas componentes principales se deber\'ian seleccionar? Justifique leyendo el gr\'afico.
+
+  \vspace{2.5cm}
+
+  \item ¿Cu\'anto de la varianza original se \textbf{pierde} al reducir el dataset a 2 componentes principales? ¿Qu\'e implica esta p\'erdida en t\'erminos pr\'acticos?
+
+  \vspace{2.5cm}
+
+  \item El dataset original tiene 8 features y se quiere usar PCA antes de aplicar un \textbf{Random Forest}. Un compa\~nero sugiere que esto siempre mejora el modelo. ¿Est\'a de acuerdo? Justifique.
+
+  \vspace{2.5cm}
+\end{enumerate}
+
+\subsection*{Ejercicio B: Partial Dependence Plot \puntaje{10}}
+
+El siguiente gr\'afico muestra el PDP (\textit{Partial Dependence Plot}) del feature ``Edad del cliente'' sobre la predicci\'on de un modelo de churn (probabilidad de abandono).
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=10cm, height=5.5cm,
+  xlabel={Edad del cliente (a\~nos)},
+  ylabel={Efecto marginal promedio (probabilidad de churn)},
+  xmin=18, xmax=70,
+  ymin=0.0, ymax=0.7,
+  grid=major,
+  grid style={line width=0.3pt, draw=gray!30},
+]
+\addplot[blue, thick, smooth] coordinates {
+  (18,0.55)(22,0.50)(28,0.42)(35,0.32)(42,0.22)(50,0.18)(58,0.20)(65,0.25)(70,0.28)
+};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item Describa en palabras qu\'e muestra este gr\'afico. ¿C\'omo var\'ia la probabilidad de churn en funci\'on de la edad?
+
+  \vspace{2.5cm}
+
+  \item ¿El PDP permite concluir que la edad \textbf{causa} el churn? ¿Por qu\'e?
+
+  \vspace{2.5cm}
+
+  \item Si en lugar del PDP se mostrara un \textbf{ICE plot} (\textit{Individual Conditional Expectation}), ¿qu\'e informaci\'on adicional aportar\'ia que el PDP no muestra?
+
+  \vspace{2.5cm}
+\end{enumerate}
+
+\vspace{0.3cm}
+
+%=============================================================
+\section*{Secci\'on 4: Desarrollo \puntaje{32}}
+%=============================================================
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=10pt]
+
+\item \puntaje{10} \textbf{Ensambles y Diversidad}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item Explique por qu\'e la diversidad entre los modelos base es fundamental para que un ensamble mejore el rendimiento respecto a un modelo individual. ¿Qu\'e suceder\'ia si todos los modelos del ensamble cometieran exactamente los mismos errores?
+  \vspace{3.5cm}
+  \item Random Forest introduce dos fuentes de aleatoriedad para lograr diversidad. Identif\'iquelas y explique c\'omo cada una contribuye a reducir la correlaci\'on entre \'arboles.
+  \vspace{3.5cm}
+  \item ¿Por qu\'e Bagging es trivialmente paralelizable pero Boosting no lo es? Explique la diferencia estructural entre ambos m\'etodos que determina esto.
+  \vspace{3cm}
+\end{enumerate}
+
+\item \puntaje{10} \textbf{Reducci\'on de la Dimensionalidad}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item Explique el concepto de ``maldici\'on de la dimensionalidad''. ¿Por qu\'e los algoritmos basados en distancias (como KNN) se ven especialmente perjudicados en espacios de alta dimensi\'on?
+  \vspace{3.5cm}
+  \item Compare PCA con t-SNE y UMAP en t\'erminos de: (i) tipo de relaciones que capturan (lineales vs. no lineales), (ii) capacidad de proyectar nuevas muestras, y (iii) utilidad para preprocesamiento vs. solo visualizaci\'on.
+  \vspace{4cm}
+  \item ¿Por qu\'e es obligatorio estandarizar los features \textbf{antes} de aplicar PCA? ¿Qu\'e problema ocurrir\'ia si no se hace?
+  \vspace{3cm}
+\end{enumerate}
+
+\item \puntaje{12} \textbf{Caso integral: Detecci\'on de piezas defectuosas}
+
+Una f\'abrica de electr\'onicos quiere predecir qu\'e piezas del proceso de manufactura saldr\'an defectuosas antes de que lleguen al control de calidad. Cuentan con:
+\begin{itemize}
+  \item Datos de sensores durante la fabricaci\'on: temperatura, presi\'on, vibraci\'on (200 sensores en total).
+  \item Registros hist\'oricos de 500.000 piezas, de las cuales 4.500 resultaron defectuosas.
+  \item Algunos sensores tienen datos correlacionados entre s\'i.
+\end{itemize}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+  \item ¿Qu\'e desaf\'ios presenta este dataset y c\'omo los abordar\'ia? Considere el desbalance de clases, la alta dimensi\'on y la correlaci\'on entre sensores.
+  \vspace{4cm}
+  \item ¿Qu\'e modelo(s) elegiria para este problema y por qu\'e? Compare al menos dos opciones considerando: rendimiento predictivo, interpretabilidad y complejidad de ajuste.
+  \vspace{3.5cm}
+  \item En una f\'abrica, los errores Falso Negativo (no detectar una pieza defectuosa) y Falso Positivo (descartar una pieza buena) tienen costos muy distintos. ¿C\'omo tendr\'ia esto en cuenta al elegir el umbral de decisi\'on y la m\'etrica de evaluaci\'on?
+  \vspace{3.5cm}
+\end{enumerate}
+
+\end{enumerate}
+
+\vspace{1cm}
+\begin{center}
+\textit{--- Fin del Parcial Modelo 2 ---}
+\end{center}
+
+\end{document}
