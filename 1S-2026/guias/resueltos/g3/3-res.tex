@@ -71,4 +71,26 @@
 	\item \textbf{Árboles de decisión.} Los splits se hacen sobre componentes principales, que son direcciones abstractas en el espacio original. El árbol sigue siendo válido como modelo, pero cada nodo ya no dice ``si el ingreso es mayor a X'' sino ``si la combinación lineal de todas las variables es mayor a X''.
 \end{itemize}
 \noindent En general, PCA cede interpretabilidad a cambio de reducción de dimensionalidad. Es una decisión de diseño: si la interpretabilidad es crítica, conviene evitarlo o aplicarlo sólo como paso intermedio sin exponer las componentes al usuario final.
+\section*{Clusterización}
+\subsection*{Ejercicio 8}
+\noindent Se busca que las muestras dentro de un cluster A sean similares entre sí, mientras que las muestras de dos clusters A y B deben ser disímiles.
+\subsection*{Ejercicio 9}
+\begin{enumerate}
+	\item Se eligen $K$ centroides iniciales. La forma más simple es seleccionar $K$ observaciones al azar del dataset como centroides iniciales.
+	\item Cada observación se asigna al centroide más cercano (distancia euclídea). Así se forman $K$ clusters.
+	\item Se recalcula el centroide de cada cluster como la media de todas las observaciones asignadas a él. De ahí el nombre ``K-Means''.
+	\item Se repiten los pasos 2 y 3 hasta que las asignaciones no cambien --- lo que equivale a que la within-cluster variation ya no mejora.
+\end{enumerate}
+\subsection*{Ejercicio 10}
+\noindent Si se inicializan mal los centroides iniciales: (1) el algoritmo puede converger a un mínimo local --- no global --- de la within-cluster variation, o (2) correr el algoritmo varias veces puede dar clusters distintos cada vez, porque no es determinístico.
+
+\noindent Para \emph{solventar} estas complicaciones se puede correr el algoritmo varias veces con inicializaciones distintas, y quedarse con el resultado que haya dado la menor within-cluster variation; o bien se puede implementar K-Means++.
+\subsection*{Ejercicio 11}
+\noindent Mirando el scree plot, se debe elegir el $K$ en el cual se forme un ``codo''. De ahí en más, la suma de los cuadrados intra-cluster (\textit{within-cluster sum of squares} --- WSS) decrece cada vez menos.
+\subsection*{Ejercicio 12}
+\begin{itemize}
+	\item \texttt{K-Means} toma como parámetro cuántos \textit{clusters} $K$ se quieren tener. En clustering jerárquico algomerativo esto no es así.
+	\item \texttt{K-Means} agrupa como puede todas las observaciones en esos $ K $ \textit{clusters}. En clustering jerárquico aglomerativo cada muestra es su propio \textit{cluster} y, basándose en algún tipo de \textit{linkage}, fusiona los \textit{clusters} (muestras) más similares de manera iterativa hasta formar un único gran \textit{cluster}.
+\end{itemize}
+\noindent La altura a la que se produce una unión representa la distancia (o disimilitud) entre los dos \textit{clusters} que se fusionan en ese paso, según el criterio de \textit{linkage} elegido. Si la fusión entre dos \textit{clusters} es abajo en el dendrograma, entonces eran muy similares; si la fusión es alta en el dendrograma, eran muy distintos.
 \end{document}
