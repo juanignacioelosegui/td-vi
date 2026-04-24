@@ -1,0 +1,21 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Preprocesamiento y Validaci\'on}{2}{}%
+\contentsline {subsection}{\numberline {1.1}Valores Faltantes}{2}{}%
+\contentsline {subsection}{\numberline {1.2}Data Leakage}{2}{}%
+\contentsline {subsection}{\numberline {1.3}Escalado de Features}{3}{}%
+\contentsline {subsection}{\numberline {1.4}Desbalance de Clases}{3}{}%
+\contentsline {subsection}{\numberline {1.5}Validaci\'on Cruzada}{3}{}%
+\contentsline {section}{\numberline {2}M\'etricas de Evaluaci\'on}{4}{}%
+\contentsline {subsection}{\numberline {2.1}Regresi\'on}{4}{}%
+\contentsline {subsection}{\numberline {2.2}Clasificaci\'on}{4}{}%
+\contentsline {section}{\numberline {3}Modelos Lineales}{5}{}%
+\contentsline {subsection}{\numberline {3.1}Regresi\'on Lineal y Log\'istica}{5}{}%
+\contentsline {subsection}{\numberline {3.2}Regularizaci\'on}{6}{}%
+\contentsline {section}{\numberline {4}\'Arboles de Decisi\'on}{6}{}%
+\contentsline {section}{\numberline {5}Ensambles I: Bagging y Random Forest}{7}{}%
+\contentsline {section}{\numberline {6}Ensambles II: Boosting}{8}{}%
+\contentsline {section}{\numberline {7}Reducci\'on de la Dimensionalidad}{9}{}%
+\contentsline {section}{\numberline {8}Overfitting, Underfitting y Trade-offs}{10}{}%
+\contentsline {section}{\numberline {9}Selecci\'on de Features}{11}{}%
+\contentsline {section}{\numberline {10}Resumen: Comparaci\'on de Modelos}{12}{}%
+\contentsline {section}{\numberline {11}Preguntas de Integraci\'on}{12}{}%

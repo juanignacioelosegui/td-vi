@@ -1,0 +1,399 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{titlesec}
+\usepackage{multicol}
+
+\geometry{top=2cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Tecnolog\'ia Digital VI --- 1er Semestre 2026}
+\lhead{Banco de Preguntas Te\'oricas --- Solo Preguntas}
+\rfoot{P\'agina \thepage}
+
+\definecolor{tdblue}{RGB}{0,74,135}
+\definecolor{tdgreen}{RGB}{0,112,60}
+\definecolor{tdred}{RGB}{180,35,24}
+\definecolor{tdorange}{RGB}{200,100,0}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{lightblue}{RGB}{230,240,255}
+\definecolor{lightgreen}{RGB}{230,248,235}
+\definecolor{lightyellow}{RGB}{255,252,220}
+
+% Caja de sección
+\newmdenv[linecolor=tdblue, linewidth=2pt, roundcorner=5pt,
+  backgroundcolor=lightblue, innertopmargin=8pt, innerbottommargin=8pt,
+  innerleftmargin=10pt]{sectionbox}
+
+% Caja de advertencia (pregunta clásica)
+\newmdenv[linecolor=tdred, linewidth=2pt, roundcorner=5pt,
+  backgroundcolor=lightyellow, innertopmargin=8pt, innerbottommargin=8pt,
+  innerleftmargin=10pt]{classicbox}
+
+\titleformat{\section}{\large\bfseries\color{tdblue}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{tdblue}}{}{0em}{}
+
+\setlist[enumerate]{itemsep=8pt}
+
+\begin{document}
+
+%--- Portada ---
+\begin{center}
+  {\Large\bfseries\color{tdblue} Universidad Torcuato Di Tella}\\[6pt]
+  {\large\bfseries Tecnolog\'ia Digital VI}\\[4pt]
+  {\large Banco de Preguntas Te\'oricas para el Parcial}\\[4pt]
+  {\normalsize 1er Semestre 2026}\\[12pt]
+  \rule{\linewidth}{1.5pt}
+\end{center}
+
+\begin{mdframed}[linecolor=tdorange, linewidth=1.5pt, roundcorner=4pt,
+  backgroundcolor=lightyellow]
+\textbf{C\'omo usar este documento:} Este banco cubre todos los temas te\'oricos
+evaluables en el parcial. Las preguntas marcadas con
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} son las que se repiten hist\'oricamente.
+Las respuestas se encuentran en el documento \textit{preguntas\_teoricas.pdf}.
+\end{mdframed}
+
+\vspace{0.5cm}
+\tableofcontents
+\newpage
+
+% =============================================================
+\section{Preprocesamiento y Validaci\'on}
+% =============================================================
+
+\subsection{Valores Faltantes}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+
+\item Explique los tres mecanismos de datos faltantes (MCAR, MAR, MNAR) y d\'e un ejemplo
+  de cada uno.
+
+\item ¿Qu\'e estrategias existen para imputar valores faltantes? ¿Cu\'ando usar cada una?
+
+\end{enumerate}
+
+\subsection{Data Leakage}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \leavevmode
+
+\begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} ¿Qu\'e es el \textit{data leakage}? D\'e un
+ejemplo concreto y explique c\'omo prevenirlo.
+\end{classicbox}
+
+\item Un equipo aplica un MinMaxScaler ajustado sobre todo el dataset y luego divide en
+  train/test. ¿Hay data leakage? Justifique.
+
+\end{enumerate}
+
+\subsection{Escalado de Features}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item ¿Cu\'ando es obligatorio escalar features y cu\'ando no importa? D\'e ejemplos de
+  modelos en cada categor\'ia.
+
+\item Compare StandardScaler, MinMaxScaler y RobustScaler. ¿Cu\'ando preferir\'ia cada uno?
+
+\end{enumerate}
+
+\subsection{Desbalance de Clases}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \leavevmode
+
+\begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Un dataset de detecci\'on de fraude tiene 98\%
+de transacciones normales y 2\% fraudulentas. Un modelo que predice siempre ``normal''
+obtiene 98\% de accuracy. ¿Qu\'e problema hay y qu\'e har\'ia?
+\end{classicbox}
+
+\item ¿Qu\'e es SMOTE y c\'omo genera muestras sint\'eticas?
+
+\end{enumerate}
+
+\subsection{Validaci\'on Cruzada}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \leavevmode
+
+\begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Explique K-Fold Cross-Validation. ¿Por qu\'e
+es preferible al simple holdout?
+\end{classicbox}
+
+\item ¿Qu\'e es Leave-One-Out CV (LOOCV)? ¿Cu\'al es su ventaja y su desventaja principal?
+
+\end{enumerate}
+
+% =============================================================
+\section{M\'etricas de Evaluaci\'on}
+% =============================================================
+
+\subsection{Regresi\'on}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item Compare MSE, RMSE y MAE. ¿Cu\'ando elegir\'ia cada uno?
+
+\item ¿Puede el $R^2$ ser negativo? Explique qu\'e significar\'ia eso.
+
+\item ¿Cu\'ando usar RMSLE en lugar de RMSE?
+
+\end{enumerate}
+
+\subsection{Clasificaci\'on}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \leavevmode
+
+\begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Defina Precision y Recall. ¿Cu\'ando es m\'as
+grave tener Recall bajo? ¿Cu\'ando es m\'as grave tener Precision baja?
+\end{classicbox}
+
+\item ¿Qu\'e es el F1-Score y cu\'ando es m\'as \'util que el Accuracy?
+
+\item Explique la curva ROC y el AUC-ROC. ¿Qu\'e significa un AUC de 0.5?
+
+\item ¿Cu\'ando preferir\'ia la curva Precision-Recall sobre la curva ROC?
+
+\end{enumerate}
+
+% =============================================================
+\section{Modelos Lineales}
+% =============================================================
+
+\subsection{Regresi\'on Lineal y Log\'istica}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item ¿Por qu\'e la Regresi\'on Log\'istica es un modelo lineal si usa la funci\'on sigmoide?
+
+\item ¿Por qu\'e la Regresi\'on Lineal tiene soluci\'on cerrada pero la Log\'istica no?
+
+\end{enumerate}
+
+\subsection{Regularizaci\'on}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \leavevmode
+
+\begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Compare L1 (Lasso) y L2 (Ridge). ¿En qu\'e
+se diferencian y cu\'ando usar cada una?
+\end{classicbox}
+
+\item ¿Qu\'e efecto tiene aumentar $\lambda$ en la regularizaci\'on? ¿Y disminuirlo?
+
+\end{enumerate}
+
+% =============================================================
+\section{\'Arboles de Decisi\'on}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item Explique intuitivamente por qu\'e los \'arboles de decisi\'on son modelos de
+  \textbf{alta varianza}.
+
+\item Defina Gini y Entrop\'ia. ¿Qu\'e valor toman cuando el nodo es puro? ¿Y cuando es
+  m\'aximamente impuro?
+
+\item \leavevmode
+
+\begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Mencione \textbf{tres} hiperpar\'ametros que
+regularizan un \'arbol de decisi\'on (reducen overfitting) y explique el efecto de cada
+uno.
+\end{classicbox}
+
+\item Un \'arbol fue entrenado con temperaturas entre 10\textdegree C y 40\textdegree C.
+  En producci\'on recibe una observaci\'on de 55\textdegree C. ¿Qu\'e predice? ¿Es un
+  problema?
+
+\item ¿Qu\'e es la importancia de features en un \'arbol? ¿Cu\'al es su sesgo principal?
+
+\end{enumerate}
+
+% =============================================================
+\section{Ensambles I: Bagging y Random Forest}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item Explique el concepto de \textbf{Bootstrap}. ¿Qu\'e porcentaje de muestras queda
+  fuera (OOB) en promedio?
+
+\item ¿C\'omo se usa el error OOB en Random Forest? ¿Qu\'e ventaja tiene frente a la
+  validaci\'on cruzada?
+
+\item \leavevmode
+
+\begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} ¿Cu\'al es la diferencia fundamental entre
+Bagging y Random Forest?
+\end{classicbox}
+
+\item ¿Agregar m\'as \'arboles a un Random Forest puede causar overfitting? ¿Y en
+  Gradient Boosting?
+
+\item ¿Por qu\'e la diversidad (decorrelaci\'on) entre modelos es importante en un
+  ensamble?
+
+\end{enumerate}
+
+% =============================================================
+\section{Ensambles II: Boosting}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \leavevmode
+
+\begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Explique la diferencia conceptual entre Bagging
+y Boosting en cuanto a c\'omo reducen el error.
+\end{classicbox}
+
+\item Explique el algoritmo de AdaBoost. ¿C\'omo se actualizan los pesos?
+
+\item ¿Qu\'e son los pseudo-residuos en Gradient Boosting? ¿Por qu\'e se usan?
+
+\item ¿Qu\'e rol cumplen el \textit{learning rate} ($\eta$) y el n\'umero de \'arboles
+  ($M$) en Gradient Boosting? ¿C\'omo interact\'uan?
+
+\item Compare XGBoost, LightGBM y CatBoost en al menos dos dimensiones.
+
+\end{enumerate}
+
+% =============================================================
+\section{Reducci\'on de la Dimensionalidad}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item ¿Qu\'e es la maldici\'on de la dimensionalidad y por qu\'e afecta a los modelos
+  basados en distancias?
+
+\item Explique PCA paso a paso. ¿Qu\'e maximiza y c\'omo se obtienen las componentes?
+
+\item ¿Qu\'e significa la varianza explicada en PCA? ¿C\'omo se elige $k$?
+
+\item \leavevmode
+
+\begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Compare PCA, t-SNE y UMAP en cuanto a:
+linealidad, velocidad, y si pueden proyectar nuevas muestras.
+\end{classicbox}
+
+\end{enumerate}
+
+% =============================================================
+\section{Overfitting, Underfitting y Trade-offs}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \leavevmode
+
+\begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA --- SE TOMA SIEMPRE]}}
+¿Qu\'e hiperpar\'ametros pueden causar \textbf{overfitting}? Liste al menos cinco
+(de distintos modelos) y explique por qu\'e.
+\end{classicbox}
+
+\item Explique el Bias-Variance Trade-off con la f\'ormula y un ejemplo.
+
+\item ¿C\'omo detectar si un modelo tiene overfitting o underfitting a partir de las
+  curvas de aprendizaje?
+
+\end{enumerate}
+
+% =============================================================
+\section{Selecci\'on de Features}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item Compare los tres tipos de selecci\'on de features: Filter, Wrapper y Embedded.
+
+\item ¿Por qu\'e Label Encoding puede ser problem\'atico para modelos lineales?
+
+\end{enumerate}
+
+% =============================================================
+\section{Resumen: Comparaci\'on de Modelos}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \leavevmode
+
+\begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} ¿Cu\'ando elegiría un \'arbol simple sobre
+Random Forest o Gradient Boosting?
+\end{classicbox}
+
+\item Complete la siguiente tabla comparativa de modelos:
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Modelo} & \textbf{Sesgo} & \textbf{Varianza} & \textbf{Interpretable} & \textbf{No lineal}\\
+\midrule
+Reg.\ Lineal/Log\'istica & & & &\\
+\'Arbol (profundo) & & & &\\
+\'Arbol (podado) & & & &\\
+Bagging / RF & & & &\\
+Gradient Boosting & & & &\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{enumerate}
+
+% =============================================================
+\section{Preguntas de Integraci\'on}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item Un equipo implementa el siguiente pipeline: (I) cargar dataset; (II) imputar con la
+  media de todo el dataset; (III) escalar con MinMaxScaler sobre todo el dataset; (IV)
+  dividir en train/test; (V) entrenar; (VI) evaluar. Identifique todos los errores.
+
+\item Un modelo de detecci\'on de enfermedades tiene Recall = 0.99 pero Precision = 0.10.
+  ¿C\'omo lo interpretar\'ia? ¿Es buen modelo?
+
+\item Un banco quiere predecir impago de cr\'editos. El dataset tiene 500k clientes,
+  solo 12k no pagaron. ¿Qu\'e problemas anticipar\'ia y c\'omo los abordar\'ia?
+
+\end{enumerate}
+
+\vspace{1cm}
+\begin{center}
+\rule{0.8\linewidth}{1pt}\\[6pt]
+{\itshape Banco de preguntas completo --- TD VI 1S-2026}\\[4pt]
+{\small\color{gray} Para las respuestas, consulte el documento \textit{preguntas\_teoricas.pdf}.}
+\end{center}
+
+\end{document}
