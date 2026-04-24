@@ -1,0 +1,908 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{titlesec}
+\usepackage{multicol}
+
+\geometry{top=2cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Tecnolog\'ia Digital VI --- 1er Semestre 2026}
+\lhead{Banco de Preguntas Te\'oricas}
+\rfoot{P\'agina \thepage}
+
+\definecolor{tdblue}{RGB}{0,74,135}
+\definecolor{tdgreen}{RGB}{0,112,60}
+\definecolor{tdred}{RGB}{180,35,24}
+\definecolor{tdorange}{RGB}{200,100,0}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{lightblue}{RGB}{230,240,255}
+\definecolor{lightgreen}{RGB}{230,248,235}
+\definecolor{lightyellow}{RGB}{255,252,220}
+
+% Caja de sección
+\newmdenv[linecolor=tdblue, linewidth=2pt, roundcorner=5pt,
+  backgroundcolor=lightblue, innertopmargin=8pt, innerbottommargin=8pt,
+  innerleftmargin=10pt]{sectionbox}
+
+% Caja de advertencia (pregunta clásica)
+\newmdenv[linecolor=tdred, linewidth=2pt, roundcorner=5pt,
+  backgroundcolor=lightyellow, innertopmargin=8pt, innerbottommargin=8pt,
+  innerleftmargin=10pt]{classicbox}
+
+% Caja de respuesta
+\newmdenv[linecolor=tdgreen, linewidth=1pt, roundcorner=3pt,
+  backgroundcolor=lightgreen, innertopmargin=6pt, innerbottommargin=6pt,
+  innerleftmargin=8pt]{answerbox}
+
+\titleformat{\section}{\large\bfseries\color{tdblue}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{tdblue}}{}{0em}{}
+
+\setlist[enumerate]{itemsep=8pt}
+
+\begin{document}
+
+%--- Portada ---
+\begin{center}
+  {\Large\bfseries\color{tdblue} Universidad Torcuato Di Tella}\\[6pt]
+  {\large\bfseries Tecnolog\'ia Digital VI}\\[4pt]
+  {\large Banco de Preguntas Te\'oricas para el Parcial}\\[4pt]
+  {\normalsize 1er Semestre 2026}\\[12pt]
+  \rule{\linewidth}{1.5pt}
+\end{center}
+
+\begin{mdframed}[linecolor=tdorange, linewidth=1.5pt, roundcorner=4pt,
+  backgroundcolor=lightyellow]
+\textbf{C\'omo usar este documento:} Este banco cubre todos los temas te\'oricos
+evaluables en el parcial. Las preguntas marcadas con
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} son las que se repiten hist\'oricamente.
+Las respuestas aparecen en cajas verdes a continuaci\'on de cada pregunta.
+\end{mdframed}
+
+\vspace{0.5cm}
+\tableofcontents
+\newpage
+
+% =============================================================
+\section{Preprocesamiento y Validaci\'on}
+% =============================================================
+
+\subsection{Valores Faltantes}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+
+\item Explique los tres mecanismos de datos faltantes (MCAR, MAR, MNAR) y d\'e un ejemplo
+  de cada uno.
+
+\begin{answerbox}
+\textbf{MCAR} (\textit{Missing Completely at Random}): la ausencia no depende de ning\'un
+valor. Ejemplo: un sensor falla aleatoriamente.\\[4pt]
+\textbf{MAR} (\textit{Missing at Random}): la ausencia depende de otras variables
+observadas, pero no del valor faltante en s\'i. Ejemplo: hombres no responden preguntas
+de salud con m\'as frecuencia que mujeres.\\[4pt]
+\textbf{MNAR} (\textit{Missing Not at Random}): la ausencia depende del propio valor
+faltante. Ejemplo: personas con ingresos muy altos no declaran su sueldo. Es el caso
+m\'as problem\'atico.
+\end{answerbox}
+
+\item ¿Qu\'e estrategias existen para imputar valores faltantes? ¿Cu\'ando usar cada una?
+
+\begin{answerbox}
+\textbf{Media/mediana/moda}: simple, funciona bien con MCAR. La media es sensible a
+outliers; la mediana es m\'as robusta.\\
+\textbf{Nueva categor\'ia} (para categ\'oricas): modelar expl\'icitamente la ausencia.\\
+\textbf{Imputaci\'on por modelo} (KNN, regresión): m\'as precisa pero costosa
+computacionalmente.\\[4pt]
+\textit{Importante}: toda imputaci\'on introduce alg\'un sesgo.
+\end{answerbox}
+
+\end{enumerate}
+
+\subsection{Data Leakage}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} ¿Qu\'e es el \textit{data leakage}? D\'e un
+ejemplo concreto y explique c\'omo prevenirlo.
+\end{classicbox}
+
+\begin{answerbox}
+El \textbf{data leakage} ocurre cuando informaci\'on del conjunto de test (o del futuro)
+se filtra al entrenamiento. Consecuencia: m\'etricas artificialmente optimistas que no
+se reproducen en producci\'on.\\[4pt]
+\textbf{Ejemplos}:
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+  \item Ajustar un StandardScaler sobre todo el dataset (train+test) antes de dividir.
+  \item Imputar valores faltantes con la media de todo el dataset.
+  \item Incluir variables que ``saben el futuro'' (ej: fecha de pago en un modelo de riesgo de impago).
+\end{itemize}
+\textbf{Prevenci\'on}: ajustar \emph{siempre} los transformadores solo con datos de
+entrenamiento y luego aplicarlos al test. Usar pipelines.
+\end{answerbox}
+
+\item Un equipo aplica un MinMaxScaler ajustado sobre todo el dataset y luego divide en
+  train/test. ¿Hay data leakage? Justifique.
+
+\begin{answerbox}
+\textbf{S\'i, hay data leakage.} El scaler aprendi\'o los m\'inimos y m\'aximos del
+conjunto de test, de modo que el modelo ya ``vi\'o'' informaci\'on del test durante el
+preprocesamiento. El flujo correcto es: dividir primero, luego ajustar el scaler solo
+en train y transformar train y test con ese scaler.
+\end{answerbox}
+
+\end{enumerate}
+
+\subsection{Escalado de Features}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item ¿Cu\'ando es obligatorio escalar features y cu\'ando no importa? D\'e ejemplos de
+  modelos en cada categor\'ia.
+
+\begin{answerbox}
+\textbf{Necesario}: modelos basados en distancias (KNN, SVM) o gradiente descendente
+(regresi\'on log\'istica, redes neuronales). Sin escalado, features en escalas grandes
+dominan artificialmente.\\[4pt]
+\textbf{No necesario}: \'arboles de decisi\'on y sus ensambles (Random Forest, Gradient
+Boosting), ya que sus splits comparan valores del mismo feature, independientemente de
+la escala.
+\end{answerbox}
+
+\item Compare StandardScaler, MinMaxScaler y RobustScaler. ¿Cu\'ando preferir\'ia cada uno?
+
+\begin{answerbox}
+\textbf{StandardScaler}: centra en 0 con $\sigma=1$. Preferir cuando los datos son
+aproximadamente normales y no hay outliers extremos.\\
+\textbf{MinMaxScaler}: escala al rango $[0,1]$. \'Util cuando se necesita un rango
+acotado, pero muy sensible a outliers.\\
+\textbf{RobustScaler}: usa mediana e IQR. Preferir cuando hay outliers significativos,
+ya que no se deja afectar por ellos.
+\end{answerbox}
+
+\end{enumerate}
+
+\subsection{Desbalance de Clases}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Un dataset de detecci\'on de fraude tiene 98\%
+de transacciones normales y 2\% fraudulentas. Un modelo que predice siempre ``normal''
+obtiene 98\% de accuracy. ¿Qu\'e problema hay y qu\'e har\'ia?
+\end{classicbox}
+
+\begin{answerbox}
+El accuracy es \textbf{enga\~noso} con clases desbalanceadas: un modelo trivial (siempre
+predice la clase mayoritaria) ya alcanza 98\% sin aprender nada.\\[4pt]
+\textbf{Soluciones}:
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+  \item Usar m\'etricas adecuadas: F1-Score, Precision, Recall, AUC-PR.
+  \item Oversampling de la clase minoritaria (SMOTE).
+  \item Undersampling de la clase mayoritaria.
+  \item Ajustar \texttt{class\_weight} en el modelo.
+\end{itemize}
+\end{answerbox}
+
+\item ¿Qu\'e es SMOTE y c\'omo genera muestras sint\'eticas?
+
+\begin{answerbox}
+\textbf{SMOTE} (Synthetic Minority Oversampling Technique) genera muestras sint\'eticas
+de la clase minoritaria interpolando entre muestras existentes y sus vecinos m\'as
+cercanos en el espacio de features. No duplica muestras sino que crea nuevas
+sint\'eticamente plausibles.
+\end{answerbox}
+
+\end{enumerate}
+
+\subsection{Validaci\'on Cruzada}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Explique K-Fold Cross-Validation. ¿Por qu\'e
+es preferible al simple holdout?
+\end{classicbox}
+
+\begin{answerbox}
+En \textbf{K-Fold CV} se divide el dataset en $k$ particiones iguales. En cada iteraci\'on
+se usa un fold como validaci\'on y los $k-1$ restantes como entrenamiento. Se promedian
+las $k$ m\'etricas resultantes.\\[4pt]
+\textbf{Ventajas sobre holdout simple}:
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+  \item Cada muestra es usada exactamente una vez para validar.
+  \item La estimaci\'on del error es m\'as robusta y con menor varianza.
+  \item No depende de una \'unica divisi\'on aleatoria.
+\end{itemize}
+Valores t\'ipicos: $k=5$ o $k=10$.
+\end{answerbox}
+
+\item ¿Qu\'e es Leave-One-Out CV (LOOCV)? ¿Cu\'al es su ventaja y su desventaja principal?
+
+\begin{answerbox}
+\textbf{LOOCV} es K-Fold con $k=n$ (una muestra por fold). \\
+\textbf{Ventaja}: usa casi todos los datos para entrenar en cada iteraci\'on.\\
+\textbf{Desventaja}: es computacionalmente muy costoso ($n$ modelos a entrenar) y la
+varianza de la estimaci\'on es alta.
+\end{answerbox}
+
+\end{enumerate}
+
+% =============================================================
+\section{M\'etricas de Evaluaci\'on}
+% =============================================================
+
+\subsection{Regresi\'on}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item Compare MSE, RMSE y MAE. ¿Cu\'ando elegir\'ia cada uno?
+
+\begin{answerbox}
+\textbf{MSE}: penaliza cuadr\'aticamente los errores grandes. Usar cuando equivocarse
+por mucho es muy costoso. Es diferenciable, est\'andar en entrenamiento.\\
+\textbf{RMSE}: ra\'iz del MSE; mismas propiedades pero en la unidad original.
+Comparar con MAE para detectar si hay puntos con error muy grande.\\
+\textbf{MAE}: promedio de errores absolutos. Robusto a outliers (prioriza la mediana).
+Usar cuando se quiere una m\'etrica directamente interpretable.
+\end{answerbox}
+
+\item ¿Puede el $R^2$ ser negativo? Explique qu\'e significar\'ia eso.
+
+\begin{answerbox}
+\textbf{S\'i}, el $R^2$ puede ser negativo. Significa que el modelo es \textbf{peor}
+que simplemente predecir la media de los valores. $R^2 = 0$ equivale a predecir la
+media; $R^2 = 1$ es predicci\'on perfecta.
+\end{answerbox}
+
+\item ¿Cu\'ando usar RMSLE en lugar de RMSE?
+
+\begin{answerbox}
+RMSLE es adecuado cuando importa el \textbf{error relativo (porcentual)} y no el absoluto.
+Tambi\'en cuando los targets abarcan varios \'ordenes de magnitud. Penaliza m\'as las
+subestimaciones que las sobreestimaciones. Muy usado en forecasting de ventas o precios.
+\end{answerbox}
+
+\end{enumerate}
+
+\subsection{Clasificaci\'on}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Defina Precision y Recall. ¿Cu\'ando es m\'as
+grave tener Recall bajo? ¿Cu\'ando es m\'as grave tener Precision baja?
+\end{classicbox}
+
+\begin{answerbox}
+\[
+  \text{Precision} = \frac{TP}{TP+FP}, \qquad \text{Recall} = \frac{TP}{TP+FN}
+\]
+\textbf{Recall bajo es m\'as grave} cuando los falsos negativos son catastr\'oficos:
+detectar c\'ancer, fraude, fallas en reactores nucleares. ``No debo perder casos
+positivos reales.''\\[4pt]
+\textbf{Precision baja es m\'as grave} cuando los falsos positivos tienen alto costo:
+filtrar spam (marcar emails leg\'itimos como spam), diagn\'osticos m\'edicos invasivos.
+``No quiero molestar/perjudicar a quien no lo merece.''
+\end{answerbox}
+
+\item ¿Qu\'e es el F1-Score y cu\'ando es m\'as \'util que el Accuracy?
+
+\begin{answerbox}
+$F_1 = \dfrac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision}+\text{Recall}}$
+
+Es la media arm\'onica entre Precision y Recall. Es \'util cuando las clases est\'an
+\textbf{desbalanceadas} y ambos tipos de error importan. El Accuracy puede ser enga\~noso
+porque un clasificador trivial puede alcanzarlo sin aprender nada.
+\end{answerbox}
+
+\item Explique la curva ROC y el AUC-ROC. ¿Qu\'e significa un AUC de 0.5?
+
+\begin{answerbox}
+La \textbf{curva ROC} grafica TPR (Recall) vs.\ FPR para distintos umbrales de
+clasificaci\'on. El \textbf{AUC-ROC} es el \'area bajo esa curva.\\
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+  \item AUC = 1: clasificador perfecto.
+  \item AUC = 0.5: equivalente a clasificar al azar (l\'inea diagonal).
+  \item AUC < 0.5: peor que el azar (modelo invertido).
+\end{itemize}
+No usar ROC cuando las clases est\'an muy desbalanceadas; preferir la curva
+Precision-Recall.
+\end{answerbox}
+
+\item ¿Cu\'ando preferir\'ia la curva Precision-Recall sobre la curva ROC?
+
+\begin{answerbox}
+Cuando el \textbf{dataset est\'a muy desbalanceado} y la clase positiva es la de inter\'es.
+La curva ROC puede resultar artificialmente optimista porque el AUC se ve inflado por la
+gran cantidad de verdaderos negativos (TN). La curva PR se focaliza solo en la clase
+positiva y es m\'as informativa en estos casos.
+\end{answerbox}
+
+\end{enumerate}
+
+% =============================================================
+\section{Modelos Lineales}
+% =============================================================
+
+\subsection{Regresi\'on Lineal y Log\'istica}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item ¿Por qu\'e la Regresi\'on Log\'istica es un modelo lineal si usa la funci\'on sigmoide?
+
+\begin{answerbox}
+La Regresi\'on Log\'istica es lineal porque la \textbf{frontera de decisi\'on} es un
+hiperplano (combinaci\'on lineal de features = 0) y la relaci\'on entre features y
+log-odds es lineal:
+\[
+  \log\!\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1 x_1 + \cdots + \beta_p x_p
+\]
+La sigmoide solo transforma la salida lineal a probabilidades $(0,1)$, pero no cambia
+la naturaleza lineal del modelo.
+\end{answerbox}
+
+\item ¿Por qu\'e la Regresi\'on Lineal tiene soluci\'on cerrada pero la Log\'istica no?
+
+\begin{answerbox}
+La Regresi\'on Lineal minimiza una funci\'on cuadr\'atica (MSE) que admite soluci\'on
+exacta mediante las ecuaciones normales: $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$.\\[4pt]
+La Log\'istica minimiza la log-loss (cross-entrop\'ia), que no tiene soluci\'on cerrada
+debido a la no linealidad de la sigmoide. Se requieren m\'etodos iterativos como
+Gradient Descent.
+\end{answerbox}
+
+\end{enumerate}
+
+\subsection{Regularizaci\'on}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Compare L1 (Lasso) y L2 (Ridge). ¿En qu\'e
+se diferencian y cu\'ando usar cada una?
+\end{classicbox}
+
+\begin{answerbox}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Propiedad} & \textbf{L1 (Lasso)} & \textbf{L2 (Ridge)}\\
+\midrule
+Penalizaci\'on & $\lambda \sum |w_j|$ & $\lambda \sum w_j^2$\\
+Coeficientes & Exactamente 0 (esparsidad) & Peque\~nos, nunca 0\\
+Selecci\'on de features & S\'i & No\\
+Multicolinealidad & Selecciona una & Distribuye peso\\
+Soluci\'on & No anal\'itica & Anal\'itica\\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Usar L1} cuando se sospecha que muchas features son irrelevantes (selecci\'on
+impl\'icita). \textbf{Usar L2} cuando todas las features son potencialmente \'utiles y
+hay multicolinealidad.
+\end{answerbox}
+
+\item ¿Qu\'e efecto tiene aumentar $\lambda$ en la regularizaci\'on? ¿Y disminuirlo?
+
+\begin{answerbox}
+\textbf{Aumentar $\lambda$}: mayor penalizaci\'on sobre los coeficientes $\Rightarrow$
+modelo m\'as simple $\Rightarrow$ mayor sesgo, menor varianza $\Rightarrow$ menos
+overfitting.\\
+\textbf{Disminuir $\lambda$}: menor penalizaci\'on $\Rightarrow$ modelo m\'as complejo
+$\Rightarrow$ menor sesgo, mayor varianza $\Rightarrow$ m\'as riesgo de overfitting.\\
+Con $\lambda=0$ no hay regularizaci\'on.
+\end{answerbox}
+
+\end{enumerate}
+
+% =============================================================
+\section{\'Arboles de Decisi\'on}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item Explique intuitivamente por qu\'e los \'arboles de decisi\'on son modelos de
+  \textbf{alta varianza}.
+
+\begin{answerbox}
+Los \'arboles de decisi\'on son de alta varianza porque son muy sensibles a los datos
+de entrenamiento: un cambio peque\~no en el dataset puede producir un \'arbol
+completamente diferente. Esto ocurre porque el algoritmo CART es \textbf{goloso (greedy)}
+y determinista: en cada nodo elige el mejor split para ese subconjunto, por lo que un
+punto extra o diferente puede cambiar todos los splits subsiguientes en cascada.
+\end{answerbox}
+
+\item Defina Gini y Entrop\'ia. ¿Qu\'e valor toman cuando el nodo es puro? ¿Y cuando es
+  m\'aximamente impuro?
+
+\begin{answerbox}
+\[
+  \text{Gini}_m = 1 - \sum_{k=1}^{K} p_{mk}^2, \qquad
+  H_m = -\sum_{k=1}^{K} p_{mk}\log_2(p_{mk})
+\]
+\textbf{Nodo puro} (todos de la misma clase): Gini = 0, Entrop\'ia = 0.\\
+\textbf{M\'axima impureza} (clases equidistribuidas): Gini alcanza $1 - 1/K$ y
+la Entrop\'ia alcanza $\log_2(K)$.
+\end{answerbox}
+
+\item \begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Mencione \textbf{tres} hiperpar\'ametros que
+regularizan un \'arbol de decisi\'on (reducen overfitting) y explique el efecto de cada
+uno.
+\end{classicbox}
+
+\begin{answerbox}
+\begin{enumerate}[label=\arabic*., topsep=2pt, itemsep=4pt]
+  \item \texttt{max\_depth}: limita la profundidad m\'axima del \'arbol. Menos
+    profundidad $\Rightarrow$ menos particiones $\Rightarrow$ menos overfitting.
+  \item \texttt{min\_samples\_split}: m\'inimo de muestras requeridas para dividir
+    un nodo. Un valor alto impide crear nodos con pocos datos.
+  \item \texttt{min\_samples\_leaf}: m\'inimo de muestras en cada hoja. Evita hojas
+    con una sola muestra que memorizan el ruido.
+\end{enumerate}
+(Tambi\'en v\'alido: \texttt{max\_features}, \texttt{max\_leaf\_nodes},
+\texttt{ccp\_alpha} para poda.)
+\end{answerbox}
+
+\item Un \'arbol fue entrenado con temperaturas entre 10\textdegree C y 40\textdegree C.
+  En producci\'on recibe una observaci\'on de 55\textdegree C. ¿Qu\'e predice? ¿Es un
+  problema?
+
+\begin{answerbox}
+El \'arbol predecir\'a el valor de la \textbf{hoja m\'as extrema} para temperaturas
+$> 40$\textdegree C (no puede extrapolar, solo puede asignar la \'ultima regi\'on).
+\textbf{S\'i es un problema}: los \'arboles no extrapolan fuera del rango de
+entrenamiento. Si los nuevos datos presentan valores fuera del rango visto en train, el
+modelo tendr\'a un rendimiento degradado. Esto contrasta con los modelos lineales que
+s\'i extrapolan (aunque tambi\'en con riesgo).
+\end{answerbox}
+
+\item ¿Qu\'e es la importancia de features en un \'arbol? ¿Cu\'al es su sesgo principal?
+
+\begin{answerbox}
+La \textbf{importancia de features} suma la ganancia en impureza ponderada que aporta
+cada feature en todos los splits del \'arbol, normalizada para que sume 1.\\[4pt]
+\textbf{Sesgo}: los \'arboles tienden a sobreestimar la importancia de variables con
+alta cardinalidad o muchas categor\'ias, porque tienen m\'as oportunidades de hacer
+buenos splits por azar. Correcci\'on: usar importancia por permutaci\'on.
+\end{answerbox}
+
+\end{enumerate}
+
+% =============================================================
+\section{Ensambles I: Bagging y Random Forest}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item Explique el concepto de \textbf{Bootstrap}. ¿Qu\'e porcentaje de muestras queda
+  fuera (OOB) en promedio?
+
+\begin{answerbox}
+El \textbf{Bootstrap} consiste en extraer $n$ muestras \textbf{con reemplazo} de un
+dataset de $n$ elementos. En promedio, $\approx 63.2\%$ de las muestras originales
+aparecen al menos una vez y el $\approx 36.8\%$ (= $1/e$) queda fuera (\textit{Out-of-Bag},
+OOB), ya que:
+\[
+  \lim_{n\to\infty}\left(1 - \frac{1}{n}\right)^n = \frac{1}{e} \approx 0.368
+\]
+\end{answerbox}
+
+\item ¿C\'omo se usa el error OOB en Random Forest? ¿Qu\'e ventaja tiene frente a la
+  validaci\'on cruzada?
+
+\begin{answerbox}
+Para cada muestra, el \textbf{error OOB} se estima usando solo los \'arboles que
+\textbf{no} la incluyeron en su bootstrap. As\'i se obtiene una estimaci\'on del error
+de generalizaci\'on sin necesidad de reservar un conjunto de validaci\'on separado.\\[4pt]
+\textbf{Ventaja}: no desperdicia datos (todos se usan para entrenar) y es m\'as eficiente
+computacionalmente que el K-Fold CV.
+\end{answerbox}
+
+\item \begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} ¿Cu\'al es la diferencia fundamental entre
+Bagging y Random Forest?
+\end{classicbox}
+
+\begin{answerbox}
+\textbf{Bagging} entrena m\'ultiples modelos en paralelo sobre muestras bootstrap
+independientes. Reduce la varianza promediando predictores.\\[4pt]
+\textbf{Random Forest} extiende Bagging con una capa adicional de aleatoriedad: en
+cada split solo se eval\'uan $m$ features seleccionados al azar (t\'ipicamente
+$m = \sqrt{p}$ para clasificaci\'on, $m = p/3$ para regresi\'on). Esto
+\textbf{decorrelaciona m\'as} los \'arboles, reduciendo a\'un m\'as la varianza del
+ensamble.
+\end{answerbox}
+
+\item ¿Agregar m\'as \'arboles a un Random Forest puede causar overfitting? ¿Y en
+  Gradient Boosting?
+
+\begin{answerbox}
+\textbf{Random Forest}: \textbf{No}. Agregar m\'as \'arboles estabiliza o mejora el
+rendimiento sin causar overfitting. El error OOB converge a un valor estable.\\[4pt]
+\textbf{Gradient Boosting}: \textbf{S\'i}. Como los \'arboles se entrenan
+secuencialmente para corregir los errores del anterior, agregar demasiados puede hacer
+que el modelo se ajuste al ruido del entrenamiento (overfitting). Por eso se usa
+\textit{early stopping}.
+\end{answerbox}
+
+\item ¿Por qu\'e la diversidad (decorrelaci\'on) entre modelos es importante en un
+  ensamble?
+
+\begin{answerbox}
+Para $B$ modelos con varianza $\sigma^2$ y correlaci\'on $\rho$:
+\[
+  \text{Var}(\bar{f}) = \rho\,\sigma^2 + \frac{1-\rho}{B}\,\sigma^2
+\]
+Si $\rho \approx 0$ (modelos decorrelacionados), la varianza del ensamble se reduce a
+$\sigma^2/B$, que tiende a 0 al aumentar $B$. Si $\rho$ es alto, el beneficio de
+agregar modelos es m\'inimo. La clave es \textbf{reducir la correlaci\'on} entre
+modelos.
+\end{answerbox}
+
+\end{enumerate}
+
+% =============================================================
+\section{Ensambles II: Boosting}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Explique la diferencia conceptual entre Bagging
+y Boosting en cuanto a c\'omo reducen el error.
+\end{classicbox}
+
+\begin{answerbox}
+\textbf{Bagging}: entrena modelos en \textbf{paralelo} sobre muestras bootstrap
+independientes. Reduce la \textbf{varianza} del modelo promediando predictores
+diversos. No reduce mucho el sesgo.\\[4pt]
+\textbf{Boosting}: entrena modelos \textbf{secuencialmente}, donde cada modelo nuevo
+se focaliza en los errores del ensamble anterior. Reduce principalmente el \textbf{sesgo},
+construyendo un modelo fuerte a partir de learners d\'ebiles.
+\end{answerbox}
+
+\item Explique el algoritmo de AdaBoost. ¿C\'omo se actualizan los pesos?
+
+\begin{answerbox}
+\begin{enumerate}[label=\arabic*., topsep=2pt, itemsep=2pt]
+  \item Inicializar pesos iguales: $w_i = 1/n$.
+  \item Entrenar clasificador $h_m$ con pesos $\{w_i\}$.
+  \item Calcular error ponderado: $\varepsilon_m = \sum_{h_m(x_i)\neq y_i} w_i$.
+  \item Peso del clasificador: $\alpha_m = \frac{1}{2}\ln\frac{1-\varepsilon_m}{\varepsilon_m}$.
+  \item Aumentar pesos de muestras mal clasificadas; reducir las correctas.
+  \item Renormalizar pesos.
+\end{enumerate}
+Predicci\'on final: $H(x) = \text{sign}\left(\sum_m \alpha_m h_m(x)\right)$.\\
+Si $\varepsilon_m < 0.5$ entonces $\alpha_m > 0$ (clasificador mejor que el azar).
+\end{answerbox}
+
+\item ¿Qu\'e son los pseudo-residuos en Gradient Boosting? ¿Por qu\'e se usan?
+
+\begin{answerbox}
+Los \textbf{pseudo-residuos} son el gradiente negativo de la funci\'on de p\'erdida
+respecto de la predicci\'on actual:
+\[
+  r_{im} = -\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}\bigg|_{F=F_{m-1}}
+\]
+Cada \'arbol nuevo se entrena para \textbf{predecir estos residuos}, lo que equivale
+a dar un paso en la direcci\'on de mayor descenso de la p\'erdida en el espacio
+funcional. Para MSE, el pseudo-residuo es simplemente $y_i - \hat{y}_i$.
+\end{answerbox}
+
+\item ¿Qu\'e rol cumplen el \textit{learning rate} ($\eta$) y el n\'umero de \'arboles
+  ($M$) en Gradient Boosting? ¿C\'omo interact\'uan?
+
+\begin{answerbox}
+\textbf{Learning rate} $\eta$: controla cu\'anto contribuye cada \'arbol. Un $\eta$ bajo
+hace pasos peque\~nos y m\'as conservadores.\\
+\textbf{N\'umero de \'arboles} $M$: cu\'antos pasos se dan.\\[4pt]
+\textbf{Trade-off}: $\eta$ peque\~no requiere $M$ grande para alcanzar buen desempe\~no,
+pero produce mayor regularizaci\'on impl\'icita y mejor generalizaci\'on. Deben
+ajustarse en conjunto.
+\end{answerbox}
+
+\item Compare XGBoost, LightGBM y CatBoost en al menos dos dimensiones.
+
+\begin{answerbox}
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+& \textbf{XGBoost} & \textbf{LightGBM} & \textbf{CatBoost}\\
+\midrule
+Crecimiento & Por nivel & Por hoja & Sim\'etrico\\
+Velocidad & Moderada & Alta & Alta\\
+Categ\'oricas & Requiere enc. & Nativo & Nativo\\
+Regularizaci\'on & Expl\'icita & Impl.+expl. & Impl\'icita\\
+\bottomrule
+\end{tabular}
+\end{center}
+LightGBM es m\'as r\'apido pero m\'as propenso a overfitting por su crecimiento
+\textit{leaf-wise}. CatBoost maneja categ\'oricas nativamente sin encoding previo.
+\end{answerbox}
+
+\end{enumerate}
+
+% =============================================================
+\section{Reducci\'on de la Dimensionalidad}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item ¿Qu\'e es la maldici\'on de la dimensionalidad y por qu\'e afecta a los modelos
+  basados en distancias?
+
+\begin{answerbox}
+En espacios de alta dimensi\'on, el volumen crece exponencialmente. Los puntos se
+vuelven \textbf{equidistantes} entre s\'i: la diferencia entre la distancia m\'axima y
+m\'inima tiende a 0. Esto hace que los algoritmos basados en distancias (KNN, SVM radial,
+clustering) pierdan efectividad porque la noci\'on de ``vecino cercano'' deja de ser
+significativa.
+\end{answerbox}
+
+\item Explique PCA paso a paso. ¿Qu\'e maximiza y c\'omo se obtienen las componentes?
+
+\begin{answerbox}
+\textbf{PCA} busca una proyecci\'on lineal que \textbf{maximice la varianza retenida}.
+\begin{enumerate}[label=\arabic*., topsep=2pt, itemsep=2pt]
+  \item Estandarizar cada feature (media 0, $\sigma = 1$).
+  \item Calcular la matriz de covarianza: $\mathbf{M}_x = \frac{1}{n-1}\mathbf{X}^\top\mathbf{X}$.
+  \item Descomponer: $\mathbf{M}_x \mathbf{v}_j = \lambda_j \mathbf{v}_j$ (autovectores y autovalores).
+  \item Ordenar por autovalor descendente.
+  \item Proyectar: $\mathbf{Z} = \mathbf{X}\,\mathbf{P}_k$.
+\end{enumerate}
+La primera CP apunta a la direcci\'on de m\'axima varianza; las siguientes son
+perpendiculares y tienen la segunda mayor varianza, etc.
+\end{answerbox}
+
+\item ¿Qu\'e significa la varianza explicada en PCA? ¿C\'omo se elige $k$?
+
+\begin{answerbox}
+La varianza explicada por la componente $j$ es:
+\[
+  \text{VE}_j = \frac{\lambda_j}{\sum_{l=1}^p \lambda_l}
+\]
+Para elegir $k$ (n\'umero de componentes a retener) se usa el \textbf{Scree Plot}: se
+busca el $k$ donde la varianza acumulada supera un umbral deseado (t\'ipicamente
+85--95\%), o donde la curva muestra un ``codo''.
+\end{answerbox}
+
+\item \begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} Compare PCA, t-SNE y UMAP en cuanto a:
+linealidad, velocidad, y si pueden proyectar nuevas muestras.
+\end{classicbox}
+
+\begin{answerbox}
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+& \textbf{PCA} & \textbf{t-SNE} & \textbf{UMAP}\\
+\midrule
+Relaciones & Lineal & No lineal & No lineal\\
+Velocidad & Muy r\'apida & Lenta & R\'apida\\
+Estructura local & Media & Alta & Alta\\
+Estructura global & Alta & Baja & Media\\
+Proyecta nuevas muestras & S\'i & \textbf{No} & S\'i\\
+Interpretabilidad & Alta & Baja & Baja\\
+\bottomrule
+\end{tabular}
+\end{center}
+t-SNE solo sirve para visualizaci\'on exploratoria; no puede proyectar nuevas muestras.
+UMAP es preferido cuando se necesita velocidad y proyecci\'on de nuevas muestras.
+\end{answerbox}
+
+\end{enumerate}
+
+% =============================================================
+\section{Overfitting, Underfitting y Trade-offs}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA --- SE TOMA SIEMPRE]}}
+¿Qu\'e hiperpar\'ametros pueden causar \textbf{overfitting}? Liste al menos cinco
+(de distintos modelos) y explique por qu\'e.
+\end{classicbox}
+
+\begin{answerbox}
+\begin{enumerate}[label=\arabic*., topsep=2pt, itemsep=5pt]
+  \item \textbf{\texttt{max\_depth} (\'arboles)}: valores altos permiten al \'arbol
+    memorizar el ruido. Sin l\'imite, cada muestra puede tener su propia hoja.
+  \item \textbf{\texttt{n\_estimators} (Gradient Boosting)}: demasiados \'arboles en
+    boosting hacen que el modelo se ajuste al ruido de training (en RF no causa overfitting).
+  \item \textbf{\texttt{learning\_rate} bajo con \texttt{n\_estimators} alto (GB)}: si la
+    tasa es muy baja pero hay muchos \'arboles, el modelo puede sobreajustarse.
+  \item \textbf{\texttt{min\_samples\_split} / \texttt{min\_samples\_leaf} bajos (\'arboles)}:
+    valores peque\~nos permiten splits con muy pocos datos, creando ramas que memorizan
+    outliers.
+  \item \textbf{$\lambda$ de regularizaci\'on bajo (L1/L2)}: poca penalizaci\'on permite
+    coeficientes muy grandes que se ajustan al ruido.
+  \item \textbf{\texttt{max\_features} alto (RF)}: si se usan muchas features por split,
+    los \'arboles quedan m\'as correlacionados y hay menos diversidad.
+  \item \textbf{Grado del polinomio (regresi\'on polinomial)}: grados muy altos crean
+    modelos que pasan exactamente por los datos de training.
+  \item \textbf{$k$ peque\~no en KNN}: $k=1$ hace que el modelo simplemente memorice
+    cada punto de entrenamiento.
+\end{enumerate}
+\end{answerbox}
+
+\item Explique el Bias-Variance Trade-off con la f\'ormula y un ejemplo.
+
+\begin{answerbox}
+\[
+  \mathbb{E}\!\left[(y - \hat{f}(x))^2\right]
+  = \underbrace{\left(\mathbb{E}[\hat{f}(x)] - f(x)\right)^2}_{\text{Sesgo}^2}
+  + \underbrace{\mathbb{E}\!\left[\left(\hat{f}(x) - \mathbb{E}[\hat{f}(x)]\right)^2\right]}_{\text{Varianza}}
+  + \underbrace{\sigma^2_\varepsilon}_{\text{Ruido irred.}}
+\]
+\textbf{Ejemplo}: Un \'arbol muy profundo tiene bajo sesgo (se ajusta bien al train) pero
+alta varianza (cambia mucho ante nuevos datos $\Rightarrow$ overfitting). Un modelo lineal
+simple tiene alto sesgo (no captura patrones complejos $\Rightarrow$ underfitting) pero
+baja varianza.
+\end{answerbox}
+
+\item ¿C\'omo detectar si un modelo tiene overfitting o underfitting a partir de las
+  curvas de aprendizaje?
+
+\begin{answerbox}
+\textbf{Overfitting}: error de entrenamiento bajo pero error de validaci\'on alto (brecha
+grande entre ambas curvas). El modelo memoriza el train pero no generaliza.\\[4pt]
+\textbf{Underfitting}: error de entrenamiento \textbf{y} validaci\'on ambos altos (curvas
+convergentes en valores altos). El modelo no captura la se\~nal de los datos.\\[4pt]
+\textbf{Modelo adecuado}: error de validaci\'on tiene un m\'inimo; elegir la complejidad
+en ese punto.
+\end{answerbox}
+
+\end{enumerate}
+
+% =============================================================
+\section{Selecci\'on de Features}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item Compare los tres tipos de selecci\'on de features: Filter, Wrapper y Embedded.
+
+\begin{answerbox}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Tipo} & \textbf{M\'etodo} & \textbf{Caracter\'istica}\\
+\midrule
+Filter & Correlaci\'on, $\chi^2$, info.\ mutua & Independiente del modelo; r\'apido\\
+Wrapper & Forward/Backward selection & Eval\'ua subconjuntos con modelo; lento\\
+Embedded & L1 (Lasso), importancia en \'arboles & Integrado al entrenamiento\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{answerbox}
+
+\item ¿Por qu\'e Label Encoding puede ser problem\'atico para modelos lineales?
+
+\begin{answerbox}
+El Label Encoding asigna un n\'umero entero a cada categor\'ia (ej: Argentina=0,
+Brasil=1, Chile=2), lo que \textbf{impone un orden ordinal artificial} que el modelo
+lineal interpretar\'a como relaci\'on num\'erica. El modelo entender\'a que
+``Chile > Brasil > Argentina'', lo cual no tiene sentido si las categor\'ias no tienen
+orden. Soluci\'on: usar One-Hot Encoding para variables nominales.\\
+\textit{Excepci\'on}: en \'arboles de decisi\'on esto no es un problema, ya que los
+splits comparan valores y no asumen relaciones lineales.
+\end{answerbox}
+
+\end{enumerate}
+
+% =============================================================
+\section{Resumen: Comparaci\'on de Modelos}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item \begin{classicbox}
+\textcolor{tdred}{\textbf{[CL\'ASICA]}} ¿Cu\'ando elegiría un \'arbol simple sobre
+Random Forest o Gradient Boosting?
+\end{classicbox}
+
+\begin{answerbox}
+Se preferir\'ia un \'arbol simple cuando:
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+  \item La \textbf{interpretabilidad} es cr\'itica (regulaci\'on, medicina, finanzas).
+  \item Los recursos computacionales son muy limitados.
+  \item El dataset es peque\~no y los ensambles podr\'ian no agregar valor.
+  \item Se necesita un modelo de referencia (\textit{baseline}) r\'apido.
+\end{itemize}
+En todos los dem\'as casos, RF o GB suelen dar mejor performance.
+\end{answerbox}
+
+\item Complete la siguiente tabla comparativa de modelos:
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Modelo} & \textbf{Sesgo} & \textbf{Varianza} & \textbf{Interpretable} & \textbf{No lineal}\\
+\midrule
+Reg.\ Lineal/Log\'istica & Alto & Bajo & Muy alta & No\\
+\'Arbol (profundo) & Bajo & Alto & Media & S\'i\\
+\'Arbol (podado) & Medio & Medio & Alta & S\'i\\
+Bagging / RF & Bajo & Bajo & Baja & S\'i\\
+Gradient Boosting & Muy bajo & Bajo & Baja & S\'i\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{enumerate}
+
+% =============================================================
+\section{Preguntas de Integraci\'on}
+% =============================================================
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, resume]
+
+\item Un equipo implementa el siguiente pipeline: (I) cargar dataset; (II) imputar con la
+  media de todo el dataset; (III) escalar con MinMaxScaler sobre todo el dataset; (IV)
+  dividir en train/test; (V) entrenar; (VI) evaluar. Identifique todos los errores.
+
+\begin{answerbox}
+\textbf{Dos errores de data leakage}:
+\begin{enumerate}[label=\arabic*., topsep=2pt, itemsep=2pt]
+  \item La imputaci\'on en el paso II usa la media del test: introduce info del futuro.
+  \item El escalado en el paso III usa m\'inimos/m\'aximos del test.
+\end{enumerate}
+\textbf{Pipeline correcto}: (I) cargar; (II) dividir en train/test; (III) ajustar
+imputador solo en train, aplicar a ambos; (IV) ajustar scaler solo en train, aplicar
+a ambos; (V) entrenar; (VI) evaluar.
+\end{answerbox}
+
+\item Un modelo de detecci\'on de enfermedades tiene Recall = 0.99 pero Precision = 0.10.
+  ¿C\'omo lo interpretar\'ia? ¿Es buen modelo?
+
+\begin{answerbox}
+\textbf{Recall = 0.99}: detecta el 99\% de los casos positivos reales (casi no pierde
+enfermos). \textbf{Precision = 0.10}: de los que diagnostica como enfermos, solo el 10\%
+realmente lo est\'a (90\% son falsos positivos).\\[4pt]
+El modelo es \'util si el costo de no detectar una enfermedad es muy alto. Sin embargo,
+la Precision baja genera muchos diagn\'osticos falsos que pueden causar tratamientos
+innecesarios. Se deber\'ia ajustar el umbral o mejorar el modelo para balancear ambas
+m\'etricas seg\'un el contexto cl\'inico.
+\end{answerbox}
+
+\item Un banco quiere predecir impago de cr\'editos. El dataset tiene 500k clientes,
+  solo 12k no pagaron. ¿Qu\'e problemas anticipar\'ia y c\'omo los abordar\'ia?
+
+\begin{answerbox}
+\textbf{Problemas}:
+\begin{enumerate}[label=\arabic*., topsep=2pt, itemsep=2pt]
+  \item \textbf{Desbalance de clases} ($\approx 2.4\%$ positivos): el accuracy ser\'a
+    enga\~noso. Usar F1, AUC-PR, ajustar \texttt{class\_weight}.
+  \item \textbf{Valores faltantes} (8\% en ingreso, 3\% en historial): imputar
+    correctamente, solo con datos de train.
+  \item \textbf{Variables categ\'oricas} (empleo, zona, educaci\'on): aplicar encoding
+    apropiado.
+  \item \textbf{Data leakage potencial}: variables que dependen del outcome (ej: monto
+    total de deuda acumulada post-impago).
+\end{enumerate}
+\textbf{M\'etrica}: AUC-PR o F1, no Accuracy.
+\end{answerbox}
+
+\end{enumerate}
+
+\vspace{1cm}
+\begin{center}
+\rule{0.8\linewidth}{1pt}\\[6pt]
+{\itshape Banco de preguntas completo --- TD VI 1S-2026}\\[4pt]
+{\small\color{gray} Revise tambi\'en los parciales modelo 1, 2 y 3 para ejercicios con
+gr\'aficos y matrices de confusi\'on.}
+\end{center}
+
+\end{document}
