@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-05-03T01:46:58.324Z",
+  "source": "auto-postool",
+  "partial": false,
+  "phase": null,
+  "phase_name": null,
+  "phase_dir": null,
+  "plan": null,
+  "task": null,
+  "total_tasks": null,
+  "status": "auto-checkpoint",
+  "completed_tasks": [],
+  "remaining_tasks": [],
+  "blockers": [],
+  "human_actions_pending": [],
+  "decisions": [],
+  "uncommitted_files": [
+    {
+      "status": "??",
+      "path": "1S-2026/tp/2/.planning/"
+    }
+  ],
+  "next_action": null,
+  "context_notes": "Recent commits:\n606b55d TP2: clasificación géneros musicales — notebook completo + visualizaciones\nc352b36 Eliminados archivos auxiliares de LaTeX\nd10f9bb Agregadas preguntas teóricas\n4facc58 Agregadas preguntas teóricas\n7ed7d40 Terminada G3"
+}
