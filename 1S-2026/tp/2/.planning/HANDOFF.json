@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-05-03T01:46:58.324Z",
+  "timestamp": "2026-05-03T16:10:00.431Z",
   "source": "auto-postool",
   "partial": false,
   "phase": null,
@@ -17,10 +17,14 @@
   "decisions": [],
   "uncommitted_files": [
     {
-      "status": "??",
-      "path": "1S-2026/tp/2/.planning/"
+      "status": "M",
+      "path": "1S-2026/tp/2/.planning/HANDOFF.json"
+    },
+    {
+      "status": "M",
+      "path": "1S-2026/tp/2/tp.ipynb"
     }
   ],
   "next_action": null,
-  "context_notes": "Recent commits:\n606b55d TP2: clasificación géneros musicales — notebook completo + visualizaciones\nc352b36 Eliminados archivos auxiliares de LaTeX\nd10f9bb Agregadas preguntas teóricas\n4facc58 Agregadas preguntas teóricas\n7ed7d40 Terminada G3"
+  "context_notes": "Recent commits:\ncf213e0 Avance TP2\n606b55d TP2: clasificación géneros musicales — notebook completo + visualizaciones\nc352b36 Eliminados archivos auxiliares de LaTeX\nd10f9bb Agregadas preguntas teóricas\n4facc58 Agregadas preguntas teóricas"
 }
