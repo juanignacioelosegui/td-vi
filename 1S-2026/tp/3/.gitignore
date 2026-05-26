@@ -1,0 +1,4 @@
+# Para no pushear semejante archivo
+EuroSAT/
+__pycache__/
+*.pth
