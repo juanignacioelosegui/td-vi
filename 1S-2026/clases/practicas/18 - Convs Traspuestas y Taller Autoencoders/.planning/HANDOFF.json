@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-06-02T18:08:29.118Z",
+  "source": "auto-postool",
+  "partial": false,
+  "phase": null,
+  "phase_name": null,
+  "phase_dir": null,
+  "plan": null,
+  "task": null,
+  "total_tasks": null,
+  "status": "auto-checkpoint",
+  "completed_tasks": [],
+  "remaining_tasks": [],
+  "blockers": [],
+  "human_actions_pending": [],
+  "decisions": [],
+  "uncommitted_files": [
+    {
+      "status": "??",
+      "path": "\"1S-2026/clases/practicas/18 - Convs Traspuestas y Taller Autoencoders/\""
+    }
+  ],
+  "next_action": null,
+  "context_notes": "Recent commits:\n4e6b353 Tomada clase 17\n645a61e Hechas anotaciones de P17\n812dc59 Tomadas prácticas 16 y 17\nfeb9019 Tomada clase 16\nf3f36d2 Agregado enunciado G4"
+}
