@@ -5,6 +5,7 @@ Clasificación de imágenes satelitales EuroSAT con CNNs (PyTorch)
 Juan Ignacio Elosegui y Juan González Merlhe
 """
 
+#   Imports
 import os
 import time
 import json
@@ -29,6 +30,7 @@ from sklearn.metrics import (
     confusion_matrix,
     accuracy_score,
 )
+
 from sklearn.manifold import TSNE
 
 warnings.filterwarnings("ignore")
@@ -39,7 +41,7 @@ BATCH_SIZE = 64
 NUM_WORKERS = 2
 IMG_SIZE = 64
 NUM_CLASSES = 10
-SEED = 69
+SEED = 69   #...
 
 #   Epochs
 EPOCHS_CUSTOM = 30
@@ -47,11 +49,10 @@ EPOCHS_TRANSFER = 15
 #   Learning rates
 LR_CUSTOM = 1e-3
 LR_TRANSFER = 1e-4
-#   TODO: ir tocándolo pq estoy en CPU por la notebook. Probar con GPU en la PC.
+#   NOTE: ir tocándolo pq estoy en CPU por la notebook. Probar con GPU en la PC.
 
-#   Qué dispositivo voy a usar. En notebook es CPU sí o sí. Ver línea 50
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"Device: {DEVICE}")
+print(f"Dispositivo a usar: {DEVICE}")
 
 torch.manual_seed(SEED)
 np.random.seed(SEED)
@@ -61,18 +62,18 @@ with open(os.path.join(dataset, "label_map.json")) as f:
     LABEL_MAP = json.load(f)
 
 #   Almacenar nombres de clases
-NOMBRES_CLASES = [k for k, v in sorted(LABEL_MAP.items(), key=lambda x: x[1])]
+CLASS_NAMES = [k for k, v in sorted(LABEL_MAP.items(), key=lambda x: x[1])]
 
 class EuroSATDataset(Dataset):
+    #   Constructor
     def __init__(self,
-                 csv_file,
-                 root_dir, 
+                 csv_file, root_dir, # leer CSV con pandas
                  transform=None):
         self.df = pd.read_csv(os.path.join(root_dir, csv_file))
         self.root_dir = root_dir
         self.transform = transform
 
-    #   Devuelve la longitud del dataset en filas.
+    #   Devuelve la cantidad de muestras.
     def __len__(self):
         return len(self.df)
 
@@ -104,21 +105,25 @@ eval_transform = T.Compose([
     T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
 
+#   Tres instancias (train/val/test) -> distinto CSV y transform
+#   Usa augmentation
 train_ds = EuroSATDataset("train.csv", dataset, transform=train_transform)
+#   No usa augmentation
 val_ds = EuroSATDataset("validation.csv", dataset, transform=eval_transform)
 test_ds = EuroSATDataset("test.csv", dataset, transform=eval_transform)
 
-train_loader    = DataLoader(train_ds,  batch_size=BATCH_SIZE, shuffle=True,    num_workers=NUM_WORKERS)
+#   Los DataLoader() convierte los datasets en iterables por batches.
+#   DataLoader junta varias muestras, las apila en tensor, y las sirve en loop de entreno.
+train_loader    = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS)
 val_loader      = DataLoader(val_ds,    batch_size=BATCH_SIZE, shuffle=False,   num_workers=NUM_WORKERS)
 test_loader     = DataLoader(test_ds,   batch_size=BATCH_SIZE, shuffle=False,   num_workers=NUM_WORKERS)
+# No hay shuffle para val y test. Interesa barajar los batches de train no más
 
 print(f"Train: {len(train_ds)} | Val: {len(val_ds)} | Test: {len(test_ds)}")
 
-# TODO: seguir revisando de acá en más.
-
-# ═══════════════════════════════════════════════════════════════════════════
+# ---------------------------------------------------------------------------
 # PARTE 1: CNN Custom desde cero
-# ═══════════════════════════════════════════════════════════════════════════
+# ---------------------------------------------------------------------------
 
 class CustomCNN(nn.Module):
     """
@@ -128,6 +133,7 @@ class CustomCNN(nn.Module):
     """
     def __init__(self, num_classes=10):
         super().__init__()
+        #   4 bloques conv. Cada bloque mismo patrón
         self.features = nn.Sequential(
             # Bloque 1: 3 -> 32 canales, 64x64 -> 32x32
             nn.Conv2d(3, 32, kernel_size=3, padding=1),
@@ -153,8 +159,12 @@ class CustomCNN(nn.Module):
             nn.ReLU(inplace=True),
             nn.MaxPool2d(2),
         )
-        # Global Average Pooling -> vector de 256 dims
+
+        #   Global Average Pooling: promedia cada canal
         self.gap = nn.AdaptiveAvgPool2d(1)
+
+        #   Cabeza clasificación
+        # TODO: explicar mejor esto. no sé qué es
         self.classifier = nn.Sequential(
             nn.Dropout(0.3),
             nn.Linear(256, 128),
@@ -163,6 +173,7 @@ class CustomCNN(nn.Module):
             nn.Linear(128, num_classes),
         )
 
+    #   Pasada normal hacia adelante
     def forward(self, x):
         x = self.features(x)
         x = self.gap(x)
@@ -170,6 +181,7 @@ class CustomCNN(nn.Module):
         x = self.classifier(x)
         return x
 
+    #   Devuelve embeddings en dimensión 128. Sirve para transfer/comparar features, visualizar, o usar como extractor.
     def extract_features(self, x):
         """Extraer features antes de la capa de clasificación final."""
         x = self.features(x)
@@ -182,17 +194,20 @@ class CustomCNN(nn.Module):
         return x
 
 
-# ---------------------------------------------------------------------------
+# 
 # Monitoreo de gradientes
-# ---------------------------------------------------------------------------
+# 
 def monitor_gradients(model, epoch):
-    """Reporta norma de gradientes por capa para detectar vanishing/exploding."""
+    """
+    Reporta norma de gradientes por capa para detectar vanishing/exploding gradientes.
+    """
     grad_norms = {}
     for name, param in model.named_parameters():
         if param.grad is not None and "weight" in name:
             grad_norms[name] = param.grad.norm().item()
 
-    if epoch < 5:  # Solo primeras épocas
+    #   Solo primeras épocas
+    if epoch < 5:
         print(f"  [Gradientes época {epoch}]")
         for name, norm in grad_norms.items():
             status = ""
@@ -202,11 +217,13 @@ def monitor_gradients(model, epoch):
                 status = " ⚠ EXPLODING"
             print(f"    {name}: {norm:.6f}{status}")
     return grad_norms
+    #   TODO: no tengo idea de qué hace esta función
 
 
-# ---------------------------------------------------------------------------
+# 
 # Training loop genérico
-# ---------------------------------------------------------------------------
+# 
+#   Entrena una época: una pasada completa por el dataset.
 def train_one_epoch(model, loader, criterion, optimizer):
     model.train()
     total_loss, correct, total = 0, 0, 0
@@ -240,14 +257,17 @@ def evaluate(model, loader, criterion):
         total += labels.size(0)
     return total_loss / total, correct / total
 
-
+#   Entreno completo con toda sus épocas.
 def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler,
                 epochs, model_name="model", monitor_grads=False):
-    """Loop de entrenamiento completo con historial de métricas."""
+    """
+    Loop de entrenamiento completo con historial de métricas.
+    """
     history = {"train_loss": [], "val_loss": [], "train_acc": [], "val_acc": [],
                "epoch_time": [], "grad_norms": []}
     best_val_acc = 0
 
+    #   Pasa por todas
     for epoch in range(epochs):
         t0 = time.time()
 
@@ -284,9 +304,9 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
     return history
 
 
-# ---------------------------------------------------------------------------
+# 
 # Gráficos de entrenamiento
-# ---------------------------------------------------------------------------
+# 
 def plot_training_history(history, title=""):
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
@@ -341,17 +361,17 @@ def plot_gradient_norms(history, title=""):
     plt.show()
 
 
-# ---------------------------------------------------------------------------
+# 
 # Entrenar CNN Custom
-# ---------------------------------------------------------------------------
+# 
 print("\n" + "=" * 70)
 print("PARTE 1: Entrenamiento CNN Custom")
 print("=" * 70)
 
 custom_model = CustomCNN(NUM_CLASSES).to(DEVICE)
 criterion = nn.CrossEntropyLoss()
-optimizer_custom = optim.Adam(custom_model.parameters(), lr=LR_CUSTOM, weight_decay=1e-4)
-scheduler_custom = optim.lr_scheduler.ReduceLROnPlateau(optimizer_custom, patience=5, factor=0.5)
+optimizador_custom = optim.Adam(custom_model.parameters(), lr=LR_CUSTOM, weight_decay=1e-4)
+scheduler_custom = optim.lr_scheduler.ReduceLROnPlateau(optimizador_custom, patience=5, factor=0.5)
 
 print(f"\nArquitectura:\n{custom_model}\n")
 total_params = sum(p.numel() for p in custom_model.parameters())
@@ -359,7 +379,7 @@ print(f"Parámetros totales: {total_params:,}\n")
 
 history_custom = train_model(
     custom_model, train_loader, val_loader, criterion,
-    optimizer_custom, scheduler_custom,
+    optimizador_custom, scheduler_custom,
     epochs=EPOCHS_CUSTOM, model_name="custom_cnn",
     monitor_grads=True,
 )
@@ -368,18 +388,18 @@ plot_training_history(history_custom, title="CNN Custom")
 plot_gradient_norms(history_custom, title="CNN Custom")
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ---------------------------------------------------------------------------
 # PARTE 2: Análisis de Errores y Espacio Latente
-# ═══════════════════════════════════════════════════════════════════════════
+# ---------------------------------------------------------------------------
 print("\n" + "=" * 70)
 print("PARTE 2: Análisis de Errores y Espacio Latente")
 print("=" * 70)
 
-# Cargar mejor modelo
+#   Cargar mejor modelo
 custom_model.load_state_dict(torch.load("best_custom_cnn.pth", weights_only=True))
 custom_model.eval()
 
-# --- Evaluación en test ---
+#   Evaluación en test
 all_preds, all_labels = [], []
 with torch.no_grad():
     for images, labels in test_loader:
@@ -397,7 +417,7 @@ print(f"\nTest Accuracy (CNN Custom): {test_acc:.4f}\n")
 print("Classification Report:")
 print(classification_report(all_labels, all_preds, target_names=CLASS_NAMES))
 
-# --- Matriz de confusión ---
+#   Matriz de confusión
 cm = confusion_matrix(all_labels, all_preds)
 fig, ax = plt.subplots(figsize=(10, 8))
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
@@ -410,7 +430,7 @@ plt.tight_layout()
 plt.savefig("confusion_matrix_custom.png", dpi=150, bbox_inches="tight")
 plt.show()
 
-# Análisis de confusiones más frecuentes
+#   Análisis de confusiones más frecuentes
 print("\nConfusiones más frecuentes:")
 np.fill_diagonal(cm, 0)
 for _ in range(5):
@@ -431,7 +451,7 @@ Estas confusiones reflejan la ambigüedad inherente en la clasificación de uso 
 donde las fronteras entre clases pueden ser difusas.
 """)
 
-# --- Espacio latente con t-SNE ---
+#   Espacio latente con t-SNE
 print("Extrayendo features del espacio latente...")
 all_features, all_labels_tsne = [], []
 with torch.no_grad():
@@ -473,14 +493,14 @@ observadas en la matriz de confusión.
 """)
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ---------------------------------------------------------------------------
 # PARTE 3: Transfer Learning con ResNet18
-# ═══════════════════════════════════════════════════════════════════════════
+# ---------------------------------------------------------------------------
 print("\n" + "=" * 70)
 print("PARTE 3: Transfer Learning — ResNet18")
 print("=" * 70)
 
-# Las imágenes son 64x64, ResNet espera 224x224 -> resize
+#   Las imágenes son 64x64, ResNet espera 224x224 -> hay q hacer resize si o si
 transfer_train_transform = T.Compose([
     T.Resize((224, 224)),
     T.RandomHorizontalFlip(),
@@ -497,23 +517,23 @@ transfer_eval_transform = T.Compose([
     T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
 
-transfer_train_ds = EuroSATDataset("train.csv", DATA_DIR, transform=transfer_train_transform)
-transfer_val_ds = EuroSATDataset("validation.csv", DATA_DIR, transform=transfer_eval_transform)
-transfer_test_ds = EuroSATDataset("test.csv", DATA_DIR, transform=transfer_eval_transform)
+transfer_train_ds = EuroSATDataset("train.csv", dataset, transform=transfer_train_transform)
+transfer_val_ds = EuroSATDataset("validation.csv", dataset, transform=transfer_eval_transform)
+transfer_test_ds = EuroSATDataset("test.csv", dataset, transform=transfer_eval_transform)
 
 transfer_train_loader = DataLoader(transfer_train_ds, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS)
 transfer_val_loader = DataLoader(transfer_val_ds, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS)
 transfer_test_loader = DataLoader(transfer_test_ds, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS)
 
-# Cargar ResNet18 preentrenada en ImageNet
+#   Cargar ResNet18 preentrenada en ImageNet
 resnet = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
 
-# Congelar todas las capas excepto layer4 y fc
+#   Congelar todas las capas excepto layer4 y fc. Transfer learning
 for name, param in resnet.named_parameters():
     if "layer4" not in name and "fc" not in name:
         param.requires_grad = False
 
-# Reemplazar capa fc para 10 clases
+#   Reemplazar capa FC para 10 clases
 resnet.fc = nn.Sequential(
     nn.Dropout(0.3),
     nn.Linear(resnet.fc.in_features, NUM_CLASSES),
@@ -539,7 +559,7 @@ history_transfer = train_model(
 
 plot_training_history(history_transfer, title="ResNet18 Transfer Learning")
 
-# --- Evaluación en test ---
+#   Evaluación en test
 resnet.load_state_dict(torch.load("best_resnet18.pth", weights_only=True))
 resnet.eval()
 
@@ -560,7 +580,7 @@ print(f"\nTest Accuracy (ResNet18): {test_acc_tl:.4f}\n")
 print("Classification Report:")
 print(classification_report(all_labels_tl, all_preds_tl, target_names=CLASS_NAMES))
 
-# Matriz de confusión
+#   Matriz de confusión
 cm_tl = confusion_matrix(all_labels_tl, all_preds_tl)
 fig, ax = plt.subplots(figsize=(10, 8))
 sns.heatmap(cm_tl, annot=True, fmt="d", cmap="Blues",
@@ -574,9 +594,9 @@ plt.savefig("confusion_matrix_resnet18.png", dpi=150, bbox_inches="tight")
 plt.show()
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ---------------------------------------------------------------------------
 # Comparación Final
-# ═══════════════════════════════════════════════════════════════════════════
+# ---------------------------------------------------------------------------
 print("\n" + "=" * 70)
 print("COMPARACIÓN: CNN Custom vs ResNet18 (Transfer Learning)")
 print("=" * 70)
@@ -596,8 +616,9 @@ print(f"""
 │ Parámetros totales     │ {sum(p.numel() for p in custom_model.parameters()):>12,} │ {total:>12,} │
 └────────────────────────┴──────────────┴──────────────┘
 """)
+#   Cuadro hecho con IA
 
-# Gráfico comparativo de convergencia
+#   Gráfico comparativo de convergencia
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 axes[0].plot(history_custom["val_loss"], label="CNN Custom", marker=".")
@@ -634,7 +655,7 @@ Conclusión:
   generales de bajo nivel congeladas y adapta las de alto nivel al dominio.
 """)
 
-print("TP3 completado. Archivos generados:")
+print("Proceso terminado. Archivos generados:")
 for f in ["training_cnn_custom.png", "gradients_cnn_custom.png",
           "confusion_matrix_custom.png", "tsne_custom.png",
           "training_resnet18_transfer_learning.png",
