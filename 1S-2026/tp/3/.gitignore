@@ -2,3 +2,5 @@
 EuroSAT/
 __pycache__/
 *.pth
+
+.venv/

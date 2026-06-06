@@ -38,7 +38,7 @@ warnings.filterwarnings("ignore")
 #   Variables para la configuración
 dataset = "EuroSAT/"
 BATCH_SIZE = 64
-NUM_WORKERS = 2
+NUM_WORKERS = 0   # Windows + spawn: con >0 hay que guardar la ejecución en if __name__=="__main__". Con 0 se evita el problema.
 IMG_SIZE = 64
 NUM_CLASSES = 10
 SEED = 69   #...
@@ -163,8 +163,7 @@ class CustomCNN(nn.Module):
         #   Global Average Pooling: promedia cada canal
         self.gap = nn.AdaptiveAvgPool2d(1)
 
-        #   Cabeza clasificación
-        # TODO: explicar mejor esto. no sé qué es
+        #   Cabeza de clasificación: toma esos 256 features y los lleva a los 10 puntajes de clase.
         self.classifier = nn.Sequential(
             nn.Dropout(0.3),
             nn.Linear(256, 128),
@@ -202,11 +201,12 @@ def monitor_gradients(model, epoch):
     Reporta norma de gradientes por capa para detectar vanishing/exploding gradientes.
     """
     grad_norms = {}
+    # recorremos los pesos (filtramos por "weight" para ignorar bias y otros parametros)
     for name, param in model.named_parameters():
         if param.grad is not None and "weight" in name:
             grad_norms[name] = param.grad.norm().item()
 
-    #   Solo primeras épocas
+    #   Solo imprimir primeras 5 épocas. aca suele detectarse el problema
     if epoch < 5:
         print(f"  [Gradientes época {epoch}]")
         for name, norm in grad_norms.items():
@@ -217,7 +217,6 @@ def monitor_gradients(model, epoch):
                 status = " ⚠ EXPLODING"
             print(f"    {name}: {norm:.6f}{status}")
     return grad_norms
-    #   TODO: no tengo idea de qué hace esta función
 
 
 # 
@@ -467,7 +466,7 @@ all_labels_tsne = np.array(all_labels_tsne)
 print(f"Shape features: {all_features.shape}")
 print("Calculando t-SNE (puede tardar unos segundos)...")
 
-tsne = TSNE(n_components=2, random_state=SEED, perplexity=30, n_iter=1000)
+tsne = TSNE(n_components=2, random_state=SEED, perplexity=30, max_iter=1000)
 features_2d = tsne.fit_transform(all_features)
 
 fig, ax = plt.subplots(figsize=(12, 10))
