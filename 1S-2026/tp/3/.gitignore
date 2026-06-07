@@ -4,3 +4,11 @@ __pycache__/
 *.pth
 
 .venv/
+
+# boludeces de latex
+*.fls
+*.log
+*.fdb_latexmk
+*.aux
+*.synctex.gz
+*.gz
