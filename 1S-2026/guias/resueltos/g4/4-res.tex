@@ -1,0 +1,48 @@
+\documentclass[a4paper,12pt]{article} 
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{geometry, amsmath, amssymb}
+\geometry{margin=2.5cm}
+
+\usepackage{hyperref}
+\usepackage{microtype} 
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Guía de Ejercicios 3}
+\rhead{Tecnología Digital VI}
+\cfoot{\thepage}
+
+\title{\vspace{-2cm}\textbf{Guía de Ejercicios 4}\\[0.2cm]
+\large Tecnología Digital VI}
+\author{Juan Ignacio Elosegui}
+\date{Universidad Torcuato Di Tella \\ Junio 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Introducción a redes neuronales y arquitectura}
+\subsection*{Ejercicio 1}
+\noindent El operador XOR no puede ser aprendido por un perceptrón original porque la función de los valores de X e Y como entradas no pueden ser separados linealmente, por lo que con una sola neurona no se puede hacer.
+
+Con dos neuronas, se introduce una no linealidad capaz de separar el gráfico de manera apropiada.
+\subsection*{Ejercicio 2}
+\noindent Un MLP tiene más capas y más neuronas que un perceptrón simple. Al tener más capas, se implementa la no linealidad que aporta un plus a lo que es la capacidad de aprendizaje.
+
+\section*{Funciones de activación}
+\subsection*{Ejercicio 3}
+\noindent Lo que se dará es que la última capa será una combinación lineal de todos los inputs anteriores. Al final, por más que se agreguen capas y capas con funciones lineales de activación, sigue siendo una gran combinación lineal.
+\subsection*{Ejercicio 4}
+\noindent Los vanishing gradients se dan cuando muchos gradientes menores a 1 se multiplican entre sí. El resultado ante una repetición de varias multiplicaciones es que las primeras capas se van a actualizar muy poco ya que el producto de gradientes tiende a cero.
+\subsection*{Ejercicio 5}
+\noindent \textit{Dying ReLU} se da cuando las actualizaciones de las neuronas son exactamente cero cuando la activación da 0, es decir, cuando el input es negativo. Como el output es cero, esa neurona no se actualizará mediante backpropagation.
+\subsection*{Ejercicio 6}
+\noindent
+
+
+\end{document}
