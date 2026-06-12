@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-06-12T21:18:34.330Z",
+  "source": "auto-postool",
+  "partial": false,
+  "phase": null,
+  "phase_name": null,
+  "phase_dir": null,
+  "plan": null,
+  "task": null,
+  "total_tasks": null,
+  "status": "auto-checkpoint",
+  "completed_tasks": [],
+  "remaining_tasks": [],
+  "blockers": [],
+  "human_actions_pending": [],
+  "decisions": [],
+  "uncommitted_files": [
+    {
+      "status": "??",
+      "path": "1S-2026/.gitignore"
+    }
+  ],
+  "next_action": null,
+  "context_notes": "Recent commits:\ne55a40d Rename clases teóricas porque jode el 0\n7e5e18c Borrados directorios de Claude\n827e461 Reestructuración general de directorios\n2519039 Avance G4\nf215f65 Tomada clase 20"
+}
