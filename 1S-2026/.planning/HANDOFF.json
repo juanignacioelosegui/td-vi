@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-06-12T21:18:34.330Z",
+  "timestamp": "2026-06-12T21:32:04.391Z",
   "source": "auto-postool",
   "partial": false,
   "phase": null,
@@ -17,10 +17,18 @@
   "decisions": [],
   "uncommitted_files": [
     {
+      "status": "M",
+      "path": "1S-2026/.planning/HANDOFF.json"
+    },
+    {
+      "status": "D",
+      "path": "1S-2026/resumenes/resumen-segunda-parte.pdf"
+    },
+    {
       "status": "??",
-      "path": "1S-2026/.gitignore"
+      "path": "1S-2026/resumenes/resumen-segunda-parte.md"
     }
   ],
   "next_action": null,
-  "context_notes": "Recent commits:\ne55a40d Rename clases teóricas porque jode el 0\n7e5e18c Borrados directorios de Claude\n827e461 Reestructuración general de directorios\n2519039 Avance G4\nf215f65 Tomada clase 20"
+  "context_notes": "Recent commits:\n533c934 Modificado .gitignore para que no joda Claude\ne55a40d Rename clases teóricas porque jode el 0\n7e5e18c Borrados directorios de Claude\n827e461 Reestructuración general de directorios\n2519039 Avance G4"
 }
