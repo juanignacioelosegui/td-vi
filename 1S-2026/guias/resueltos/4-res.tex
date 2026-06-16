@@ -7,8 +7,8 @@
 \geometry{margin=2.5cm}
 
 \usepackage{hyperref}
-\usepackage{microtype} 
-
+\usepackage{microtype}
+\usepackage{parskip}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 
@@ -64,10 +64,10 @@ La normalización es clave para que convierta los logits en una distribución pr
 \textbf{Backward propagation} es el proceso en el cual se entrena a las redes neuronales para que bajen su error de predicción. Funciona propagando los errores hacia atrás, calculando gradientes usando la regla de la cadena y actualizando los pesos y biases para mejorar el rendimiento.
 \subsection*{Ejercicio 8}
 \begin{figure}[h]
-    \centering
-    \includegraphics[width=0.6\textwidth]{img/1.png}
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/1.png}
 \end{figure}
-
+\hl{Falta la pasada forward.}
 \subsection*{Ejercicio 9}
 \hl{Pedirle a Chino}
 \subsection*{Ejercicio 10}
@@ -75,18 +75,53 @@ Los \textbf{grafos computacionales} son una manera de representar expresiones ma
 
 Para representar la función \(f(x, y, z) = (x+y) \times z\), se puede usar el grafo:
 \begin{figure}[h]
-    \centering
-    \includegraphics[width=0.4\textwidth]{img/2.png}
+	\centering
+	\includegraphics[width=0.4\textwidth]{img/2.png}
 \end{figure}
 
 Para calcular el output, se propaga el input por la red.
 
-\hl{No entiendo el uso funcional para una red neuronal. ¿Qué se quiere conseguir al fin y al cabo?}
+\hl{No entiendo el uso funcional para un grafo computacional. ¿Qué se quiere conseguir al fin y al cabo?}
 \section*{Optimización, hiperparámetros y regularización}
 \subsection*{Ejercicio 11}
+\textit{Batch Gradient Descent (BGD)}:
+\begin{itemize}
+	\item (+) Entrenamiento estable y robusto.
+	\item (+) El algoritmo converge a mínimos.
+	\item (-) No es aplicable para un dataset gigantesco. Es computacionalmente inviable.
+	\item (-) Un dataset gigante puede tener datos redundantes, así que resulta ineficiente procesar muchos datos iguales.
+	\item (-) Puede quedarse atrapado en puntos silla o mínimos locales.
+\end{itemize}
+\textit{Stochastic Gradient Descent (SGD)}
+\begin{itemize}
+	\item (+) Menos costoso que BGD.
+	\item (+) Converge sin necesidad de procesar todos los datos.
+	\item (-) Curva de entrenamiento ruidosa.
+\end{itemize}
+
+Se suele preferir \textit{Mini-Batch} porque es computacionalmente viable y tiene una mejor tasa de convergencia en el entrenamiento. Al procesar subconjuntos más chicos de datos, se actualizan los pesos más rápido que en BGD y con menos ruido que SGD. Este algoritmo ofrece un punto medio entre los dos siendo más eficiente y convergiendo a veces más rápido.
 \subsection*{Ejercicio 12}
+\textit{Momentum} hace que los gradientes ya no sean independientes, sino que se acumulan gradientes de pasos anteriores para que la actualización actual sea una combinación entre el gradiente actual y el anterior. Esto hace que se acelere el aprendizaje, se reduzca el zig-zagueopara que sea una trayectoria más suave, se consiga una convergencia más rápida...
+
+Un \textit{Learning Rate adaptativo} permite que existan algortimos como AdaGrad, RMSprop y ADAM ajustando este parámetro de manera dinámica. Todos estos ayudan a la estabilidad y convergencia del algoritmo de optimización porque se hacen mejores actualizaciones por parámetro.
 \subsection*{Ejercicio 13}
+\begin{itemize}
+	\item \textbf{Step decay}. Cada $n$ épocas el LR se divide por dos.
+	\item \textbf{Exponential decay}. Se multiplica constantemente el LR por un valor menor a uno.
+	\item \textbf{Cosine Annealing}. El LR sigue una curva de coseno descendente.
+	\item \textbf{Reduce on Plateau}. Si la loss function no mejora en varias épocas, se reduce el LR a la mitad.
+\end{itemize}
 \subsection*{Ejercicio 14}
+\emph{(Ejercicio prompteado.)}
+
+Durante el entrenamiento, Dropout desactiva aleatoriamente una fracción $p$ de las neuronas de cada capa en cada paso, forzando a la red a no depender excesivamente de ninguna neurona individual y distribuyendo el aprendizaje de forma más robusta. Esto actúa como regularizador porque impide la co-adaptación de neuronas (que grupos específicos de neuronas memoricen patrones del set de entrenamiento).
+
+Al momento de la inferencia, se necesitan \textbf{todas} las neuronas activas para obtener la mejor predicción posible. Sin embargo, como durante el entrenamiento cada neurona solo estuvo activa una fracción $(1-p)$ del tiempo, sus pesos aprendidos están calibrados para ese régimen reducido. Por eso, al usar todas las neuronas juntas, las activaciones serían más grandes de lo esperado. Para compensar, se \textbf{escalan las salidas} multiplicándolas por $(1-p)$, de modo que la magnitud esperada de las activaciones sea consistente con lo que la red aprendió durante el entrenamiento.
+
+En PyTorch, la instrucción \texttt{modelo.eval()} es crucial porque cambia el comportamiento de la red al modo de evaluación: desactiva el Dropout (todas las neuronas quedan activas con el escaleo correspondiente) y también fija las estadísticas de Batch Normalization (usa la media y varianza acumuladas del entrenamiento en lugar de calcularlas por batch). Si no se llama a \texttt{modelo.eval()}, la red seguiría apagando neuronas al azar durante la inferencia, produciendo predicciones ruidosas e inconsistentes.
 \subsection*{Ejercicio 15}
+La estandarización de los inputs sirve para allanar el loss landscape y mejora la convergencia. Si no se estandarizan, la convergencia depende directamente de la inicialización de parámetros inicial.
+
+Una capa de batch normalization normaliza los valores de cada batch antes de ciertas capas, corrigiendo el problema de que las capas modifiquen las distribuciones de sus salidas. Es una capa que funciona puramente como regularización.
 
 \end{document}
