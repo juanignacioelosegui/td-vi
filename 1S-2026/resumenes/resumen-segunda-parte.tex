@@ -63,20 +63,19 @@
 \begin{titlepage}
 	\centering
 	\vspace*{2cm}
-	{\Huge\bfseries\color{azul} Resumen \\[0.4em]
-		Tecnología Digital VI\par}
+	{\Huge\bfseries\color{azul} Resumen Tecnología Digital VI\\[0.4em]
+		Segunda parte\par}
 	\vspace{0.5cm}
-	{\large 1er Semestre 2026 — Segunda Parte\par}
+	{\small Juan Ignacio Elosegui\par}
 \end{titlepage}
 
-\tableofcontents
 \newpage
 
 % =============================================================
-\section{Introducción a las Redes Neuronales}
+\section{Introducción a las redes neuronales}
 % =============================================================
 
-\subsection{Del Mundo Tabular al No Estructurado}
+\subsection{Del mundo tabular al no estructurado}
 
 En el \textbf{mundo tabular}, los datos son estructurados y las columnas tienen semántica específica para cada problema. Los modelos se encargan de hallar interacciones entre columnas.
 
@@ -153,7 +152,7 @@ La \textbf{loss function} promedia los errores sobre todas las muestras:
 \]
 
 % =============================================================
-\section{Funciones de Activación}
+\section{Funciones de activación}
 % =============================================================
 
 \subsection{Complicaciones}
@@ -232,7 +231,7 @@ Toma todo el vector de salidas y lo transforma en probabilidades (entre 0 y 1). 
 \]
 
 % =============================================================
-\section{Optimización e Hiperparámetros}
+\section{Optimización e hiperparámetros}
 % =============================================================
 
 \subsection{Loss Landscape}
@@ -250,7 +249,7 @@ La loss function suele tener formas irregulares y no se minimiza de forma analí
 	\textbf{Época} = pasar todos los datos de entrenamiento (divididos en mini-batches) por la red.
 \end{defbox}
 
-\subsection{Problemas de Terreno}
+\subsection{Problemas de terreno}
 
 \begin{itemize}
 	\item \textbf{Ravine}: topología tipo cañón $\Rightarrow$ zig-zag.
@@ -259,7 +258,7 @@ La loss function suele tener formas irregulares y no se minimiza de forma analí
 
 \textbf{Momentum}: los gradientes ya no son independientes; se acumulan gradientes de pasos anteriores para suavizar la trayectoria.
 
-\subsection{Learning Rate Adaptativo}
+\subsection{Learning Rate adaptativo}
 
 \begin{center}
 	\begin{tabular}{lp{9cm}}
@@ -302,7 +301,7 @@ Las redes son sensibles a los rangos de los inputs. Estandarizar allana el loss 
 	\caption{Efecto del input scaling en el loss landscape.}
 \end{figure}
 
-\subsection{Inicialización de Pesos}
+\subsection{Inicialización de pesos}
 
 La convergencia depende directamente del punto de partida. Una buena inicialización evita vanishing/exploding gradients. Métodos: Random, LeCun, Xavier.
 
@@ -351,7 +350,7 @@ Una imagen es una matriz (o tres matrices para RGB) que contiene números.
 
 \subsection{Convolución}
 
-\begin{defbox}{Convolución 2D Discreta}
+\begin{defbox}{Convolución 2D discreta}
 	Operación que toma una imagen $I$ y un kernel $K$ (filtro) pequeño. El kernel se desplaza por la imagen, multiplicando elemento a elemento y sumando:
 	\[
 		(I * K)[i,j] = \sum_m \sum_n I[i+m,\, j+n] \cdot K[m,n]
@@ -362,6 +361,13 @@ Una imagen es una matriz (o tres matrices para RGB) que contiene números.
 	\item \textbf{Padding}: rellenar bordes con ceros para controlar el tamaño de salida.
 	\item \textbf{Stride}: el ``tranco'' que da el filtro. Stride grande $\Rightarrow$ salida más chica.
 \end{itemize}
+
+\textbf{Fórmula del tamaño de salida}:
+\[
+	O = \frac{I - K + 2P}{S} + 1
+\]
+
+Ejemplo: imagen $28 \times 28$, kernel $3 \times 3$, $P=1$, $S=2$: $O = \frac{28-3+2}{2}+1 = 14$. Salida: $14 \times 14$.
 
 Los filtros (kernels) se inicializan random y se ajustan con backpropagation. La red aprende qué detectar.
 
@@ -374,7 +380,7 @@ Resume información de un grupo de píxeles vecinos:
 	\item Da robustez ante traslación.
 \end{itemize}
 
-\subsection{Bloque Convolucional}
+\subsection{Bloque convolucional}
 
 \begin{algbox}{Bloque convolucional estándar}
 	\textbf{Convolución} $\longrightarrow$ \textbf{Función de activación} $\longrightarrow$ \textbf{Pooling}
@@ -382,8 +388,18 @@ Resume información de un grupo de píxeles vecinos:
 	La convolución es una operación lineal; la no linealidad la aportan la activación y el pooling.
 \end{algbox}
 
+\subsection{Ejemplo: parámetros MLP vs CNN}
+
+Para una imagen de $32 \times 32 \times 3$ (color):
+
+\textbf{MLP}: flatten + capa de 128 neuronas + capa de 10 salidas $= (3072 \times 128 + 128) + (128 \times 10 + 10) = 394{,}634$ parámetros.
+
+\textbf{CNN}: conv de 10 filtros $5 \times 5$ + maxpool $2 \times 2$ + conv de 20 filtros $3 \times 3$ $= 760 + 1{,}820 = 2{,}580$ parámetros.
+
+La CNN tiene $\sim$150$\times$ menos parámetros gracias al parameter sharing y la localidad.
+
 % =============================================================
-\section{Arquitecturas Famosas}
+\section{Arquitecturas famosas}
 % =============================================================
 
 Todas fueron evaluadas en el \textbf{ImageNet Challenge} (14M imágenes, 22K clases).
@@ -440,7 +456,7 @@ Demostró que usar siempre \textbf{filtros de 3$\times$3 con stride 1} combinado
 
 \subsection{ResNet (2015)}
 
-\begin{defbox}{Bloque Residual}
+\begin{defbox}{Bloque residual}
 	Se agrega una \textbf{skip connection}: el input se bifurca, pasa por convoluciones por un lado y se saltea por otro, sumándose antes de la activación:
 	\[
 		H(x) = F(x) + x
@@ -461,7 +477,7 @@ Demostró que usar siempre \textbf{filtros de 3$\times$3 con stride 1} combinado
 Error del 3\% en ImageNet. Terminó efectivamente la competencia.
 
 % =============================================================
-\section{Visualización e Interpretabilidad de CNNs}
+\section{Visualización e interpretabilidad de CNNs}
 % =============================================================
 
 \subsection{Redes Deconvolucionales (Zeiler \& Fergus)}
@@ -482,7 +498,7 @@ Se tapa una parte de la imagen y se observa cómo afecta la predicción.
 	\caption{Sensibilidad a la oclusión: qué partes de la imagen influyen en la predicción.}
 \end{figure}
 
-\subsection{Espacio Latente e Image Similarity}
+\subsection{Espacio latente e Image Similarity}
 
 La última capa antes de clasificar codifica imágenes en un espacio de features. Imágenes similares quedan cerca en ese espacio. Se aplican técnicas de reducción de dimensionalidad para visualizar.
 
@@ -514,7 +530,14 @@ Se busca el mínimo cambio en píxeles para que la red clasifique una imagen com
 
 \subsection{Style Transfer}
 
-Transferir el estilo visual de una imagen a otra combinando las representaciones de contenido y estilo de ambas.
+Transferir el estilo visual de una imagen a otra. Se optimiza una imagen intermedia $I$ minimizando:
+\[
+	\mathcal{L}_{\text{total}} = \alpha \cdot \mathcal{L}_{\text{content}} + \beta \cdot \mathcal{L}_{\text{style}}
+\]
+
+\textbf{Content Loss}: diferencia entre las activaciones de $I$ y la imagen de contenido en capas intermedias de una CNN (e.g.\ VGG). Preserva la estructura.
+
+\textbf{Style Loss}: diferencia entre las \textbf{matrices de Gram} (correlaciones entre feature maps) de $I$ y la imagen de estilo. Capturan texturas y patrones sin importar la posición espacial.
 
 % =============================================================
 \section{Transfer Learning}
@@ -537,7 +560,7 @@ Transferir el estilo visual de una imagen a otra combinando las representaciones
 \end{figure}
 
 % =============================================================
-\section{Problemas sobre Imágenes}
+\section{Problemas sobre imágenes}
 % =============================================================
 
 \subsection{Object Detection}
@@ -572,7 +595,9 @@ Reemplaza el algoritmo externo de regiones por una \textbf{Region Proposal Netwo
 
 	\textbf{Loss combinada}: penaliza clasificar mal y poner la caja lejos de la real.
 
-	\textbf{Non-Max Suppression}: descarta bounding boxes con mucha intersección respecto de otra caja de mayor confianza.
+	La imagen se divide en una grilla de $S \times S$ celdas. Cada celda predice $B$ bounding boxes con 5 valores $(x, y, w, h, \text{confidence})$ más $C$ probabilidades de clase. Output total: $S \times S \times (B \times 5 + C)$.
+
+	\textbf{Non-Max Suppression}: muchas celdas detectan el mismo objeto. Se toma la caja con mayor confianza y se descartan las que tengan alta intersección (IoU) con ella.
 \end{defbox}
 
 \begin{figure}[H]
@@ -616,7 +641,7 @@ Usos:
 	\item \textbf{Inpainting}: reconstruir regiones faltantes de la imagen.
 \end{itemize}
 
-\subsubsection{Segmentación Semántica}
+\subsubsection{Segmentación semántica}
 
 Clasificar cada píxel de la imagen indicando a qué clase pertenece.
 
@@ -626,10 +651,13 @@ Clasificar cada píxel de la imagen indicando a qué clase pertenece.
 	\caption{Segmentación semántica: cada píxel recibe una clase.}
 \end{figure}
 
-Loss functions posibles: Dice Loss, Jaccard Loss, Focal Loss.
+Loss functions posibles: Dice Loss, Jaccard Loss, Focal Loss. Se suele preferir \textbf{Dice Loss} sobre cross-entropy porque las clases están muy desbalanceadas (mucho fondo, poco objeto). Dice mide directamente la superposición:
+\[
+	\text{Dice} = \frac{2|X \cap Y|}{|X| + |Y|}
+\]
 
 % =============================================================
-\section{Generación de Imágenes}
+\section{Generación de imágenes}
 % =============================================================
 
 \subsection{GANs (Generative Adversarial Networks)}
@@ -659,14 +687,14 @@ Dos redes entrenadas simultáneamente:
 Conecta texto e imágenes: redes separadas llevan imágenes y texto a espacios latentes distintos, y luego se mapean para unirlos. Permite búsqueda cross-modal.
 
 % =============================================================
-\section{Secuencias, Texto y NLP}
+\section{Secuencias, texto y NLP}
 % =============================================================
 
-\subsection{Dificultades del Texto}
+\subsection{Dificultades del texto}
 
 Los lenguajes varían en símbolos, orden y separación de palabras. Convertir texto a números no es trivial, a diferencia de las imágenes (que siempre son píxeles).
 
-\subsection{Representaciones de Texto}
+\subsection{Representaciones de texto}
 
 \subsubsection{Bag-of-Words}
 
@@ -682,7 +710,7 @@ Problemas: tantas columnas como palabras, pérdida de orden, ignora contexto y p
 
 \subsubsection{TF-IDF}
 
-Normalización que le quita peso a palabras muy frecuentes en el corpus. Multiplica TF (term frequency) con IDF (inverse document frequency).
+Normalización que le quita peso a palabras muy frecuentes en el corpus. $\text{TF}$ mide frecuencia en el documento; $\text{IDF} = \log(N/n_t)$ penaliza palabras que aparecen en muchos documentos. Producto TF $\times$ IDF da más peso a palabras discriminativas.
 
 \subsubsection{One-Hot Encoding}
 
@@ -735,6 +763,8 @@ Proceso CBOW:
 	\caption{Pipeline completo de CBOW.}
 \end{figure}
 
+\textbf{Analogías vectoriales}: $v_{\text{madrid}} \approx v_{\text{paris}} - v_{\text{francia}} + v_{\text{españa}}$. Se busca la palabra cuyo vector sea más cercano al resultado.
+
 \textbf{Product2Vec}: misma idea aplicada a secuencias de productos para encontrar productos similares.
 
 \subsection{Language Models}
@@ -753,6 +783,8 @@ Buscan predecir la siguiente palabra en una secuencia. Se reduce a un problema d
 	El hidden state $h_t$ codifica información de todas las palabras procesadas anteriormente. La retroalimentación se corta en algún punto.
 \end{defbox}
 
+\textbf{Backpropagation Through Time (BPTT)}: al desenrollar la RNN, los gradientes dependen de la exponenciación de la matriz de pesos $W_{hh}$. Multiplicar muchas veces la misma matriz hace que los gradientes se desvanezcan (o exploten). En la práctica, secuencias de 25--30 pasos ya sufren este problema $\Rightarrow$ las RNNs no pueden aprender dependencias lejanas.
+
 % =============================================================
 \section{LSTM, Seq2Seq y Attention}
 % =============================================================
@@ -770,9 +802,9 @@ Buscan predecir la siguiente palabra en una secuencia. Se reduce a un problema d
 
 	\textbf{Gates} (vectores que controlan el flujo de información):
 	\begin{itemize}
-		\item \textbf{Forget Gate}: decide qué olvidar del cell state.
-		\item \textbf{Input Gate}: decide qué información nueva agregar.
-		\item \textbf{Output Gate}: decide cuánto del cell state se expone como salida.
+		\item \textbf{Forget Gate}: decide qué \emph{borrar} del cell state. Sigmoide: 0 = olvidar, 1 = recordar.
+		\item \textbf{Input Gate}: decide \emph{cuánto} de lo nuevo se escribe en $c$ (sigmoide) y \emph{qué} (tanh).
+		\item \textbf{Output Gate}: decide cuánto del cell state se expone como salida $h_t$.
 	\end{itemize}
 \end{defbox}
 
@@ -782,6 +814,24 @@ Buscan predecir la siguiente palabra en una secuencia. Se reduce a un problema d
 	\caption{Arquitectura interna de una celda LSTM.}
 \end{figure}
 
+El ``+'' en el cómputo de $C_t$ permite que la información fluya sin desvanecerse (análogo a las skip connections de ResNet). Si forget gate = 1 e input gate = 0, el cell state fluye intacto.
+
+\subsection{BiLSTM}
+
+Misma idea que LSTM pero en \textbf{ambas direcciones}: izquierda a derecha y derecha a izquierda, obteniendo el doble de hidden states. Captura contexto de ambos lados de cada token.
+
+\subsection{GRU (Gated Recurrent Unit)}
+
+Versión simplificada de LSTM: combina $c$ y $h$ en un solo vector, y fusiona forget e input gates. Menos parámetros, rendimiento similar.
+
+\subsection{Limitaciones de LSTM/BiLSTM}
+
+\begin{itemize}
+	\item Procesan secuencialmente $\Rightarrow$ \textbf{no paralelizables}.
+	\item Memoria a largo plazo limitada (mejor que RNN, pero no infinita).
+	\item Resumen todo en un vector fijo final.
+\end{itemize}
+
 \subsection{Seq2Seq}
 
 \begin{defbox}{Seq2Seq}
@@ -790,6 +840,7 @@ Buscan predecir la siguiente palabra en una secuencia. Se reduce a un problema d
 		\item \textbf{Encoder}: procesa la secuencia de entrada y genera una representación.
 		\item \textbf{Decoder}: genera la secuencia de salida a partir de esa representación.
 	\end{itemize}
+	En entrenamiento se usa \textbf{teacher forcing}: en cada paso del decoder se ingresa la palabra correcta aunque no haya sido la predicha.
 \end{defbox}
 
 \begin{figure}[H]
@@ -801,6 +852,184 @@ Buscan predecir la siguiente palabra en una secuencia. Se reduce a un problema d
 \subsection{Attention}
 
 Mecanismo que permite al decoder ``mirar'' todas las posiciones de la secuencia de entrada (no solo el último hidden state del encoder), asignando pesos de importancia a cada posición según su relevancia para la palabra que se está generando.
+
+Supongamos que estamos generando la tercera palabra de la traducción. Ya tenemos todos los hidden states $h_i$ del encoder y el estado $s_{t-1}$ del decoder. Se calculan \textbf{scores de atención} para cada $h_i$:
+\[
+	e_{t,i} = v_a^\top \tanh(W_a s_{t-1} + U_a h_i)
+\]
+donde $v_a, W_a, U_a$ son pesos aprendibles. Luego se pasan por softmax para obtener pesos $\alpha_{t,i}$ y se calcula el \textbf{vector de contexto}:
+\[
+	c_t = \sum_i \alpha_{t,i} \, h_i
+\]
+
+Este vector $c_t$ se concatena con la entrada del decoder en el paso $t$. La semántica es: ``para dar la siguiente palabra, enfocate en esta parte de la frase original''.
+
+\begin{notebox}
+	\textbf{Cuello de botella Seq2Seq}: sin Attention, toda la información de la frase de entrada se comprime en un único vector $h$ final del encoder. Funciona para frases cortas, pero no para párrafos. Attention resuelve esto dejando al decoder ver todos los $h_i$ intermedios.
+\end{notebox}
+
+% =============================================================
+\section{Transformers}
+% =============================================================
+
+\subsection{Problema de secuencialidad de las RNNs}
+
+Aunque Attention resolvió el cuello de botella en la representación, las RNNs siguen siendo \textbf{inherentemente secuenciales}: para conocer el estado en el paso 50, primero hay que computar los 49 anteriores. No son paralelizables. Las CNNs no tenían este problema y por eso entre 2012--2016 aprovecharon mejor los avances en hardware.
+
+\subsection{Attention Is All You Need (2017)}
+
+El paper de Vaswani et al.\ propuso el \textbf{Transformer}: no es necesario usar RNNs. El mismo mecanismo de atención que relacionaba encoder con decoder se puede usar como ladrillo fundamental.
+
+\subsection{Self-Attention}
+
+En la atención clásica (Bahdanau), la atención era \textbf{cruzada} entre la frase del decoder y la del encoder. En \textbf{Self-Attention}, las palabras de una misma oración se prestan atención a sí mismas para construir una representación rica.
+
+\subsection{Scaled Dot-Product Attention}
+
+\begin{defbox}{Scaled Dot-Product Attention}
+	Paso a paso:
+	\begin{enumerate}
+		\item Secuencia de palabras $w_i$.
+		\item Convertir a embeddings: $x_i = E \, w_i$.
+		\item Transformar cada embedding en su \textbf{Query} $q_i = Q x_i$, \textbf{Key} $k_i = K x_i$ y \textbf{Value} $v_i = V x_i$.
+		\item Calcular similaridades: $e_{ij} = \dfrac{q_i^\top k_j}{\sqrt{d_k}}$.
+		\item Normalizar con softmax: $\alpha_{ij} = \dfrac{\exp(e_{ij})}{\sum_{j'} \exp(e_{ij'})}$.
+		\item Salida: suma ponderada de values: $o_i = \sum_j \alpha_{ij} \, v_j$.
+	\end{enumerate}
+
+	En forma matricial:
+	\[
+		\text{Attention}(Q,K,V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right) V
+	\]
+\end{defbox}
+
+\textbf{Intuición}: es como una \emph{lookup table suavizada}. En un diccionario, se tiene una query $q$, se busca la key $k$ exacta y se toma su value $v$. En self-attention, la query tiene correspondencia parcial con varias keys y se toma el promedio ponderado de los values.
+
+\subsection{Preguntas Clave del Mecanismo}
+
+\begin{itemize}
+	\item \textbf{¿De dónde salen Q, K, V?} Son matrices de pesos aprendibles. Se inicializan random y se ajustan con backpropagation.
+	\item \textbf{¿Por qué dividir por $\sqrt{d_k}$?} Cuando la dimensión es grande, el producto interno crece mucho. La división estabiliza las cuentas (de ahí ``scaled'').
+	\item \textbf{¿Por qué aprender Q y K por separado?} La multiplicación $q_i^\top k_j$ es una \textbf{low-rank factorization} de la matriz de scores $e_{ij}$. Más eficiente computacionalmente y obliga a un cuello de botella en la representación.
+	\item \textbf{¿Qué rompe la linealidad?} La softmax rompe un poco, pero el objetivo principal de no linealidad viene de las capas feed-forward con funciones de activación que se agregan después.
+\end{itemize}
+
+\subsection{Masked Attention}
+
+En el decoder, las palabras se generan de forma online: al tener la palabra $t$, no se conoce la $t+1$. Se \textbf{enmascaran} los scores de palabras futuras fijándolos en $-\infty$ para que la softmax les asigne peso cero.
+
+\subsection{Positional Encoding}
+
+\begin{defbox}{Positional Encoding}
+	Sin recurrencia, self-attention procesa todas las palabras en paralelo y pierde la noción de orden (se vuelve un bag-of-words). La solución: \textbf{sumar un vector de posición} a cada embedding.
+
+	El paper original usó funciones de senos y cosenos de distintas frecuencias:
+	\[
+		PE_{(pos, 2i)} = \sin\!\left(\frac{pos}{10000^{2i/d}}\right), \quad
+		PE_{(pos, 2i+1)} = \cos\!\left(\frac{pos}{10000^{2i/d}}\right)
+	\]
+
+	Evolución posterior: Positional Encoding aprendible $\rightarrow$ Relative PE $\rightarrow$ Rotary PE (RoPE).
+\end{defbox}
+
+\subsection{Multi-Head Attention}
+
+\begin{defbox}{Multi-Head Attention}
+	Análogo a tener múltiples filtros en una CNN: sobre las mismas palabras se quieren aprender \textbf{diferentes representaciones}. Una cabeza puede aprender a reconocer entidades (países, personas), otra a relacionar verbo y sujeto.
+
+	Se ejecutan $h$ mecanismos de atención en paralelo, cada uno con sus propias matrices $Q_i, K_i, V_i$. Las salidas se concatenan y se proyectan con una capa lineal.
+
+	Son computacionalmente muy eficientes.
+\end{defbox}
+
+\subsection{Arquitectura del Transformer}
+
+Sigue teniendo \textbf{encoder} y \textbf{decoder}, pero sin RNNs:
+\begin{itemize}
+	\item El encoder tiene capas de \textbf{self-attention} + feed-forward.
+	\item El decoder tiene capas de \textbf{masked self-attention} + \textbf{cross-attention} (con el encoder) + feed-forward.
+	\item \textbf{Add \& Norm}: después de cada bloque hay una conexión residual (como ResNet) y Layer Normalization (reemplazo de BatchNorm). Ayudan al flujo de gradientes y aceleran convergencia.
+\end{itemize}
+
+Ya en el trabajo original se consiguieron resultados estado del arte en traducción automática con mucho menos entrenamiento que los modelos previos (LSTMs).
+
+\subsection{BERT vs GPT}
+
+\begin{center}
+	\begin{tabular}{lp{5.5cm}p{5.5cm}}
+		\toprule
+		                           & \textbf{BERT (2018, Google)}                                                 & \textbf{GPT (2018, OpenAI)}          \\
+		\midrule
+		\textbf{Parte usada}       & Solo encoder                                                                 & Solo decoder                         \\
+		\textbf{Dirección}         & Bidireccional                                                                & Autorregresivo (izquierda a derecha) \\
+		\textbf{Uso}               & Clasificación, NER, Sentiment Analysis (requiere fine-tuning)                & Generación de texto                  \\
+		\textbf{Pre-entrenamiento} & Masked Language Model (predecir palabras ocultas) + Next Sentence Prediction & Predecir la siguiente palabra        \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\subsection{Evolución de GPT}
+
+\begin{itemize}
+	\item \textbf{GPT-1 (2018)}: El foco era resolver problemas de NLP con fine-tuning. Perdía contra BERT.
+	\item \textbf{GPT-2 (2019)}: Foco en resolver tareas NLP sin fine-tuning (\textbf{zero-shot learning}).
+	\item \textbf{GPT-3 (2020)}: Foco completamente en el Language Model y todo lo que puede resolver sin ajuste adicional.
+\end{itemize}
+
+\subsection{InstructGPT y alineación}
+
+\begin{defbox}{InstructGPT y RLHF}
+	Un Language Model bueno genera secuencias gramaticalmente correctas, pero puede no estar \textbf{alineado} con la intención del usuario. Ejemplo: ante una pregunta, GPT-3 completaba con opciones multiple choice como si fuera un examen.
+
+	\textbf{InstructGPT} resolvió esto con \textbf{Reinforcement Learning from Human Feedback (RLHF)}:
+	\begin{enumerate}
+		\item Se entrena un modelo de recompensa con preferencias humanas.
+		\item Se usa RL para ajustar el LLM y que maximice esa recompensa.
+	\end{enumerate}
+
+	ChatGPT (nov.\ 2022) usó GPT-3 como backbone + técnicas de alineación para ser conversacional.
+\end{defbox}
+
+\subsection{LLMs: Más que un predictor de palabras}
+
+El backbone de un LLM sigue siendo el decoder de un Transformer, pero hay componentes adicionales:
+\begin{itemize}
+	\item \textbf{Tokenizers}: cómo se segmenta el texto en tokens.
+	\item \textbf{Data}: calidad y cantidad de datos de entrenamiento.
+	\item \textbf{SFT y RLHF}: Supervised Fine-Tuning y alineación con feedback humano.
+	\item Optimizaciones de cómputo.
+\end{itemize}
+
+\subsection{Vision Transformers (ViT)}
+
+\begin{defbox}{ViT (2021)}
+	Idea análoga a ``Attention Is All You Need'' pero para imágenes: no hacen falta CNNs. Se parte la imagen en \textbf{parches} y se aplican mecanismos de atención entre ellos.
+
+	Buenos resultados pero con tiempos de cómputo altos (prohibitivos para resoluciones altas). La batalla CNN vs ViT sigue abierta para visión, a diferencia de texto donde el Transformer ganó claramente.
+\end{defbox}
+
+\subsection{Tipos de Transformers (resumen)}
+
+\begin{center}
+	\begin{tabular}{llp{6cm}}
+		\toprule
+		\textbf{Tipo}   & \textbf{Ejemplo} & \textbf{Uso}                                     \\
+		\midrule
+		Encoder-Only    & BERT             & Comprender texto: clasificación, sentiment, NER  \\
+		Encoder-Decoder & T5, Transformer  & Seq2Seq: traducción, summarization               \\
+		Decoder-Only    & GPT              & Generar texto/secuencias. Predecir próximo token \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\subsection{Decoder-Only Transformers}
+
+Entrenados bajo la tarea de predecir el próximo token. Cada token solo puede mirar tokens anteriores (\textbf{causal masking}). Tres componentes:
+\begin{enumerate}
+	\item \textbf{Embedding}: tokenización + positional encoding.
+	\item \textbf{Bloque Transformer}: Masked Multi-Head Attention + Feed-Forward (MLP).
+	\item \textbf{Output}: proyección lineal + softmax sobre todo el vocabulario.
+\end{enumerate}
 
 % =============================================================
 \end{document}
