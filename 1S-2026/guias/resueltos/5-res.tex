@@ -22,23 +22,46 @@
 \rhead{Tecnología Digital VI}
 \cfoot{\thepage}
 
-\title{\vspace{-2cm}\textbf{Guía de Ejercicios 4}\\[0.2cm]
+\title{\vspace{-2cm}\textbf{Guía de Ejercicios 5}\\[0.2cm]
 \large Tecnología Digital VI}
 \author{Juan Ignacio Elosegui}
 \date{Universidad Torcuato Di Tella \\ Junio 2026}
 
 \begin{document}
 \maketitle
+%   ==========================================
 \section*{Fundamentos de Redes Convolucionales (CNNs)}
 \subsection*{Ejercicio 1}
-\subsection*{Ejercicio 2}
-\subsection*{Ejercicio 3}
-\subsection*{Ejercicio 4}
+Las redes fully-connected tienen la limitación que es que ignoran la estructura espacial: procesa los pixeles como si todos fuesen independientes entre sí, y este no suele ser el caso.
 
+Una CNN explota la relación entre pixeles vecinos usando filtros (kernels) que aprenden los patrones de cada subconjunto cuadrado de pixeles.
+
+Estos kernels se inicializan random y se ajustan via backpropagation. Este mismo kernel se aplica en todas las posiciones de la imagen, lo que reduce la cantidad de parámetros respecto a una fully-connected y además detecta los mismos patrones sin importar en qué posición se aplique. Antes, cada píxel tenía su propio peso hacia adelante (FC), ahora se comparten (con una CNN).
+\subsection*{Ejercicio 2}
+\textbf{Padding} consiste en rellenar bordes con ceros para controlar el tamaño de salida.
+
+\textbf{Stride} indica cuánto se mueve el filtro. Un \textit{stride} más grande implica una salida más chica.
+
+Usando la fórmula:
+\[O = \frac{I-K+2K}{S}+1\]
+\[\implies O = \frac{28-3+2 \times 1}{2}+1\]
+\[\therefore O = 14\]
+Por lo tanto, la salida será de $14 \times 14$.
+\subsection*{Ejercicio 3}
+
+\subsection*{Ejercicio 4}
+La capa de \textit{pooling} sirve para resumir información de un grupo de píxeles vecinos. Estas capas achican la dimensión (que ahorra espacio y cómputo), aumentan el campo receptivo y da robustez ante la traslación (un desplazamiento probablemente no cambie el resultado del pooling).
+
+%   ==========================================
 \section*{Arquitecturas famosas y Transfer Learning}
 \subsection*{Ejercicio 5}
+\textbf{AlexNet} aportó la posibilidad de entrenarse con múltiples GPUs, incluyó capas de normalización, data augmentation, dropout...
 \subsection*{Ejercicio 6}
+La \textbf{ResNet} mitigó el problema de los vanishing gradients porque al agregar una skip connection cuyo gradiente es 1 (por ser la identidad), los gradientes no se pueden desvanecer.
 \subsection*{Ejercicio 7}
+\textbf{Transfer learning} consiste en reutilizar capas preentrenadas en un dataset grande para otro problema distinto. Se puede optar por esta opción porque entrenar desde cero es muy costoso, por lo que reciclar las capas entrenadas y cambiar únicamente la última fully-connected acorde a lo que requiera el problema a resolver.
+
+Se puede reentrenar la nueva capa y congelar todo lo otro hacer fine tuning de algunas capas previas.
 
 \section*{Detección de objetos y segmentación (I2I)}
 \subsection*{Ejercicio 8}
