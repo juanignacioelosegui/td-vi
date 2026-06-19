@@ -502,12 +502,6 @@ Se tapa una parte de la imagen y se observa cómo afecta la predicción.
 
 La última capa antes de clasificar codifica imágenes en un espacio de features. Imágenes similares quedan cerca en ese espacio. Se aplican técnicas de reducción de dimensionalidad para visualizar.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.5\textwidth]{7.png}
-	\caption{Visualización del espacio latente con reducción de dimensionalidad.}
-\end{figure}
-
 \subsection{Saliency Maps}
 
 \begin{defbox}{Saliency Maps}
@@ -756,12 +750,6 @@ Proceso CBOW:
 	\item Softmax $\Rightarrow$ probabilidades.
 	\item Comparar con ground truth y actualizar $W$ y $W'$.
 \end{enumerate}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.6\textwidth]{33.png}
-	\caption{Pipeline completo de CBOW.}
-\end{figure}
 
 \textbf{Analogías vectoriales}: $v_{\text{madrid}} \approx v_{\text{paris}} - v_{\text{francia}} + v_{\text{españa}}$. Se busca la palabra cuyo vector sea más cercano al resultado.
 
