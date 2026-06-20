@@ -1,0 +1,190 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+
+\geometry{margin=2cm}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{red},
+  commentstyle=\color{gray}\itshape,
+  showstringspaces=false,
+  frame=single,
+  breaklines=true,
+  numbers=left,
+  numberstyle=\tiny\color{gray}
+}
+
+\title{\textbf{Tecnología Digital VI --- Segundo Parcial} \\ Modelo de Examen 3}
+\author{Universidad Torcuato Di Tella}
+\date{}
+
+\begin{document}
+\maketitle
+\noindent\textbf{Duración:} 2 horas \hfill \textbf{Nombre:} \hrulefill
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 1: Verdadero o Falso (2 pts c/u)}
+\textit{Justifique brevemente las respuestas falsas.}
+
+\begin{enumerate}[label=\alph*)]
+    \item Las RNNs no pueden procesar secuencias de longitud variable, por lo que siempre se requiere padding y truncamiento a un largo fijo.
+
+    \item En el mecanismo de atención de Bahdanau, el vector de contexto $c_t$ es un promedio ponderado de todos los hidden states del encoder, donde los pesos dependen del paso actual del decoder.
+
+    \item La representación Bag-of-Words preserva el orden de las palabras en un documento.
+
+    \item En el Inception Module (GoogLeNet), se aplican convoluciones de distintos tamaños en paralelo y se concatenan las salidas.
+
+    \item Early Stopping consiste en detener el entrenamiento cuando la loss de entrenamiento deja de bajar.
+
+    \item El modelo GPT es bidireccional: al generar texto, cada token puede ``ver'' tanto los tokens anteriores como los posteriores.
+\end{enumerate}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 2: Multiple Choice (3 pts c/u)}
+\textit{Marque la opción correcta. Solo una es válida.}
+
+\begin{enumerate}[label=\arabic*)]
+    \item ¿Cuál de las siguientes NO es una ventaja del pooling en CNNs?
+    \begin{enumerate}[label=\Alph*)]
+        \item Reduce la dimensionalidad espacial.
+        \item Aumenta el campo receptivo.
+        \item Aprende nuevos filtros para detectar patrones.
+        \item Da robustez ante traslaciones del objeto.
+    \end{enumerate}
+
+    \item ¿Qué problema resuelve \textbf{Leaky ReLU} respecto a ReLU estándar?
+    \begin{enumerate}[label=\Alph*)]
+        \item El problema de vanishing gradients en funciones acotadas.
+        \item El problema de dying ReLU, permitiendo un gradiente pequeño para valores negativos.
+        \item La falta de derivabilidad en $x = 0$.
+        \item El costo computacional excesivo de ReLU.
+    \end{enumerate}
+
+    \item En Word2Vec con arquitectura \textbf{CBOW}, ¿cuál es el input y cuál es el output?
+    \begin{enumerate}[label=\Alph*)]
+        \item Input: palabra central. Output: palabras de contexto.
+        \item Input: palabras de contexto. Output: palabra central.
+        \item Input: toda la oración. Output: vector de embedding.
+        \item Input: one-hot de la palabra. Output: one-hot de la siguiente palabra.
+    \end{enumerate}
+
+    \item ¿Cuál de las siguientes afirmaciones sobre \textbf{Autoencoders} es correcta?
+    \begin{enumerate}[label=\Alph*)]
+        \item Requieren etiquetas supervisadas para entrenarse.
+        \item El encoder comprime la entrada a una representación latente y el decoder intenta reconstruir la entrada original.
+        \item Solo pueden usarse para clasificación de imágenes.
+        \item La loss function mide la diferencia entre la representación latente y el input.
+    \end{enumerate}
+
+    \item ¿Qué componente del Transformer cumple un rol análogo a las skip connections de ResNet?
+    \begin{enumerate}[label=\Alph*)]
+        \item Multi-Head Attention.
+        \item Feed-Forward Network.
+        \item Add \& Norm (conexión residual + Layer Normalization).
+        \item Positional Encoding.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 3: Desarrollo (10 pts c/u)}
+
+\begin{enumerate}[label=\arabic*)]
+    \item \textbf{Funciones de activación y sus problemas.} \\
+    \begin{enumerate}[label=\alph*)]
+        \item Explique el problema de \textit{Vanishing Gradients} en redes profundas que usan Sigmoide o Tanh. ¿Por qué la multiplicación repetida de derivadas pequeñas impide el aprendizaje en las primeras capas?
+        \item ¿Cómo soluciona ReLU este problema? ¿Qué nuevo problema introduce (\textit{Dying ReLU})?
+        \item Nombre dos funciones de activación que mitigan el Dying ReLU y explique brevemente cómo lo logran.
+    \end{enumerate}
+
+    \item \textbf{Diseño de red para XOR.} \\
+    Diseñe una red neuronal con una capa oculta de 2 neuronas (activación Heaviside/Step) y una neurona de salida que compute la función XOR. Especifique:
+    \begin{enumerate}[label=\alph*)]
+        \item Los pesos y biases de cada conexión.
+        \item Verifique su diseño mostrando el forward pass para las 4 combinaciones posibles: $(0,0)$, $(0,1)$, $(1,0)$, $(1,1)$.
+    \end{enumerate}
+    \textit{Hint: piense en XOR como la combinación de dos funciones linealmente separables.}
+
+    \item \textbf{Object Detection: R-CNN vs YOLO.} \\
+    \begin{enumerate}[label=\alph*)]
+        \item Describa brevemente el pipeline de R-CNN (las 4 etapas principales).
+        \item ¿Cuál es la diferencia fundamental entre R-CNN (two-stage) y YOLO (one-stage)?
+        \item Explique qué es Non-Max Suppression y por qué es necesario en YOLO.
+        \item Si YOLO usa una grilla de $7 \times 7$ con $B=2$ bounding boxes y $C=20$ clases, ¿cuántos valores tiene el tensor de salida?
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 4: Interpretación de Código (15 pts)}
+
+Analice el siguiente código de PyTorch y responda las preguntas.
+
+\begin{lstlisting}
+import torch
+import torch.nn as nn
+
+class SentimentLSTM(nn.Module):
+    def __init__(self, vocab_size, embed_dim, hidden_dim, output_dim):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, embed_dim)
+        self.lstm = nn.LSTM(embed_dim, hidden_dim,
+                           batch_first=True,
+                           bidirectional=True)
+        self.fc = nn.Linear(hidden_dim * 2, output_dim)
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        embedded = self.embedding(x)
+        output, (hidden, cell) = self.lstm(embedded)
+        # Concatenar los hidden states de ambas direcciones
+        hidden_cat = torch.cat((hidden[0], hidden[1]), dim=1)
+        out = self.fc(hidden_cat)
+        return self.sigmoid(out)
+
+modelo = SentimentLSTM(vocab_size=10000,
+                        embed_dim=100,
+                        hidden_dim=256,
+                        output_dim=1)
+criterio = nn.BCELoss()
+\end{lstlisting}
+
+\begin{enumerate}[label=\alph*)]
+    \item ¿Qué tipo de problema resuelve esta red? Justifique basándose en la dimensión de salida y la loss function.
+
+    \item ¿Qué hace la capa \texttt{nn.Embedding}? ¿Por qué es preferible a usar One-Hot Encoding directamente como entrada?
+
+    \item ¿Por qué \texttt{self.fc} recibe \texttt{hidden\_dim * 2} como entrada? ¿Qué tiene que ver con el parámetro \texttt{bidirectional=True}?
+
+    \item ¿Qué información contiene la variable \texttt{output} vs.\ la variable \texttt{hidden} que devuelve la LSTM?
+
+    \item ¿Qué rol cumple la variable \texttt{cell} que devuelve la LSTM? ¿Se usa en este modelo?
+
+    \item ¿Qué limitación tiene esta arquitectura (basada en LSTM) respecto a un Transformer para procesar secuencias largas?
+\end{enumerate}
+
+\end{document}

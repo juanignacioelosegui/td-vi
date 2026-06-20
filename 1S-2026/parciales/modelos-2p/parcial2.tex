@@ -1,0 +1,205 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+
+\geometry{margin=2cm}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{red},
+  commentstyle=\color{gray}\itshape,
+  showstringspaces=false,
+  frame=single,
+  breaklines=true,
+  numbers=left,
+  numberstyle=\tiny\color{gray}
+}
+
+\title{\textbf{Tecnología Digital VI --- Segundo Parcial} \\ Modelo de Examen 2}
+\author{Universidad Torcuato Di Tella}
+\date{}
+
+\begin{document}
+\maketitle
+\noindent\textbf{Duración:} 2 horas \hfill \textbf{Nombre:} \hrulefill
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 1: Verdadero o Falso (2 pts c/u)}
+\textit{Justifique brevemente las respuestas falsas.}
+
+\begin{enumerate}[label=\alph*)]
+    \item El Perceptrón simple puede aprender la función XOR porque tiene un peso por cada entrada más el bias.
+
+    \item La función Softmax garantiza que las salidas sumen 1 y sean no negativas, lo que permite interpretarlas como probabilidades.
+
+    \item En una CNN, la operación de convolución es no lineal, por lo que no es necesario agregar una función de activación después.
+
+    \item El algoritmo ADAM combina las ideas de Momentum y Learning Rate adaptativo por parámetro.
+
+    \item En Transfer Learning, se suelen congelar las primeras capas convolucionales porque capturan features genéricas (bordes, texturas) útiles para cualquier tarea visual.
+
+    \item Una BiLSTM procesa la secuencia en ambas direcciones, por lo que tiene el doble de hidden states que una LSTM unidireccional.
+\end{enumerate}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 2: Multiple Choice (3 pts c/u)}
+\textit{Marque la opción correcta. Solo una es válida.}
+
+\begin{enumerate}[label=\arabic*)]
+    \item ¿Cuál es el propósito principal de \textbf{Batch Normalization}?
+    \begin{enumerate}[label=\Alph*)]
+        \item Reemplazar las funciones de activación en cada capa.
+        \item Normalizar las salidas de cada capa para combatir el Internal Covariate Shift y acelerar la convergencia.
+        \item Reducir la cantidad de parámetros de la red.
+        \item Eliminar la necesidad de usar un optimizador como ADAM.
+    \end{enumerate}
+
+    \item En Style Transfer, la \textbf{Style Loss} se calcula usando:
+    \begin{enumerate}[label=\Alph*)]
+        \item La diferencia pixel a pixel entre la imagen generada y la imagen de estilo.
+        \item La diferencia entre las matrices de Gram de los feature maps de la imagen generada y la imagen de estilo.
+        \item El error cuadrático entre los logits de la última capa FC.
+        \item La divergencia KL entre las distribuciones de los feature maps.
+    \end{enumerate}
+
+    \item ¿Por qué se divide por $\sqrt{d_k}$ en el \textbf{Scaled Dot-Product Attention}?
+    \begin{enumerate}[label=\Alph*)]
+        \item Para que las queries y keys tengan norma unitaria.
+        \item Para reducir la cantidad de parámetros del modelo.
+        \item Para evitar que el producto punto crezca demasiado con la dimensión, estabilizando la softmax.
+        \item Para convertir los scores en probabilidades.
+    \end{enumerate}
+
+    \item ¿Qué técnica usa \textbf{InstructGPT} para alinear las respuestas del LLM con la intención del usuario?
+    \begin{enumerate}[label=\Alph*)]
+        \item Data Augmentation sobre el corpus de pre-entrenamiento.
+        \item Reinforcement Learning from Human Feedback (RLHF).
+        \item Agregar más capas de Transformer al modelo base.
+        \item Fine-tuning supervisado sin ningún componente adicional.
+    \end{enumerate}
+
+    \item En una celda LSTM, la \textbf{Forget Gate} se encarga de:
+    \begin{enumerate}[label=\Alph*)]
+        \item Decidir qué información nueva se escribe en el cell state.
+        \item Decidir cuánto del cell state actual se expone como salida $h_t$.
+        \item Decidir qué información del cell state anterior se descarta (multiplicando por un valor entre 0 y 1).
+        \item Calcular el gradiente para el backpropagation through time.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 3: Desarrollo (10 pts c/u)}
+
+\begin{enumerate}[label=\arabic*)]
+    \item \textbf{Forward Pass manual.} \\
+    Considere una red con 2 entradas $(x_1, x_2)$, una capa oculta de 2 neuronas con activación ReLU, y una neurona de salida con activación Sigmoide. Los pesos y biases son:
+
+    \begin{center}
+    \begin{tabular}{lcc}
+    \toprule
+    & Neurona oculta 1 & Neurona oculta 2 \\
+    \midrule
+    $w_{x_1}$ & 0.5 & $-1.0$ \\
+    $w_{x_2}$ & 1.0 & 0.5 \\
+    $b$ & $-0.5$ & 0.0 \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+
+    Neurona de salida: $w_1 = 1.0$, $w_2 = -0.5$, $b = 0.2$.
+
+    Para la entrada $x_1 = 1, x_2 = 0$:
+    \begin{enumerate}[label=\alph*)]
+        \item Calcule $z$ y $a$ para cada neurona de la capa oculta.
+        \item Calcule $z$ y $a$ para la neurona de salida.
+        \item Si el label verdadero es $y = 1$, ¿la red predice correctamente (umbral 0.5)?
+    \end{enumerate}
+
+    \item \textbf{Segmentación semántica y Dice Loss.} \\
+    \begin{enumerate}[label=\alph*)]
+        \item ¿Por qué en segmentación semántica se prefiere Dice Loss sobre Cross-Entropy clásica?
+        \item Dada una predicción y un ground truth para una imagen de $4 \times 4$ píxeles (clase ``objeto'' = 1, ``fondo'' = 0):
+
+        Predicción: \texttt{[[1,1,0,0],[1,1,0,0],[0,0,0,0],[0,0,0,0]]}
+
+        Ground Truth: \texttt{[[1,1,1,0],[1,1,0,0],[1,0,0,0],[0,0,0,0]]}
+
+        Calcule el coeficiente Dice: $\text{Dice} = \frac{2|X \cap Y|}{|X| + |Y|}$.
+    \end{enumerate}
+
+    \item \textbf{Transformers: Self-Attention.} \\
+    Considere la oración: ``El banco está cerca del río''.
+    \begin{enumerate}[label=\alph*)]
+        \item Explique intuitivamente qué representan las matrices Query, Key y Value en el mecanismo de Self-Attention.
+        \item ¿Cómo resuelve Self-Attention la ambigüedad de la palabra ``banco'' (¿institución financiera o ribera?) en esta oración?
+        \item ¿Para qué sirve Multi-Head Attention? Dé un ejemplo de dos ``relaciones'' distintas que podrían aprender dos heads diferentes.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 4: Interpretación de Código (15 pts)}
+
+Analice el siguiente código de PyTorch y responda las preguntas.
+
+\begin{lstlisting}
+import torch
+import torch.nn as nn
+
+class CNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=9, padding=4)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.relu = nn.ReLU()
+        self.fc1 = nn.Linear(64 * 7 * 7, 128)
+        self.fc2 = nn.Linear(128, 10)
+
+    def forward(self, x):
+        x = self.pool(self.relu(self.conv1(x)))
+        x = self.pool(self.relu(self.conv2(x)))
+        x = x.view(-1, 64 * 7 * 7)
+        x = self.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+\end{lstlisting}
+
+\begin{enumerate}[label=\alph*)]
+    \item ¿Cuál es el tamaño esperado de la imagen de entrada? Justifique rastreando las dimensiones capa por capa hasta llegar a $64 \times 7 \times 7$ antes del flatten. (Use la fórmula $O = \frac{I - K + 2P}{S} + 1$.)
+
+    \item ¿Por qué el \texttt{padding=4} en la primera convolución y \texttt{padding=1} en la segunda? ¿Qué relación tiene con el tamaño del kernel?
+
+    \item ¿Cuántos parámetros entrenables tiene la capa \texttt{conv1}? Muestre el cálculo.
+
+    \item ¿Por qué la capa \texttt{fc1} tiene como entrada $64 \times 7 \times 7 = 3136$ neuronas?
+
+    \item ¿Qué problema está resolviendo esta red? ¿Para qué dataset fue diseñada?
+
+    \item Si quisiera adaptar esta red para clasificar imágenes a color de $32 \times 32$ en 100 clases (ej. CIFAR-100), ¿qué cambios mínimos haría en la arquitectura?
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,209 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\geometry{margin=2cm}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{red},
+  commentstyle=\color{gray}\itshape,
+  showstringspaces=false,
+  frame=single,
+  breaklines=true,
+  numbers=left,
+  numberstyle=\tiny\color{gray}
+}
+
+\title{\textbf{Tecnología Digital VI --- Segundo Parcial} \\ Modelo de Examen 1}
+\author{Universidad Torcuato Di Tella}
+\date{}
+
+\begin{document}
+\maketitle
+\noindent\textbf{Duración:} 2 horas \hfill \textbf{Nombre:} \hrulefill
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 1: Verdadero o Falso (2 pts c/u)}
+\textit{Justifique brevemente las respuestas falsas.}
+
+\begin{enumerate}[label=\alph*)]
+    \item Si construimos una red neuronal profunda con múltiples capas ocultas pero sin funciones de activación no lineales, la red resultante es equivalente a una única transformación lineal.
+
+    \item La función de activación ReLU sufre del problema de \textit{vanishing gradients} porque su derivada es cero para valores negativos.
+
+    \item En una red convolucional, las capas de Max Pooling tienen parámetros entrenables que se ajustan durante el backpropagation.
+
+    \item El modelo Word2Vec con arquitectura Skip-Gram recibe una palabra central y predice las palabras de contexto que la rodean.
+
+    \item En la arquitectura Transformer, el Positional Encoding es necesario porque el mecanismo de Self-Attention procesa todos los tokens en paralelo y pierde la noción de orden secuencial.
+
+    \item En un modelo Seq2Seq basado en RNNs sin atención, el decoder tiene acceso a todos los hidden states intermedios del encoder para generar la traducción.
+\end{enumerate}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 2: Multiple Choice (3 pts c/u)}
+\textit{Marque la opción correcta. Solo una es válida.}
+
+\begin{enumerate}[label=\arabic*)]
+    \item ¿Cuál es la principal ventaja de usar \textbf{Mini-Batch Gradient Descent} frente a Batch GD y SGD puro?
+    \begin{enumerate}[label=\Alph*)]
+        \item Siempre converge al mínimo global de la loss function.
+        \item Combina la estabilidad de Batch GD con la eficiencia computacional de SGD.
+        \item Elimina por completo el problema de los gradientes que se desvanecen.
+        \item No requiere definir un learning rate.
+    \end{enumerate}
+
+    \item ¿Qué problema resuelven las \textbf{skip connections} en ResNet?
+    \begin{enumerate}[label=\Alph*)]
+        \item Reducen la cantidad de parámetros de la red.
+        \item Permiten que agregar capas nunca empeore el rendimiento, ya que el bloque puede aprender la identidad ($F(x) = 0$).
+        \item Reemplazan la necesidad de funciones de activación no lineales.
+        \item Eliminan la necesidad de usar Batch Normalization.
+    \end{enumerate}
+
+    \item En YOLO (v1), ¿cuál es el tamaño del tensor de salida si la imagen se divide en una grilla de $S \times S$, se predicen $B$ bounding boxes por celda y hay $C$ clases?
+    \begin{enumerate}[label=\Alph*)]
+        \item $S \times S \times (B + C)$
+        \item $S \times S \times (B \times 5 + C)$
+        \item $S \times S \times (B \times 5 \times C)$
+        \item $S \times S \times B \times C$
+    \end{enumerate}
+
+    \item ¿Cuál de las siguientes afirmaciones sobre \textbf{BERT} y \textbf{GPT} es correcta?
+    \begin{enumerate}[label=\Alph*)]
+        \item BERT usa solo el decoder del Transformer y es autorregresivo.
+        \item GPT usa solo el encoder del Transformer y es bidireccional.
+        \item BERT es bidireccional y se pre-entrena con Masked Language Model; GPT es autorregresivo y predice el siguiente token.
+        \item Ambos modelos usan exactamente la misma arquitectura y difieren solo en los datos de entrenamiento.
+    \end{enumerate}
+
+    \item ¿Qué ocurre con Dropout durante la fase de \textbf{inferencia}?
+    \begin{enumerate}[label=\Alph*)]
+        \item Se siguen apagando neuronas al azar igual que en entrenamiento.
+        \item Se desactiva: todas las neuronas participan, y las salidas se escalan.
+        \item Se duplica la tasa de dropout para mayor regularización.
+        \item No tiene efecto porque Dropout solo afecta al optimizador.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 3: Desarrollo (10 pts c/u)}
+
+\begin{enumerate}[label=\arabic*)]
+    \item \textbf{Cálculo de parámetros CNN vs MLP.} \\
+    Considere una imagen de entrada de $32 \times 32$ píxeles a color (3 canales).
+
+    \begin{itemize}
+        \item \textbf{Escenario A (MLP):} Se aplica flatten y luego una capa densa de 128 neuronas con ReLU, seguida de una capa de salida de 10 neuronas.
+        \item \textbf{Escenario B (CNN):} Se aplica una capa convolucional de 16 filtros de $5 \times 5$ (sin padding, stride 1), ReLU, MaxPool $2 \times 2$, y luego una segunda capa convolucional de 32 filtros de $3 \times 3$ (sin padding, stride 1).
+    \end{itemize}
+
+    Para cada escenario:
+    \begin{enumerate}[label=\alph*)]
+        \item Calcule el tamaño espacial de la salida después de cada capa usando la fórmula $O = \frac{I - K + 2P}{S} + 1$.
+        \item Calcule la cantidad total de parámetros entrenables (incluyendo biases).
+    \end{enumerate}
+
+    \item \textbf{Transfer Learning y Arquitecturas.} \\
+    Suponga que tiene un dataset de 500 imágenes de rayos X para clasificar entre ``sano'' y ``patológico''. Explique:
+    \begin{enumerate}[label=\alph*)]
+        \item ¿Por qué no conviene entrenar una CNN desde cero para este problema?
+        \item ¿Cómo aplicaría Transfer Learning usando una red pre-entrenada en ImageNet? Detalle qué capas congelaría y cuáles reemplazaría.
+        \item ¿Por qué las primeras capas convolucionales de una red entrenada en ImageNet (fotos naturales) son útiles para imágenes médicas?
+    \end{enumerate}
+
+    \item \textbf{Attention en Seq2Seq.} \\
+    Considere una arquitectura Seq2Seq para traducción automática (inglés $\to$ español). La frase de entrada tiene 6 palabras.
+    \begin{enumerate}[label=\alph*)]
+        \item Explique el problema del ``cuello de botella'' cuando se usa la arquitectura Encoder-Decoder sin atención.
+        \item Describa paso a paso cómo el mecanismo de atención de Bahdanau calcula el vector de contexto $c_t$ al generar la palabra $t$ de la traducción.
+        \item ¿Por qué los pesos de atención $\alpha_{t,i}$ deben sumar 1?
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 4: Interpretación de Código (15 pts)}
+
+Analice el siguiente código de PyTorch y responda las preguntas.
+
+\begin{lstlisting}
+import torch
+import torch.nn as nn
+
+class MiRed(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.fc1 = nn.Linear(784, 256)
+        self.fc2 = nn.Linear(256, 128)
+        self.fc3 = nn.Linear(128, 10)
+        self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(0.3)
+
+    def forward(self, x):
+        x = x.view(-1, 784)
+        x = self.dropout(self.relu(self.fc1(x)))
+        x = self.dropout(self.relu(self.fc2(x)))
+        x = self.fc3(x)
+        return x
+
+modelo = MiRed()
+criterio = nn.CrossEntropyLoss()
+optimizador = torch.optim.Adam(modelo.parameters(), lr=0.001)
+
+for epoch in range(10):
+    modelo.train()
+    for batch_x, batch_y in train_loader:
+        optimizador.zero_grad()
+        salida = modelo(batch_x)
+        loss = criterio(salida, batch_y)
+        loss.backward()
+        optimizador.step()
+
+    modelo.eval()
+    with torch.no_grad():
+        for batch_x, batch_y in val_loader:
+            salida = modelo(batch_x)
+            loss_val = criterio(salida, batch_y)
+\end{lstlisting}
+
+\begin{enumerate}[label=\alph*)]
+    \item ¿Qué tipo de problema está resolviendo esta red? ¿Para qué dataset parece estar diseñada? Justifique basándose en las dimensiones de entrada y salida.
+
+    \item ¿Qué hace la línea \texttt{x = x.view(-1, 784)}? ¿Por qué es necesaria?
+
+    \item ¿Por qué no se aplica Softmax en la capa de salida del \texttt{forward}, a pesar de ser un problema de clasificación multiclase?
+
+    \item ¿Por qué se llama a \texttt{modelo.train()} antes del entrenamiento y \texttt{modelo.eval()} antes de la validación? ¿Qué capa de esta red se comporta distinto entre ambos modos?
+
+    \item ¿Cuál es el propósito de \texttt{torch.no\_grad()} en el bloque de validación?
+
+    \item ¿Qué hace \texttt{optimizador.zero\_grad()} y qué pasaría si se omitiera?
+\end{enumerate}
+
+\end{document}

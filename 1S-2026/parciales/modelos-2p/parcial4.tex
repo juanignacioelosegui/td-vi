@@ -1,0 +1,213 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+
+\geometry{margin=2cm}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{red},
+  commentstyle=\color{gray}\itshape,
+  showstringspaces=false,
+  frame=single,
+  breaklines=true,
+  numbers=left,
+  numberstyle=\tiny\color{gray}
+}
+
+\title{\textbf{Tecnología Digital VI --- Segundo Parcial} \\ Modelo de Examen 4}
+\author{Universidad Torcuato Di Tella}
+\date{}
+
+\begin{document}
+\maketitle
+\noindent\textbf{Duración:} 2 horas \hfill \textbf{Nombre:} \hrulefill
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 1: Verdadero o Falso (2 pts c/u)}
+\textit{Justifique brevemente las respuestas falsas.}
+
+\begin{enumerate}[label=\alph*)]
+    \item Una CNN tiene significativamente menos parámetros que un MLP para procesar imágenes, gracias al \textit{parameter sharing} y la localidad de los filtros.
+
+    \item La fórmula del tamaño de salida de una convolución es $O = \frac{I - K + 2P}{S} + 1$. Si aplicamos un kernel de $5 \times 5$ con padding $P=2$ y stride $S=1$ a una imagen de $28 \times 28$, la salida tiene tamaño $28 \times 28$.
+
+    \item Los Saliency Maps calculan la derivada de la predicción respecto a los pesos de la red para determinar qué píxeles son más importantes.
+
+    \item En las GANs, el Generador y el Discriminador se entrenan cooperativamente para generar imágenes realistas.
+
+    \item TF-IDF es una mejora sobre Bag-of-Words que penaliza palabras muy frecuentes en todo el corpus (como artículos y preposiciones), dando más peso a palabras discriminativas.
+
+    \item En un Decoder-Only Transformer como GPT, se usa \textit{causal masking} para que cada token solo pueda atender a los tokens anteriores (y a sí mismo).
+\end{enumerate}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 2: Multiple Choice (3 pts c/u)}
+\textit{Marque la opción correcta. Solo una es válida.}
+
+\begin{enumerate}[label=\arabic*)]
+    \item ¿Cuál es la principal contribución de la arquitectura \textbf{VGG}?
+    \begin{enumerate}[label=\Alph*)]
+        \item Demostró que usar siempre filtros de $3 \times 3$ con stride 1 es más eficiente que filtros grandes.
+        \item Introdujo las skip connections para mitigar vanishing gradients.
+        \item Fue la primera CNN en usar Dropout.
+        \item Redujo los parámetros usando Global Average Pooling.
+    \end{enumerate}
+
+    \item ¿Qué es \textit{teacher forcing} en el entrenamiento de un modelo Seq2Seq?
+    \begin{enumerate}[label=\Alph*)]
+        \item Usar un modelo pre-entrenado (``teacher'') para inicializar los pesos del Seq2Seq.
+        \item En cada paso del decoder, usar como input la palabra correcta del ground truth en vez de la predicción anterior.
+        \item Forzar al encoder a producir un hidden state de mayor dimensión.
+        \item Aplicar regularización L2 a los pesos del decoder.
+    \end{enumerate}
+
+    \item ¿Cuál de las siguientes analogías vectoriales es correcta usando embeddings de Word2Vec?
+    \begin{enumerate}[label=\Alph*)]
+        \item $v_{\text{madrid}} \approx v_{\text{paris}} - v_{\text{francia}} + v_{\text{españa}}$
+        \item $v_{\text{madrid}} \approx v_{\text{paris}} + v_{\text{francia}} - v_{\text{españa}}$
+        \item $v_{\text{madrid}} \approx v_{\text{paris}} + v_{\text{francia}} + v_{\text{españa}}$
+        \item $v_{\text{madrid}} \approx v_{\text{españa}} - v_{\text{paris}} - v_{\text{francia}}$
+    \end{enumerate}
+
+    \item ¿Qué scheduler reduce el learning rate a la mitad cuando la loss de validación deja de mejorar durante varias épocas?
+    \begin{enumerate}[label=\Alph*)]
+        \item Step Decay
+        \item Exponential Decay
+        \item Cosine Annealing
+        \item Reduce on Plateau
+    \end{enumerate}
+
+    \item En un Autoencoder, la \textbf{representación latente} es:
+    \begin{enumerate}[label=\Alph*)]
+        \item La salida final reconstruida del decoder.
+        \item El vector comprimido que se obtiene entre el encoder y el decoder.
+        \item Los pesos de la red entrenada.
+        \item El vector de entrada después del preprocesamiento.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 3: Desarrollo (10 pts c/u)}
+
+\begin{enumerate}[label=\arabic*)]
+    \item \textbf{Convolución: cálculo paso a paso.} \\
+    Dada una imagen de entrada de $6 \times 6$ (1 canal) y un kernel de $3 \times 3$:
+
+    \[
+    \text{Imagen} = \begin{pmatrix}
+    1 & 0 & 1 & 0 & 1 & 0 \\
+    0 & 1 & 0 & 1 & 0 & 1 \\
+    1 & 0 & 1 & 0 & 1 & 0 \\
+    0 & 1 & 0 & 1 & 0 & 1 \\
+    1 & 0 & 1 & 0 & 1 & 0 \\
+    0 & 1 & 0 & 1 & 0 & 1
+    \end{pmatrix}
+    \qquad
+    \text{Kernel} = \begin{pmatrix}
+    1 & 0 & -1 \\
+    1 & 0 & -1 \\
+    1 & 0 & -1
+    \end{pmatrix}
+    \]
+
+    \begin{enumerate}[label=\alph*)]
+        \item ¿Cuál es el tamaño de la salida si se usa padding $P=0$ y stride $S=1$?
+        \item Calcule el valor de la posición $(0, 0)$ del feature map de salida (esquina superior izquierda).
+        \item ¿Qué tipo de patrón detecta este kernel en particular?
+    \end{enumerate}
+
+    \item \textbf{Interpretabilidad: Grad-CAM vs Saliency Maps.} \\
+    \begin{enumerate}[label=\alph*)]
+        \item Explique cómo funcionan los Saliency Maps: ¿respecto a qué se calcula la derivada y qué se mantiene fijo?
+        \item ¿Qué mejora aporta Grad-CAM respecto a Saliency Maps? ¿En qué capa de la red opera?
+        \item Describa brevemente cómo funcionan los ataques adversarios: ¿cómo se pueden modificar los píxeles de una imagen para engañar a la red?
+    \end{enumerate}
+
+    \item \textbf{LSTMs y dependencias a largo plazo.} \\
+    \begin{enumerate}[label=\alph*)]
+        \item Explique por qué las RNNs simples sufren de vanishing gradients al entrenar con BPTT (Backpropagation Through Time).
+        \item Describa la arquitectura interna de una celda LSTM: ¿qué son el cell state $C_t$ y el hidden state $h_t$? ¿Cuál es la función de cada gate (Forget, Input, Output)?
+        \item ¿Por qué la operación de suma ``$+$'' en la actualización de $C_t$ (en lugar de multiplicación) es clave para mitigar el vanishing gradient? Haga una analogía con las skip connections de ResNet.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+%% =============================================
+\section*{Parte 4: Interpretación de Código (15 pts)}
+
+Analice el siguiente código de PyTorch y responda las preguntas.
+
+\begin{lstlisting}
+import torch
+import torch.nn as nn
+import torchvision.models as models
+
+# Cargar modelo pre-entrenado
+resnet = models.resnet18(pretrained=True)
+
+# Congelar todos los parametros
+for param in resnet.parameters():
+    param.requires_grad = False
+
+# Reemplazar la ultima capa FC
+num_features = resnet.fc.in_features
+resnet.fc = nn.Sequential(
+    nn.Linear(num_features, 256),
+    nn.ReLU(),
+    nn.Dropout(0.4),
+    nn.Linear(256, 2)
+)
+
+criterio = nn.CrossEntropyLoss()
+# Solo optimizar los parametros de la nueva capa fc
+optimizador = torch.optim.Adam(resnet.fc.parameters(), lr=0.001)
+
+for epoch in range(20):
+    resnet.train()
+    for imgs, labels in train_loader:
+        optimizador.zero_grad()
+        outputs = resnet(imgs)
+        loss = criterio(outputs, labels)
+        loss.backward()
+        optimizador.step()
+\end{lstlisting}
+
+\begin{enumerate}[label=\alph*)]
+    \item ¿Qué técnica de Deep Learning se está aplicando en este código? Descríbala brevemente.
+
+    \item ¿Qué efecto tiene \texttt{param.requires\_grad = False} en el ciclo que recorre todos los parámetros? ¿Por qué se hace esto?
+
+    \item ¿Por qué se pasa \texttt{resnet.fc.parameters()} al optimizador en vez de \texttt{resnet.parameters()}?
+
+    \item La nueva capa \texttt{fc} tiene 2 neuronas de salida. ¿Cuántas clases tiene el problema? ¿Cuántas tenía el modelo original pre-entrenado en ImageNet?
+
+    \item ¿Qué pasaría si las imágenes del \texttt{train\_loader} fueran en escala de grises (1 canal) en vez de RGB (3 canales)?
+
+    \item Si el modelo estuviera sobreajustando al nuevo dataset, ¿qué estrategia adicional (además del Dropout ya incluido) podría implementar sin cambiar la arquitectura? Mencione al menos dos opciones.
+\end{enumerate}
+
+\end{document}
