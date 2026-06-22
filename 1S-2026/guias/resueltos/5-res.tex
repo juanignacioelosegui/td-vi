@@ -65,11 +65,29 @@ Se puede reentrenar la nueva capa y congelar todo lo otro hacer fine tuning de a
 
 \section*{Detección de objetos y segmentación (I2I)}
 \subsection*{Ejercicio 8}
-\subsection*{Ejercicio 9}
-\subsection*{Ejercicio 10}
+\textbf{R-CNN} usa regiones candidatas en las cuales se hace una inferencia. Se toma una imagen como input, se extraen regiones ($\approx$ 2000) donde pueden haber objetos, y cada región pasa por una CNN que es sometida a un problema de clasificación. Se suele preferir una R-CNN antes que un algoritmo de fuerza bruta como uno de \textit{sliding window}.
 
+\textbf{YOLO}, por otro lado, es un algoritmo aún más eficiente. En una sola pasada, se pasa de los píxeles a las coordenadas de las \textit{bounding boxes} con sus respectivas clases. Predice etiquetas de objetos y ubicaciones de las bounding boxes. Su función de pérdida penaliza errores de ubicación de las bounding boxes, tamaños de las bounding boxes, su tamaño y errores de clasificación.
+\subsection*{Ejercicio 9}
+La imagen se divide en una grilla de $S \times S$ celdas. Cada una arroja $B$ bounding boxes con cinco valores: $x$, $y$, $w$ (ancho de la caja), $confidence$ más $C$ probabilidades de clase. El output formalizado es: \[S \times S \times (B \times 5 + C)\]
+
+El procedimiento de \textbf{Non-Max Suppression} hace que se tome la bounding box con mayor confianza para descartar cualquier otra con la cual compartan alta intersección sobre unión (IoU).
+\subsection*{Ejercicio 10}
+\textbf{Dice} es una medida de concordancia entre las predicciones de la red y las anotaciones hechas a mano (la ``ground truth''). Se prefiere Dice por sobre cross-entropy porque las clases suelen estar muy desbalanceadas (mucho fondo y poco objeto), entronces mira únicamente las áreas que la red acertó: \[\text{Dice} = 2\frac{|X \cap Y|}{|X|+|Y|}\]
+Se puede referir a $|X|$ al área predicha y a $|Y|$ como el área real. El numerador $|X \cap Y|$ hace referencia al área como \textit{True Positive}.
 \section*{Interpretabilidad y manipulación}
 \subsection*{Ejercicio 11}
+Los \textbf{Saliency Maps} son cálculos de sensibilidad de predicción en backpropagation respecto a cada píxel. Los píxeles con mayor gradiente son los más importantes para predecir la clase. El input ahora es una variable.
+
+% Tienen la desventaja de la localización poco precisa del target o mismo la falta de claridad de la imagen cuando se hace la visualización, que impacta en el análisis del proceso de decisión y los resultados del modelo.
+
+\textbf{Grad-CAM} hace lo mismo pero no píxel a píxel, sino parche a parche. Calcula la importancia para cada uno generando un mapa de calor sobre la imagen.
+
+\hl{Qué ventaja trae esto?}
 \subsection*{Ejercicio 12}
+Se busca el mínimo cambio en píxeles para que la red clasifique una clase como otra distinta. Se fija la nueva clase objetivo y se modifica la imagen de manera iterativa para maximizar esa probabilidad. Modificar un píxel puede no hacer la diferencia, pero modificar cien sí.
 \subsection*{Ejercicio 13}
+\textbf{Style Transfer} consiste en transferir el estilo visual de una imagen a otra.
+
+Primero, se optimiza una imagen intermedia $I$ minimizando la función: \[\mathcal{L}_{\text{total}} = \alpha \cdot \mathcal{L}_{\text{content}} + \beta \cdot \mathcal{L}_{\text{style}}\]
 \end{document}
