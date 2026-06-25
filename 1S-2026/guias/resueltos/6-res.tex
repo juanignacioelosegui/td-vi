@@ -1,0 +1,109 @@
+\documentclass[a4paper,11pt]{article} 
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{geometry, amsmath, amssymb}
+\geometry{margin=2.5cm}
+
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+
+% me parece que con esto manejo los colores
+\usepackage{color, soul}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Guía de Ejercicios 6}
+\rhead{Tecnología Digital VI}
+\cfoot{\thepage}
+
+\title{\vspace{-2cm}\textbf{Guía de Ejercicios 6}\\[0.2cm]
+\large Tecnología Digital VI}
+\author{Juan Ignacio Elosegui}
+\date{Universidad Torcuato Di Tella \\ Junio 2026}
+
+\begin{document}
+\maketitle
+%   ==========================================
+\section*{Respresentación de texto y embeddings}
+\subsection*{Ejercicio 1}
+La principal limitación de \textit{Bag-of-Words} es que se olvida el orden de las palabras porque no es más que un histograma de las palabras que aparecen en un corpus.No solo eso, sino que si se aplica sobre un documento con muchas palabras, va a haber tantas columnas como palabras (altísima dimensionalidad); y también se ignora el contexto y la polisemia.
+
+La normalización \textbf{TF-IDF} sirve para quitarle peso a las palabras que son muy frecuentes mediante dos mecanismos: $TF$ e $IDF$.
+\begin{itemize}
+	\item $TF$. Mide frecuencia de palabras en un documento.
+	\item $IDF$. Penaliza palabras que aparecen en muchos documentos del corpus. $$IDF = \log\left(\frac{N}{n_{t}}\right)$$
+\end{itemize}
+El producto $TF \times IDF$ le da más peso a palabras discriminativas.
+
+\hl{¿Documento = corpus?} No. Un corpus es una colección de documentos.
+
+\hl{¿Qué son las palabras discriminativas?} Son las palabras que ayudan a distinguir un documento del otro porque son específicas de ese documento.
+
+\hl{¿Qué es $n_{t}$ en el IDF?} Es el número de documentos que contienen el término $t$. Y $N$ es el número total de documentos del corpus.
+\subsection*{Ejercicio 2}
+Con \textbf{OHE}, todos los vectores están a la misma distancia y son todos ortogonales entre sí, por lo que cualquier medida de similitud que se elija va a dar lo mismo para cualquier par de palabras. ``Perro'' va a ser igual de parecido a ``Gato'' que a ``Chimenea''.
+
+\textit{Word2Vec} consiste de dos modelos que llevan palabras a un espacio latente donde las relaciones semánticas se preservan como operaciones vectoriales. Una palabra se caracteriza según qué palabras tenga alrededor.
+\begin{itemize}
+	\item \textbf{CBOW}. Se predice la palabra del medio a partir de las $n$ anteriores y las $n$ posteriores.
+	\item \textbf{Skip-Gram}. Es el proceso inverso: se predicen las $n$ palabras alrededor de la central.
+\end{itemize}
+La diferencia trivial es que un modelo hace exactamente lo contrario al otro, pero la diferencia central es sobre qué palabras funciona mejor cada modelo.
+
+\textit{Skip-Gram} funciona mejor con palabras raras y corpus chicos porque genera más ejemplos de entrenamiento por palabra.
+
+\textit{CBOW} es más rápido de entrenar y anda bien con palabras frecuentes. Esto promedia el contexto y suaviza el ruido.
+
+\hl{Preguntarle esto a Fede.}
+\subsection*{Ejercicio 3}
+La operación matemática sería $$v_{\text{Madrid}} \approx v_{\text{Paris}} - v_{\text{Francia}} + v_{\text{España}}$$
+
+%   ==========================================
+\section*{Redes Neuronales Recurrentes (RNNs) y memoria}
+\subsection*{Ejercicio 4}
+El \textit{hidden state} $h_{t}$ es una retroalimentación del resultado anterior que, sumado con un input $x_{t}$ (re)ingresan al bloque recurrente.
+
+El hidden state se formula como $$h_{t} = \sigma(W_{1}x_{t} + W_{2}h_{t-1})$$
+
+(\textit{Con IA}.) El hidden state es memoria porque en cada paso $t$ se calcula a partir de $h_{t-1}$, que a su vez dependía $h_{t-2}$, y así sucesivamente: por recursión, $h_t$ resume comprimido todo el contexto anterior de la secuencia en un vector de tamaño fijo. Eso es lo que le permite a la RNN ``recordar'' lo que vino antes al procesar la palabra actual.
+
+En la práctica, la información de pasos muy lejanos se va diluyendo y el hidden state termina reflejando sobre todo el contexto reciente. Por eso se lo llama memoria a corto plazo: esa dilución es justamente el problema de vanishing gradients.
+\subsection*{Ejercicio 5}
+Los gradientes dependen de la exponenciación de la matriz de pesos $W$. Multiplicar la misma matriz hace que los gradientes desaparezcan (como el vanishing gradient común) o que también exploten. Las RNNs no pueden aprender dependencias lejanas porque quiere decir que estamos hablando de más de treinta pasos para atrás.
+\subsection*{Ejercicio 6}
+La \textbf{Long Short-Term Memory (LSTM)} soluciona el problema del vanishing gradient a la hora de aprender dependencias lejanas.
+
+Contiene dos vectores de estado:
+\begin{itemize}
+	\item \textbf{Hidden State} $h_{t}$. Es una memoria a corto plazo del contexto actual.
+	\item \textbf{Cell State} $c_{t}$. Es la memoria a largo plazo que pasa información sin desvanecerse.
+\end{itemize}
+
+Tiene además tres vectores qeu controlan el flujo de la información:
+\begin{itemize}
+	\item \textbf{Forget Gate}. Decide qué borrar del \textit{cell state}. Se usa una sigmoide en la cual si devuelve cero, se debe olvidar; y si devuelve uno, se debe recordar. \hl{Puede haber valores intermedios?}
+	\item \textbf{Input Gate}. Decide cuánto de lo nuevo se escribe en el \textit{cell state} (mediante una sigmoide) y qué cosa (mediante una tanh).
+	\item \textbf{Output Gate}. Decide cuánto del \textit{cell state} se expone como salida en $h_{t}$. \hl{Cómo sería esto?}
+\end{itemize}
+
+%   ==========================================
+\section*{Modelos Seq2Seq y Atención}
+\subsection*{Ejercicio 7 y 8}
+\textbf{Seq2Seq} toma secuencias de palabras para generar otras secuencias (por ejemplo, en traducción) usando dos LSTMs: un \emph{encoder} que procesa la secuencia de entrada y genera una representación latente, y un \emph{decoder} que genera la secuencia de salida usando la representación creada.
+
+\textbf{Attention} es un mecanismo que permite al decoder mirar \emph{todas} las posiciones de la secuencia de entrada, asignando pesos de importancia a cada posición según su relevancia para la palabra que se está generando. En criollo, el mecanismo sabe en qué palabra o parte de la frase enfocarse para dar la siguiente palabra en la traducción.
+
+Si no existiera el mecanismo Attention, toda la información de la frase de entrada se comprime en un único vector resultante del encoder en el espacio latente. Puede llegar a funcionar para frases cortas pero no para párrafos completos. Este es el problema del \textbf{cuello de botella}, y Attention lo que hace para solucionarlo es permitirle ver al decoder todos los \textit{hidden states} intermedios. \hl{Preguntarle a Fede}
+
+%   ==========================================
+\section*{Transformers y Large Language Models (LLMs)}
+\subsection*{Ejercicio 9}
+\subsection*{Ejercicio 10}
+\subsection*{Ejercicio 11}
+\subsection*{Ejercicio 12}
+\end{document}
