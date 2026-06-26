@@ -103,7 +103,26 @@ Si no existiera el mecanismo Attention, toda la información de la frase de entr
 %   ==========================================
 \section*{Transformers y Large Language Models (LLMs)}
 \subsection*{Ejercicio 9}
+Se parte de una secuencia de palabras ($w_{i}$) que, antes que nada, se deben convertir a embeddings ($x_{i} = Ew_{i}$).
+
+Luego, cada embedding se transforma en su (Query, Key, Value) = $(q_{i} = Qx_{i}, k_{i} = Kx_{i}, v_{i} = Vx_{i})$
+
+Se calculan similaridades $e_{ij}$: qué tan relacionada está cada palabra $i$ con la palabra $j$. Se divide por la raíz de la dimensión de las queries, que es igual que la dimensión de las keys, en pos de normalizar la varianza y no sé qué más...
+
+Se normalizan estas similaridades con una softmax, y la salida es una suma ponderada de los values.
+
+``Es como una lookup table suavizada'', diría Fede.
 \subsection*{Ejercicio 10}
+(\textit{Con IA}). Se introdujo el \textbf{positional encoding}: a cada embedding se le suma un vector que codifica su posición dentro de la oración. Así, el vector que entra al modelo combina \emph{qué} palabra es y \emph{dónde} está.
 \subsection*{Ejercicio 11}
+\begin{itemize}
+	\item BERT usa el encoder, GPT el decoder.
+	\item BERT es bidireccional, GPT es únicamente de izquierda a derecha (unidireccional).
+	\item BERT se usa para clasificación y análisis de reviews (si te gustó o no la película), GPT se usa para generación de texto.
+	\item BERT está preentrenado con una arquitectura para predecir palabras ocultas y para predecir la siguiente oración. GPT se preentrenó para predecir la siguiente palabra.
+\end{itemize}
 \subsection*{Ejercicio 12}
+GPT antes respondía como si fuese un multiple choice en una prueba, lo que no era lo que esperaba el usuario.
+
+InstructGPT resuelve esto con RLHF incorporando un modelo de recompensa con preferencias humanas. Basándose en aprendizaje por refuerzos (mirando su ambiente, lo que responde), se autoajusta para maximizar su recompensa.
 \end{document}
